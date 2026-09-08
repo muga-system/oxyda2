@@ -14,6 +14,18 @@
   --color-ink-soft: #bdbdc5;
   --color-border-strong: #474752;
   --color-accent-deep: #3e3a38;
+  --color-accent-hover: #fbcba9;
+  --color-accent-selected: #201b19;
+  --color-accent-line: #605146;
+  --color-error-soft: #ff9794;
+  --color-success-border: #365a43;
+  --color-review-border: #765c49;
+  --color-skill-soft: #a6cfff;
+  --color-skill-border: #3d5777;
+  --color-success-soft: #86dfaa;
+  --color-muted-strong: #626270;
+  --color-muted-deep: #5d5d68;
+  --color-list-line: #202028;
   --font-sans: 'Inter Variable', sans-serif;
   --font-mono: 'JetBrains Mono Variable', monospace;
 }
@@ -130,7 +142,7 @@ fieldset {
 .lead {
   font-size: clamp(1.05rem, 1.6vw, 1.2rem);
   line-height: 1.65;
-  color: #bdbdc5;
+  color: var(--color-ink-soft);
   max-width: 59ch;
 }
 .small-note {
@@ -309,13 +321,13 @@ main:focus {
   color: var(--color-surface);
 }
 .button-primary:hover {
-  background: #fbcba9;
+  background: var(--color-accent-hover);
   transform: translateY(-1px);
 }
 .button-secondary {
   background: transparent;
   color: var(--color-ink);
-  border-color: #474752;
+  border-color: var(--color-border-strong);
 }
 .button-secondary:hover {
   background: var(--color-strong);
@@ -386,7 +398,6 @@ main:focus {
   border-radius: 8px;
   background: var(--color-raised);
   padding: 26px 30px 30px;
-  box-shadow: 12px 12px 0 var(--color-strong);
 }
 .first-run-preview::before {
   content: '';
@@ -476,7 +487,7 @@ main:focus {
   font-size: 0.82rem;
 }
 .thinking-sequence > span[aria-hidden] {
-  color: #5d5d68;
+  color: var(--color-muted-deep);
 }
 .home-heading {
   display: flex;
@@ -497,6 +508,7 @@ main:focus {
   font-size: clamp(2.1rem, 3.5vw, 3.25rem);
 }
 .featured-challenge {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
   border: 1px solid var(--color-border-strong);
@@ -504,14 +516,20 @@ main:focus {
   background: var(--color-raised);
   padding: 32px;
   gap: 44px;
-  box-shadow: 8px 8px 0 var(--color-strong);
+}
+.featured-challenge::before {
+  content: '';
+  position: absolute;
+  inset: 18px auto 18px -1px;
+  width: 2px;
+  background: var(--color-accent);
 }
 .featured-challenge h2 {
   margin-top: 12px;
 }
 .featured-challenge p:not(.section-label) {
   margin-top: 12px;
-  color: #bdbdc5;
+  color: var(--color-ink-soft);
   font-size: 0.94rem;
 }
 .featured-challenge .button {
@@ -581,7 +599,7 @@ main:focus {
 }
 .action-card:hover,
 .action-card:focus-within {
-  border-color: #605146;
+  border-color: var(--color-accent-line);
   background: var(--color-raised);
   transform: translateY(-2px);
 }
@@ -679,7 +697,6 @@ main:focus {
   border-radius: 8px;
   padding: 28px;
   margin-bottom: 34px;
-  box-shadow: 8px 8px 0 var(--color-strong);
 }
 .scenario {
   font-size: 1.03rem;
@@ -746,7 +763,7 @@ main:focus {
 }
 .choice.is-selected {
   border-color: var(--color-accent);
-  background: #201b19;
+  background: var(--color-accent-selected);
 }
 .choice:focus-within {
   outline: 2px solid var(--color-accent);
@@ -822,7 +839,7 @@ fieldset:disabled .choice {
   gap: 14px;
 }
 .validation-message {
-  color: #ff9794;
+  color: var(--color-error-soft);
   font-size: 0.85rem;
   min-height: 22px;
   margin: 8px 0;
@@ -835,10 +852,10 @@ fieldset:disabled .choice {
   background: var(--color-raised);
 }
 .feedback-success {
-  border-color: #365a43;
+  border-color: var(--color-success-border);
 }
 .feedback-review {
-  border-color: #765c49;
+  border-color: var(--color-review-border);
 }
 .hint {
   margin-top: 18px;
@@ -1025,23 +1042,23 @@ fieldset:disabled .choice {
   font-weight: 500;
   line-height: 1.4;
   color: var(--color-muted);
-  border: 1px solid #474751;
+  border: 1px solid var(--color-border-strong);
   padding: 5px 8px;
   border-radius: 4px;
   white-space: nowrap;
 }
 .status-developing {
-  color: #a6cfff;
-  border-color: #3d5777;
+  color: var(--color-skill-soft);
+  border-color: var(--color-skill-border);
 }
 .status-available,
 .status-solid {
-  color: #86dfaa;
-  border-color: #365a43;
+  color: var(--color-success-soft);
+  border-color: var(--color-success-border);
 }
 .status-refresh {
   color: var(--color-accent);
-  border-color: #765c49;
+  border-color: var(--color-review-border);
 }
 .family-local-status {
   display: flex;
@@ -1171,7 +1188,7 @@ fieldset:disabled .choice {
 .search-field > div {
   display: flex;
   align-items: center;
-  border: 1px solid #626270;
+  border: 1px solid var(--color-muted-strong);
   background: var(--color-raised);
   border-radius: 5px;
 }
@@ -1199,7 +1216,7 @@ fieldset:disabled .choice {
 .family-filter select {
   color: var(--color-ink);
   background: var(--color-raised);
-  border: 1px solid #626270;
+  border: 1px solid var(--color-muted-strong);
   border-radius: 5px;
   min-height: 53px;
   padding: 12px;
@@ -1439,7 +1456,7 @@ fieldset:disabled .choice {
   display: flex;
   align-items: center;
   gap: 18px;
-  border-bottom: 1px solid #202028;
+  border-bottom: 1px solid var(--color-list-line);
 }
 .skill-map-name {
   flex: 1;

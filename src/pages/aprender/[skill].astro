@@ -22,7 +22,7 @@ const relatedChallenges = challenges.filter(
   <header class="page-heading compact">
     <h1>{family.title}</h1><p class="lead">{family.description}</p>
   </header>
-  <FamilyStatusIsland client:idle skills={familySkills} />
+  <FamilyStatusIsland client:load skills={familySkills} />
   <nav
     class="concept-nav"
     aria-label={`Conceptos de ${family.title.toLowerCase()}`}

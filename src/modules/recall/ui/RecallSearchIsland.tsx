@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Family, RecallCard } from '../../../shared/domain/types';
+import { SearchIcon } from '../../../components/react/icons/search';
 
 function normalize(value: string) {
   return value
@@ -34,22 +35,7 @@ export default function RecallSearchIsland({
         <div className="search-field">
           <label htmlFor="recall-search">¿Qué necesitás recordar?</label>
           <div>
-            <svg
-              className="search-icon"
-              aria-hidden="true"
-              focusable="false"
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.3-4.3" />
-            </svg>
+            <SearchIcon size={22} className="search-icon" reducedMotion />
             <input
               type="search"
               id="recall-search"
