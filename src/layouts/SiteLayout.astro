@@ -38,56 +38,33 @@ const links = [
   </head>
   <body class:list={[home && 'home-layout']}>
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
-    <header class:list={['site-header', home && 'site-header-home']}>
+    <header class="site-header site-header-app">
       <a class="brand" href="/" aria-label="OxYda2, inicio"
         >Ox<span>Y</span>da<span class="brand-two">2</span></a
       >
-      {
-        home && (
-          <nav class="home-nav" aria-label="Principal">
-            {links.map((link) => (
-              <NavigationLink
-                href={link.href}
-                label={link.label}
-                icon={link.icon}
-                variant="top"
-                current={link.href === pathname}
-                client:load
-              />
-            ))}
-          </nav>
-        )
-      }
+      <nav class="home-nav" aria-label="Principal">
+        {
+          links.map((link) => (
+            <NavigationLink
+              href={link.href}
+              label={link.label}
+              icon={link.icon}
+              variant="top"
+              current={
+                link.href === '/'
+                  ? pathname === '/'
+                  : pathname.startsWith(link.href)
+              }
+              client:load
+            />
+          ))
+        }
+      </nav>
       <span class="header-note"
         ><span class="local-dot" aria-hidden="true"></span> Un espacio para pensar</span
       >
     </header>
     <div class:list={['site-frame', home && 'site-frame-home']}>
-      {
-        !home && (
-          <nav class="primary-nav" aria-label="Principal">
-            {links.map((link) => (
-              <NavigationLink
-                href={link.href}
-                label={link.label}
-                icon={link.icon}
-                variant="side"
-                current={
-                  link.href === '/'
-                    ? pathname === '/'
-                    : pathname.startsWith(link.href)
-                }
-                client:load
-              />
-            ))}
-            <p class="nav-footnote">
-              Sin apuro.
-              <br />
-              Con sentido.
-            </p>
-          </nav>
-        )
-      }
       <main id="contenido" tabindex="-1"><slot /></main>
     </div>
     <footer class="site-footer">

@@ -10,31 +10,66 @@ function MathInstrument({ label }: { label: string }) {
     <aside className="math-instrument" aria-label="Comparación de descuentos">
       <header className="math-instrument__header">
         <span>{label}</span>
-        <span>RELACIÓN 01</span>
+        <span className="math-instrument__header-index">01 / 04</span>
       </header>
-      <div className="math-instrument__equation">
-        <span className="math-instrument__eyebrow">descuento A</span>
-        <strong className="math-instrument__percent">25%</strong>
-        <span className="math-instrument__base">de $80.000</span>
-        <span className="math-instrument__operation">80.000 × 0,25</span>
-        <span className="math-instrument__rule" aria-hidden="true" />
-        <span className="math-instrument__result-label">equivale a</span>
-        <strong className="math-instrument__result">$20.000</strong>
+      <div className="math-instrument__steps">
+        <div className="math-step">
+          <span className="math-step__index">01</span>
+          <div>
+            <span className="math-step__label">Entrada</span>
+            <strong>$80.000</strong>
+            <small>precio original</small>
+          </div>
+        </div>
+        <div className="math-step math-step--relation">
+          <span className="math-step__index">02</span>
+          <div>
+            <span className="math-step__label">Relación</span>
+            <strong>25%</strong>
+            <small>descuento A</small>
+          </div>
+        </div>
+        <div className="math-step math-step--operation">
+          <span className="math-step__index">03</span>
+          <div>
+            <span className="math-step__label">Operación</span>
+            <strong>80.000 × 0,25</strong>
+            <small>parte del total</small>
+          </div>
+        </div>
+        <div className="math-step math-step--result">
+          <span className="math-step__index">04</span>
+          <div>
+            <span className="math-step__label">Resultado</span>
+            <strong>$20.000</strong>
+            <small>descuento A</small>
+          </div>
+        </div>
       </div>
       <div
-        className="math-instrument__ledger"
+        className="math-instrument__comparison"
         aria-label="Comparación de descuentos"
       >
+        <header>
+          <span>Comparación</span>
+          <span>A ↔ B</span>
+        </header>
         <div>
-          <span>descuento A</span>
+          <span>
+            <b>A</b> descuento directo
+          </span>
           <strong>$20.000</strong>
         </div>
         <div>
-          <span>descuento B</span>
+          <span>
+            <b>B</b> oferta equivalente
+          </span>
           <strong>$18.000</strong>
         </div>
         <div className="math-instrument__difference">
-          <span>diferencia</span>
+          <span>
+            <b>Δ</b> diferencia
+          </span>
           <strong>$2.000</strong>
         </div>
       </div>

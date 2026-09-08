@@ -31,8 +31,7 @@ export function useIconAnimation(
         if (!reducedMotion) void controls.start('animate');
       },
       stopAnimation: () => {
-        controls.stop();
-        controls.set('normal');
+        void controls.start('normal');
       },
     }),
     [controls, reducedMotion],
