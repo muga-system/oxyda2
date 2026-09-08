@@ -44,6 +44,7 @@ export default function StepPanel({
   const [usedHint, setUsedHint] = useState(false);
   const [hintVisible, setHintVisible] = useState(false);
   const [result, setResult] = useState<AttemptResult | null>(null);
+  const [unknownAnswer, setUnknownAnswer] = useState(false);
   const [validation, setValidation] = useState('');
   const heading = useRef<HTMLHeadingElement>(null);
   const input = useRef<HTMLInputElement>(null);
@@ -77,12 +78,14 @@ export default function StepPanel({
     }
     setValidation('');
     setResult(next);
+    setUnknownAnswer(dontKnow);
     setAttempts(next.attempts);
     onEvaluated(next);
   }
 
   function retry() {
     setResult(null);
+    setUnknownAnswer(false);
     setRaw('');
     setValidation('');
     requestAnimationFrame(() => {
@@ -248,28 +251,30 @@ export default function StepPanel({
       <div className="feedback-region" aria-live="polite" aria-atomic="true">
         {result && (
           <div
-            className={`feedback ${result.evaluation.correct ? 'feedback-success' : 'feedback-review'}`}
+            className={`feedback ${unknownAnswer ? 'feedback-neutral' : result.evaluation.correct ? 'feedback-success' : 'feedback-review'}`}
           >
             <div className="feedback-title">
               <span aria-hidden="true">
-                {result.evaluation.correct ? '✓' : '↳'}
+                {unknownAnswer ? '·' : result.evaluation.correct ? '✓' : '↳'}
               </span>
               <strong>
-                {result.evaluation.correct
-                  ? 'Tiene sentido.'
-                  : result.done
-                    ? 'Revisemos la idea.'
-                    : 'Hay algo para revisar.'}
+                {unknownAnswer
+                  ? 'Registrado.'
+                  : result.evaluation.correct
+                    ? 'Tiene sentido.'
+                    : result.done
+                      ? 'Revisemos la idea.'
+                      : 'Hay algo para revisar.'}
               </strong>
             </div>
             <p>{result.evaluation.feedback}</p>
-            {result.done && !result.evaluation.correct && (
+            {result.done && !result.evaluation.correct && !unknownAnswer && (
               <p className="solution">
                 <strong>Respuesta: </strong>
                 {solution}
               </p>
             )}
-            {result.done && <p>{step.explanation}</p>}
+            {result.done && !unknownAnswer && <p>{step.explanation}</p>}
           </div>
         )}
       </div>

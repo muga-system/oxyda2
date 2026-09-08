@@ -1,20 +1,57 @@
 import { useEffect, useRef, useState } from 'react';
-import type { Evidence, Family, Skill } from '../../../shared/domain/types';
+import type { Evidence, Skill } from '../../../shared/domain/types';
 import type { DiagnosticItem } from '../domain/selectDiagnostic';
 import { makeEvidences } from '../../challenges/application/attempts';
 import StepPanel, { type AttemptResult } from '../../challenges/ui/StepPanel';
 import { useProgress } from '../../progress/ui/useProgress';
 import ChallengeContext from '../../../components/react/ChallengeContext';
 import StorageNotice from '../../../components/react/StorageNotice';
-import { kindLabels } from '../../../shared/ui/labels';
+import {
+  ArrowRightIcon,
+  ArrowUpRightIcon,
+} from '../../../components/react/icons/arrow';
+
+type DiagnosticStatus =
+  'Sólido' | 'Disponible' | 'En desarrollo' | 'Para explorar';
+
+const synthesisGroups: {
+  status: DiagnosticStatus;
+  description: string;
+}[] = [
+  {
+    status: 'Sólido',
+    description: 'Apareció con una respuesta consistente en este recorrido.',
+  },
+  {
+    status: 'Disponible',
+    description: 'La idea apareció, aunque conviene volver a usarla.',
+  },
+  {
+    status: 'En desarrollo',
+    description: 'Hay una relación para revisar con más tiempo.',
+  },
+  {
+    status: 'Para explorar',
+    description: 'Todavía no apareció evidencia en estas situaciones.',
+  },
+];
+
+function getDiagnosticStatus(
+  skillId: string,
+  evidences: readonly Evidence[],
+): DiagnosticStatus {
+  const related = evidences.filter((evidence) => evidence.skillId === skillId);
+  if (!related.length) return 'Para explorar';
+  if (related.every((evidence) => evidence.correct)) return 'Sólido';
+  if (related.some((evidence) => evidence.correct)) return 'Disponible';
+  return 'En desarrollo';
+}
 
 export default function DiagnosticRunnerIsland({
   items,
-  families,
   skills,
 }: {
   items: DiagnosticItem[];
-  families: Family[];
   skills: Skill[];
 }) {
   const [started, setStarted] = useState(false);
@@ -86,64 +123,53 @@ export default function DiagnosticRunnerIsland({
 
   if (finished)
     return (
-      <section className="diagnostic-results">
+      <section
+        className="diagnostic-results"
+        aria-labelledby="diagnostic-results-title"
+      >
         <StorageNotice message={message} />
-        <p className="eyebrow">Recorrido completo</p>
-        <h2 ref={resultHeading} tabIndex={-1}>
-          Una lectura, no una etiqueta.
+        <p className="eyebrow">Primera lectura creada</p>
+        <h2 ref={resultHeading} tabIndex={-1} id="diagnostic-results-title">
+          Ya tenemos suficiente evidencia para empezar a organizar tus
+          habilidades.
         </h2>
         <p className="lead">
-          Estas situaciones dan algunas pistas. Una respuesta sola no define lo
-          que sabés.
+          Esto orienta el próximo paso; una respuesta sola no define lo que
+          sabés.
         </p>
-        <div className="diagnostic-family-list">
-          {families.map((family) => {
-            const familySkills = skills.filter(
-              (skill) => skill.familyId === family.id,
+        <div className="diagnostic-synthesis">
+          {synthesisGroups.map((group) => {
+            const groupSkills = skills.filter(
+              (skill) =>
+                getDiagnosticStatus(skill.id, sessionEvidence) === group.status,
             );
-            const tested = familySkills.filter((skill) =>
-              sessionEvidence.some((evidence) => evidence.skillId === skill.id),
-            );
+            if (!groupSkills.length) return null;
             return (
-              <section className="diagnostic-family" key={family.id}>
-                <h3>{family.title}</h3>
-                {tested.map((skill) => {
-                  const related = sessionEvidence.filter(
-                    (evidence) => evidence.skillId === skill.id,
-                  );
-                  const successful = related.some(
-                    (evidence) => evidence.correct,
-                  );
-                  const toReview = related.some(
-                    (evidence) => !evidence.correct,
-                  );
-                  return (
-                    <p key={skill.id}>
-                      <strong>{skill.title}</strong>
-                      <span>
-                        {successful && toReview
-                          ? 'La idea apareció; hay una relación para revisar.'
-                          : successful
-                            ? 'Pudiste usar esta idea en la situación.'
-                            : 'Conviene retomar esta idea con un ejemplo.'}
-                      </span>
-                    </p>
-                  );
-                })}
-                <a className="text-link" href={`/aprender/${family.slug}`}>
-                  Retomar {family.title.toLowerCase()}{' '}
-                  <span aria-hidden="true">↗</span>
-                </a>
+              <section
+                className="diagnostic-synthesis__group"
+                key={group.status}
+              >
+                <div>
+                  <h3>{group.status}</h3>
+                  <p>{group.description}</p>
+                </div>
+                <ul>
+                  {groupSkills.map((skill) => (
+                    <li key={skill.id}>{skill.title}</li>
+                  ))}
+                </ul>
               </section>
             );
           })}
         </div>
         <div className="answer-actions">
           <a className="button button-primary" href="/mapa">
-            Ver mi mapa <span aria-hidden="true">→</span>
+            Ver mi mapa{' '}
+            <ArrowUpRightIcon aria-hidden="true" size={17} reducedMotion />
           </a>
-          <a className="button button-secondary" href="/aprender">
-            Elegir qué aprender
+          <a className="button button-secondary" href="/">
+            Volver al inicio{' '}
+            <ArrowRightIcon aria-hidden="true" size={17} reducedMotion />
           </a>
         </div>
       </section>
@@ -152,10 +178,11 @@ export default function DiagnosticRunnerIsland({
   return (
     <>
       <StorageNotice message={message} />
-      <div className="runner-meta">
-        <span>{current ? kindLabels[current.step.kind] : 'Diagnóstico'}</span>
+      <div className="runner-meta" role="status" aria-live="polite">
+        <span>Diagnóstico</span>
         <span>
-          Situación {index + 1} de {items.length}
+          {String(index + 1).padStart(2, '0')} /{' '}
+          {String(items.length).padStart(2, '0')}
         </span>
       </div>
       <div className="step-track" aria-hidden="true">
