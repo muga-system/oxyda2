@@ -2238,8 +2238,8 @@ html[data-reduced-motion='true'] *::after {
   align-items: center;
   justify-content: space-between;
   gap: 32px;
-  padding: 32px 0 38px;
-  border-bottom: 1px solid var(--color-line);
+  padding: 32px clamp(18px, 3vw, 32px) 38px;
+  border: 1px dashed var(--color-line);
 }
 .home-continue h2 {
   margin-top: 8px;
@@ -2503,7 +2503,7 @@ html[data-reduced-motion='true'] *::after {
     align-items: start;
     flex-direction: column;
     gap: 12px;
-    padding: 28px 0 34px;
+    padding: 28px 20px 34px;
   }
   .home-continue .home-text-action {
     align-self: start;
