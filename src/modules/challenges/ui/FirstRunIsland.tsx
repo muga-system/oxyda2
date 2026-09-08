@@ -1,14 +1,37 @@
-import { useMemo } from 'react';
+import { useReducedMotion } from 'motion/react';
+import { useMemo, useRef } from 'react';
 import type { Challenge, Family, Skill } from '../../../shared/domain/types';
 import { useProgress } from '../../progress/ui/useProgress';
 import { getSkillProgress } from '../../progress/domain/progress';
 import ActionCard from '../../../components/react/ActionCard';
 import StorageNotice from '../../../components/react/StorageNotice';
 import { AnimatedArrowLink } from '../../../components/react/AnimatedArrowAction';
+import type { AnimatedIconHandle } from '../../../components/react/icons/animated-icon';
+import { ArrowLeftRightIcon } from '../../../components/react/icons/arrow-left-right';
 
 function MathInstrument({ label }: { label: string }) {
+  const differenceIconRef = useRef<AnimatedIconHandle>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const reducedMotion = prefersReducedMotion === true;
+
+  function startDifferenceAnimation() {
+    if (
+      reducedMotion ||
+      document.documentElement.dataset['reducedMotion'] === 'true'
+    ) {
+      differenceIconRef.current?.stopAnimation();
+      return;
+    }
+    differenceIconRef.current?.startAnimation();
+  }
+
   return (
-    <aside className="math-instrument" aria-label="Comparación de descuentos">
+    <aside
+      className="math-instrument"
+      aria-label="Comparación de descuentos"
+      onMouseEnter={startDifferenceAnimation}
+      onMouseLeave={() => differenceIconRef.current?.stopAnimation()}
+    >
       <header className="math-instrument__header">
         <span>{label}</span>
         <span className="math-instrument__header-index">01 / 04</span>
@@ -69,7 +92,13 @@ function MathInstrument({ label }: { label: string }) {
         </div>
         <div className="math-instrument__difference">
           <span>
-            <b>Δ</b> diferencia
+            <ArrowLeftRightIcon
+              ref={differenceIconRef}
+              className="math-instrument__difference-icon"
+              size={17}
+              reducedMotion={reducedMotion}
+            />
+            diferencia
           </span>
           <strong>$2.000</strong>
         </div>

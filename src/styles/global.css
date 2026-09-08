@@ -2150,6 +2150,15 @@ html[data-reduced-motion='true'] *::after {
 .math-instrument__difference strong {
   color: var(--color-accent);
 }
+.math-instrument__difference > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.math-instrument__difference-icon {
+  display: block;
+  flex: 0 0 auto;
+}
 .math-instrument__note {
   margin-top: 16px;
   color: var(--color-muted);
