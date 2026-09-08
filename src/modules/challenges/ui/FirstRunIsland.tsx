@@ -4,11 +4,7 @@ import { useProgress } from '../../progress/ui/useProgress';
 import { getSkillProgress } from '../../progress/domain/progress';
 import ActionCard from '../../../components/react/ActionCard';
 import StorageNotice from '../../../components/react/StorageNotice';
-import {
-  ArrowDownIcon,
-  ArrowRightIcon,
-  ArrowUpRightIcon,
-} from '../../../components/react/icons/arrow';
+import { AnimatedArrowLink } from '../../../components/react/AnimatedArrowAction';
 
 function MathInstrument({ label }: { label: string }) {
   return (
@@ -136,7 +132,7 @@ export default function FirstRunIsland({
   families,
   skills,
 }: {
-  challenges: Pick<Challenge, 'id' | 'title' | 'scenario'>[];
+  challenges: Pick<Challenge, 'id' | 'slug' | 'title' | 'scenario'>[];
   families: Family[];
   skills: Skill[];
 }) {
@@ -195,17 +191,19 @@ export default function FirstRunIsland({
               números y tomá una decisión con sentido.
             </p>
             <div className="home-hero__actions">
-              <a
+              <AnimatedArrowLink
                 className="button button-primary"
-                href="/desafio/percentage-discount-compare"
+                href="/desafio/comparar-descuentos"
               >
                 Resolver mi primer desafío
-                <ArrowRightIcon size={18} reducedMotion />
-              </a>
-              <a className="home-text-action" href="#como-funciona">
+              </AnimatedArrowLink>
+              <AnimatedArrowLink
+                className="home-text-action"
+                href="#como-funciona"
+                direction="down"
+              >
                 Explorar cómo funciona
-                <ArrowDownIcon size={17} reducedMotion />
-              </a>
+              </AnimatedArrowLink>
             </div>
             <p className="small-note">Sin registro. Sin reloj. A tu ritmo.</p>
           </div>
@@ -247,17 +245,19 @@ export default function FirstRunIsland({
             disponible en este navegador.
           </p>
           <div className="home-hero__actions">
-            <a
+            <AnimatedArrowLink
               className="button button-primary"
-              href={`/desafio/${featured.id}`}
+              href={`/desafio/${featured.slug}`}
             >
               Resolver esta situación
-              <ArrowRightIcon size={18} reducedMotion />
-            </a>
-            <a className="button button-secondary" href="/mapa">
+            </AnimatedArrowLink>
+            <AnimatedArrowLink
+              className="button button-secondary"
+              href="/mapa"
+              direction="up-right"
+            >
               Abrir mi mapa
-              <ArrowUpRightIcon size={18} reducedMotion />
-            </a>
+            </AnimatedArrowLink>
           </div>
         </div>
         <MathInstrument label="Relación a mano" />
@@ -270,10 +270,12 @@ export default function FirstRunIsland({
           <span className="home-eyebrow">DESAFÍO DESTACADO</span>
           <h2 id="featured-title">{featured.title}</h2>
           <p>{featured.scenario}</p>
-          <a className="button button-primary" href={`/desafio/${featured.id}`}>
+          <AnimatedArrowLink
+            className="button button-primary"
+            href={`/desafio/${featured.slug}`}
+          >
             Resolver esta situación
-            <ArrowRightIcon size={18} reducedMotion />
-          </a>
+          </AnimatedArrowLink>
         </div>
         <div className="home-focus__aside">
           <span>Una relación cambia</span>
@@ -290,13 +292,12 @@ export default function FirstRunIsland({
               mapa.
             </p>
           </div>
-          <a
+          <AnimatedArrowLink
             className="button button-secondary"
             href={`/aprender/${refreshFamily.slug}#${refreshSkill.id}`}
           >
             Retomar la idea
-            <ArrowRightIcon size={18} reducedMotion />
-          </a>
+          </AnimatedArrowLink>
         </aside>
       )}
       <section className="home-continue" aria-labelledby="continue-title">
@@ -305,13 +306,12 @@ export default function FirstRunIsland({
           <h2 id="continue-title">{activeSkill.title}</h2>
           <p>{activeSkill.description}</p>
         </div>
-        <a
+        <AnimatedArrowLink
           className="home-text-action"
           href={`/aprender/${activeFamily.slug}#${activeSkill.id}`}
         >
           Abrir el concepto
-          <ArrowRightIcon size={17} reducedMotion />
-        </a>
+        </AnimatedArrowLink>
       </section>
       <HomeDoors />
     </>

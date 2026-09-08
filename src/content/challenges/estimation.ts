@@ -4,6 +4,7 @@ import { choice, numeric, option as o } from './steps';
 export const estimationChallenges = [
   {
     id: 'estimation-download-time',
+    slug: 'tiempo-de-descarga',
     familyId: 'estimation',
     title: '¿Segundos o una tarde?',
     scenario:
@@ -101,6 +102,7 @@ export const estimationChallenges = [
   },
   {
     id: 'estimation-event-capacity',
+    slug: 'capacidad-del-evento',
     familyId: 'estimation',
     title: '¿Alcanzan los lugares?',
     scenario:
@@ -199,6 +201,7 @@ export const estimationChallenges = [
   },
   {
     id: 'estimation-grocery-total',
+    slug: 'total-de-compras',
     familyId: 'estimation',
     title: 'Una cuenta antes de la caja',
     scenario:
@@ -293,6 +296,7 @@ export const estimationChallenges = [
   },
   {
     id: 'estimation-magnitude-error',
+    slug: 'error-de-magnitud',
     familyId: 'estimation',
     title: 'Un cero fuera de lugar',
     scenario:

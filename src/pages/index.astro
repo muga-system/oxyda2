@@ -8,8 +8,9 @@ import { families, skills } from '../content/skills';
 <SiteLayout home>
   <FirstRunIsland
     client:load
-    challenges={challenges.map(({ id, title, scenario }) => ({
+    challenges={challenges.map(({ id, slug, title, scenario }) => ({
       id,
+      slug,
       title,
       scenario,
     }))}

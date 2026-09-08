@@ -5,6 +5,8 @@ import { getFamilyStatus, getSkillProgress } from '../domain/progress';
 import { formatDate } from '../../../shared/ui/format';
 import { errorLabels } from '../../../shared/ui/labels';
 import StorageNotice from '../../../components/react/StorageNotice';
+import { getChallengeSlug } from '../../../content/challenges';
+import { AnimatedArrowLink } from '../../../components/react/AnimatedArrowAction';
 
 const masteryLabels = {
   unexplored: 'Sin evidencia',
@@ -50,12 +52,12 @@ export default function ProgressMapIsland({
             guiado o probar ideas de las cinco familias.
           </p>
           <div className="answer-actions">
-            <a
+            <AnimatedArrowLink
               className="button button-primary"
-              href="/desafio/percentage-discount-compare"
+              href={`/desafio/${getChallengeSlug('percentage-discount-compare')}`}
             >
-              Resolver mi primer desafío <span aria-hidden="true">→</span>
-            </a>
+              Resolver mi primer desafío
+            </AnimatedArrowLink>
             <a className="text-link" href="/prueba">
               Poneme a prueba
             </a>
@@ -133,24 +135,25 @@ export default function ProgressMapIsland({
                         {entry.status === 'Para refrescar' ? '↻ ' : ''}
                         {entry.status}
                       </span>
-                      <a
+                      <AnimatedArrowLink
                         href={`/aprender/${family.slug}#${skill.id}`}
                         className="skill-map-link"
                         aria-label={`${entry.status === 'Para refrescar' ? 'Refrescar' : 'Explorar'} ${skill.title.toLowerCase()}`}
                       >
                         {entry.status === 'Para refrescar'
                           ? 'Refrescar'
-                          : 'Explorar'}{' '}
-                        <span aria-hidden="true">↗</span>
-                      </a>
+                          : 'Explorar'}
+                      </AnimatedArrowLink>
                     </li>
                   );
                 })}
               </ul>
-              <a className="text-link" href={`/aprender/${family.slug}`}>
-                Abrir {family.title.toLowerCase()}{' '}
-                <span aria-hidden="true">→</span>
-              </a>
+              <AnimatedArrowLink
+                className="text-link"
+                href={`/aprender/${family.slug}`}
+              >
+                Abrir {family.title.toLowerCase()}
+              </AnimatedArrowLink>
             </section>
           );
         })}

@@ -6,7 +6,7 @@ import type {
 import { resolveAttempt } from '../application/attempts';
 import { formatNumber } from '../../../shared/ui/format';
 import { kindLabels } from '../../../shared/ui/labels';
-import { ArrowRightIcon } from '../../../components/react/icons/arrow';
+import { AnimatedArrowButton } from '../../../components/react/AnimatedArrowAction';
 
 export type AttemptResult = ReturnType<typeof resolveAttempt>;
 
@@ -210,13 +210,13 @@ export default function StepPanel({
         </p>
         {!result && (
           <div className="answer-actions">
-            <button
+            <AnimatedArrowButton
               className="button button-primary"
               type="submit"
               disabled={!ready}
             >
-              Comprobar <ArrowRightIcon aria-hidden="true" size={17} />
-            </button>
+              Comprobar
+            </AnimatedArrowButton>
             {mode === 'diagnostic' ? (
               <button
                 className="button button-quiet"
@@ -280,7 +280,7 @@ export default function StepPanel({
       </div>
       {result && (
         <div className="step-next">
-          <button
+          <AnimatedArrowButton
             ref={nextButton}
             className="button button-primary"
             onClick={result.done ? onNext : retry}
@@ -291,9 +291,8 @@ export default function StepPanel({
                   ? 'Ver mi lectura'
                   : 'Cerrar desafío'
                 : 'Continuar'
-              : 'Volver a intentar'}{' '}
-            <ArrowRightIcon aria-hidden="true" size={17} />
-          </button>
+              : 'Volver a intentar'}
+          </AnimatedArrowButton>
         </div>
       )}
     </section>

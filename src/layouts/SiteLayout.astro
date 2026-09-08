@@ -3,6 +3,7 @@ import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/global.css';
 import NavigationLink from '../components/react/NavigationLink';
+import { ClientRouter } from 'astro:transitions';
 
 interface Props {
   title?: string;
@@ -32,6 +33,7 @@ const links = [
     <meta name="description" content={description} />
     <meta name="theme-color" content="#0b0b0f" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <ClientRouter />
     <title>
       {title ? `${title} · OxYda2` : 'OxYda2 · Matemática para pensar'}
     </title>

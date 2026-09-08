@@ -31,10 +31,34 @@ const requiredIds = [
   'data-graph-axis',
   'data-sample-claim',
 ];
+const requiredSlugs = [
+  'comparar-descuentos',
+  'precio-original',
+  'cambios-sucesivos',
+  'titular-con-otra-base',
+  'precio-por-unidad',
+  'escalar-receta',
+  'tiempo-de-viaje',
+  'escala-del-mapa',
+  'tiempo-de-descarga',
+  'capacidad-del-evento',
+  'total-de-compras',
+  'error-de-magnitud',
+  'volumen-de-receta',
+  'distancia-del-viaje',
+  'duracion-del-horario',
+  'precio-por-peso',
+  'promedio-y-demora',
+  'sueldo-representativo',
+  'eje-del-grafico',
+  'muestra-y-afirmacion',
+];
 
 describe('catálogo v0.1', () => {
   it('incluye los 20 escenarios, 18 habilidades, cinco familias y diez fichas', () => {
     expect(challenges.map(({ id }) => id)).toEqual(requiredIds);
+    expect(challenges.map(({ slug }) => slug)).toEqual(requiredSlugs);
+    expect(new Set(requiredSlugs).size).toBe(requiredSlugs.length);
     expect(skills).toHaveLength(18);
     expect(families).toHaveLength(5);
     expect(recallCards).toHaveLength(10);

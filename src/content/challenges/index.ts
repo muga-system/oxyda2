@@ -12,3 +12,11 @@ export const challenges: Challenge[] = [
   ...unitsChallenges,
   ...dataChallenges,
 ] satisfies Challenge[];
+
+export function getChallengeById(id: string) {
+  return challenges.find((challenge) => challenge.id === id);
+}
+
+export function getChallengeSlug(id: string) {
+  return getChallengeById(id)?.slug ?? id;
+}

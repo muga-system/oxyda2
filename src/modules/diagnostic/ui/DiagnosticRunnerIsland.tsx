@@ -7,9 +7,9 @@ import { useProgress } from '../../progress/ui/useProgress';
 import ChallengeContext from '../../../components/react/ChallengeContext';
 import StorageNotice from '../../../components/react/StorageNotice';
 import {
-  ArrowRightIcon,
-  ArrowUpRightIcon,
-} from '../../../components/react/icons/arrow';
+  AnimatedArrowButton,
+  AnimatedArrowLink,
+} from '../../../components/react/AnimatedArrowAction';
 
 type DiagnosticStatus =
   'Sólido' | 'Disponible' | 'En desarrollo' | 'Para explorar';
@@ -107,13 +107,13 @@ export default function DiagnosticRunnerIsland({
           <li>Si una idea no aparece, podés decir «No sé todavía».</li>
           <li>Sin nota ni reloj. Las respuestas aportan a tu mapa.</li>
         </ul>
-        <button
+        <AnimatedArrowButton
           className="button button-primary"
           disabled={!ready}
           onClick={() => setStarted(true)}
         >
-          Empezar mi recorrido <span aria-hidden="true">→</span>
-        </button>
+          Empezar mi recorrido
+        </AnimatedArrowButton>
         <p className="small-note">
           Cada respuesta se guarda. Si salís, podés volver a empezar; la
           evidencia anterior se conserva.
@@ -163,14 +163,16 @@ export default function DiagnosticRunnerIsland({
           })}
         </div>
         <div className="answer-actions">
-          <a className="button button-primary" href="/mapa">
-            Ver mi mapa{' '}
-            <ArrowUpRightIcon aria-hidden="true" size={17} reducedMotion />
-          </a>
-          <a className="button button-secondary" href="/">
-            Volver al inicio{' '}
-            <ArrowRightIcon aria-hidden="true" size={17} reducedMotion />
-          </a>
+          <AnimatedArrowLink
+            className="button button-primary"
+            href="/mapa"
+            direction="up-right"
+          >
+            Ver mi mapa
+          </AnimatedArrowLink>
+          <AnimatedArrowLink className="button button-secondary" href="/">
+            Volver al inicio
+          </AnimatedArrowLink>
         </div>
       </section>
     );

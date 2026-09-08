@@ -4,6 +4,7 @@ import { choice, numeric, option as o } from './steps';
 export const unitsChallenges = [
   {
     id: 'units-recipe-volume',
+    slug: 'volumen-de-receta',
     familyId: 'units',
     title: 'Una botella, tres preparaciones',
     scenario:
@@ -97,6 +98,7 @@ export const unitsChallenges = [
   },
   {
     id: 'units-commute-distance',
+    slug: 'distancia-del-viaje',
     familyId: 'units',
     title: 'Dos tramos, una distancia',
     scenario:
@@ -191,6 +193,7 @@ export const unitsChallenges = [
   },
   {
     id: 'units-schedule-time',
+    slug: 'duracion-del-horario',
     familyId: 'units',
     title: 'Llegar con margen',
     scenario:
@@ -283,6 +286,7 @@ export const unitsChallenges = [
   },
   {
     id: 'units-weight-price',
+    slug: 'precio-por-peso',
     familyId: 'units',
     title: 'Gramos en el mostrador',
     scenario:

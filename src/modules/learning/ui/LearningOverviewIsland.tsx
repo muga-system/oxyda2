@@ -6,7 +6,7 @@ import {
   getSkillProgress,
 } from '../../progress/domain/progress';
 import StorageNotice from '../../../components/react/StorageNotice';
-import { ArrowUpRightIcon } from '../../../components/react/icons/arrow';
+import { AnimatedArrowLink } from '../../../components/react/AnimatedArrowAction';
 
 const familySignals: Record<
   FamilyId,
@@ -48,9 +48,11 @@ export default function LearningOverviewIsland({
             ),
           );
           return (
-            <a
+            <AnimatedArrowLink
               className="learning-family"
               href={`/aprender/${family.slug}`}
+              direction="up-right"
+              arrowClassName="family-arrow"
               key={family.id}
             >
               <div className="family-index" aria-hidden="true">
@@ -75,12 +77,7 @@ export default function LearningOverviewIsland({
                   <span>{family.question}</span>
                 </div>
               </div>
-              <ArrowUpRightIcon
-                className="family-arrow"
-                size={18}
-                reducedMotion
-              />
-            </a>
+            </AnimatedArrowLink>
           );
         })}
       </div>

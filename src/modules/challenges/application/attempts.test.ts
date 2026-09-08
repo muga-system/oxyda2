@@ -14,6 +14,7 @@ const step: ChallengeStep = {
 };
 const challenge: Challenge = {
   id: 'campera',
+  slug: 'campera',
   familyId: 'percentage',
   title: 'La campera',
   scenario: 'Descuento de 25%.',

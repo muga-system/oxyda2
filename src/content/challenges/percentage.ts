@@ -4,6 +4,7 @@ import { choice, numeric, option as o } from './steps';
 export const percentageChallenges = [
   {
     id: 'percentage-discount-compare',
+    slug: 'comparar-descuentos',
     familyId: 'percentage',
     title: 'Dos descuentos, una campera',
     scenario:
@@ -167,6 +168,7 @@ export const percentageChallenges = [
   },
   {
     id: 'percentage-reverse-price',
+    slug: 'precio-original',
     familyId: 'percentage',
     title: 'Antes del descuento',
     scenario:
@@ -260,6 +262,7 @@ export const percentageChallenges = [
   },
   {
     id: 'percentage-successive-change',
+    slug: 'cambios-sucesivos',
     familyId: 'percentage',
     title: 'Sube 25%, baja 25%',
     scenario:
@@ -353,6 +356,7 @@ export const percentageChallenges = [
   },
   {
     id: 'percentage-headline',
+    slug: 'titular-con-otra-base',
     familyId: 'percentage',
     title: 'Un titular con otra base',
     scenario:

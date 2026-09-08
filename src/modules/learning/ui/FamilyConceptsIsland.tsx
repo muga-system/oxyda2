@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { Challenge, Freshness, Skill } from '../../../shared/domain/types';
-import { ArrowRightIcon } from '../../../components/react/icons/arrow';
+import { AnimatedArrowLink } from '../../../components/react/AnimatedArrowAction';
 import { useProgress } from '../../progress/ui/useProgress';
 import { getSkillProgress } from '../../progress/domain/progress';
 import { formatDate } from '../../../shared/ui/format';
@@ -90,13 +90,12 @@ export default function FamilyConceptsIsland({
                 <p>{skill.example}</p>
               </div>
               {challenge && (
-                <a
+                <AnimatedArrowLink
                   className="button button-secondary concept-practice"
-                  href={`/desafio/${challenge.id}?source=learning`}
+                  href={`/desafio/${challenge.slug}?source=learning`}
                 >
                   Poner la idea en práctica
-                  <ArrowRightIcon aria-hidden="true" size={17} reducedMotion />
-                </a>
+                </AnimatedArrowLink>
               )}
             </article>
           );

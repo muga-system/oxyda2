@@ -4,6 +4,7 @@ import { choice, numeric, option as o } from './steps';
 export const proportionChallenges = [
   {
     id: 'proportion-unit-price',
+    slug: 'precio-por-unidad',
     familyId: 'proportion',
     title: 'El precio de un kilo',
     scenario:
@@ -106,6 +107,7 @@ export const proportionChallenges = [
   },
   {
     id: 'proportion-recipe-scale',
+    slug: 'escalar-receta',
     familyId: 'proportion',
     title: 'De seis a catorce',
     scenario:
@@ -202,6 +204,7 @@ export const proportionChallenges = [
   },
   {
     id: 'proportion-travel-time',
+    slug: 'tiempo-de-viaje',
     familyId: 'proportion',
     title: 'Cuánto dura el viaje',
     scenario:
@@ -294,6 +297,7 @@ export const proportionChallenges = [
   },
   {
     id: 'proportion-map-scale',
+    slug: 'escala-del-mapa',
     familyId: 'proportion',
     title: 'Del mapa al camino',
     scenario:

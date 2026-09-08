@@ -38,7 +38,7 @@ export function ActionCard({
   const hovered = useRef(false);
   const focused = useRef(false);
   const prefersReducedMotion = useReducedMotion();
-  const reducedMotion = reducedMotionOverride || prefersReducedMotion !== false;
+  const reducedMotion = reducedMotionOverride || prefersReducedMotion === true;
   const Icon = icons[icon];
 
   function startAnimation() {

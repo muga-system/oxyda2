@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
 import type { Family, RecallCard } from '../../../shared/domain/types';
 import { SearchIcon } from '../../../components/react/icons/search';
-import { ArrowRightIcon } from '../../../components/react/icons/arrow';
+import { AnimatedArrowLink } from '../../../components/react/AnimatedArrowAction';
+import { getChallengeSlug } from '../../../content/challenges';
 
 function normalize(value: string) {
   return value
@@ -93,12 +94,12 @@ export default function RecallSearchIsland({
                   <span className="recall-label">Ejemplo</span>
                   <p>{card.example}</p>
                 </div>
-                <a
+                <AnimatedArrowLink
                   className="button button-secondary"
-                  href={`/desafio/${card.challengeId}?source=recall`}
+                  href={`/desafio/${getChallengeSlug(card.challengeId)}?source=recall`}
                 >
-                  Probar un ejemplo <ArrowRightIcon size={18} reducedMotion />
-                </a>
+                  Probar un ejemplo
+                </AnimatedArrowLink>
               </div>
             </div>
           </details>

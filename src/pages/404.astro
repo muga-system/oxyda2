@@ -1,5 +1,6 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import { AnimatedArrowLink } from '../components/react/AnimatedArrowAction';
 ---
 
 <SiteLayout title="Página no encontrada">
@@ -7,8 +8,12 @@ import SiteLayout from '../layouts/SiteLayout.astro';
     <h1>Por acá no hay un desafío.</h1><p>
       Es posible que el enlace haya cambiado. Desde el inicio podés elegir otra
       situación.
-    </p><a class="button button-primary" href="/"
-      >Volver al inicio <span aria-hidden="true">→</span></a
+    </p><AnimatedArrowLink
+      client:load
+      className="button button-primary"
+      href="/"
     >
+      Volver al inicio
+    </AnimatedArrowLink>
   </div>
 </SiteLayout>

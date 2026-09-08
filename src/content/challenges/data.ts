@@ -4,6 +4,7 @@ import { choice, numeric, option as o } from './steps';
 export const dataChallenges = [
   {
     id: 'data-mean-outlier',
+    slug: 'promedio-y-demora',
     familyId: 'data',
     title: 'El promedio y la demora',
     scenario:
@@ -100,6 +101,7 @@ export const dataChallenges = [
   },
   {
     id: 'data-median-salaries',
+    slug: 'sueldo-representativo',
     familyId: 'data',
     title: 'Un sueldo representativo',
     scenario:
@@ -201,6 +203,7 @@ export const dataChallenges = [
   },
   {
     id: 'data-graph-axis',
+    slug: 'eje-del-grafico',
     familyId: 'data',
     title: 'Cuando el eje amplifica',
     scenario:
@@ -311,6 +314,7 @@ export const dataChallenges = [
   },
   {
     id: 'data-sample-claim',
+    slug: 'muestra-y-afirmacion',
     familyId: 'data',
     title: 'Nueve de cada diez',
     scenario:

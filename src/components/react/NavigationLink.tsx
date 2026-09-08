@@ -34,7 +34,7 @@ export default function NavigationLink({
   const hovered = useRef(false);
   const focused = useRef(false);
   const prefersReducedMotion = useReducedMotion();
-  const reducedMotion = prefersReducedMotion !== false;
+  const reducedMotion = prefersReducedMotion === true;
   const Icon = icons[icon];
 
   function startAnimation() {

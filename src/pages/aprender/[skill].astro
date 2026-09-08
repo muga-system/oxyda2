@@ -5,6 +5,7 @@ import FamilyStatusIsland from '../../modules/learning/ui/FamilyStatusIsland';
 import FamilyConceptsIsland from '../../modules/learning/ui/FamilyConceptsIsland';
 import { families, skills } from '../../content/skills';
 import { challenges } from '../../content/challenges';
+import { AnimatedArrowLink } from '../../components/react/AnimatedArrowAction';
 
 export const getStaticPaths = (() =>
   families.map((family) => ({
@@ -42,7 +43,12 @@ const familyIndex = families.findIndex((item) => item.id === family.id);
       >
         {
           relatedChallenges.map((challenge) => (
-            <a href={`/desafio/${challenge.id}?source=learning`}>
+            <AnimatedArrowLink
+              client:load
+              className="challenge-link"
+              href={`/desafio/${challenge.slug}?source=learning`}
+              direction="up-right"
+            >
               <>
                 <span>
                   <>
@@ -50,9 +56,8 @@ const familyIndex = families.findIndex((item) => item.id === family.id);
                     <span>{challenge.steps.length} pasos para pensar</span>
                   </>
                 </span>
-                <span aria-hidden="true">↗</span>
               </>
-            </a>
+            </AnimatedArrowLink>
           ))
         }
       </div>

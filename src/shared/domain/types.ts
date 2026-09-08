@@ -61,6 +61,8 @@ export interface ChallengeStep {
 }
 export interface Challenge {
   id: string;
+  /** Stable route segment shown in the public URL. */
+  slug: string;
   familyId: FamilyId;
   title: string;
   scenario: string;

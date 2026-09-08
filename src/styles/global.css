@@ -302,8 +302,7 @@ main:focus {
   transition:
     background-color 160ms,
     border-color 160ms,
-    color 160ms,
-    transform 160ms;
+    color 160ms;
 }
 .button-primary {
   background: var(--color-accent);
@@ -311,7 +310,6 @@ main:focus {
 }
 .button-primary:hover {
   background: var(--color-accent-hover);
-  transform: translateY(-1px);
 }
 .button-secondary {
   background: transparent;
@@ -321,7 +319,6 @@ main:focus {
 .button-secondary:hover {
   background: var(--color-strong);
   border-color: var(--color-muted);
-  transform: translateY(-1px);
 }
 .button-quiet {
   background: transparent;
@@ -590,7 +587,6 @@ main:focus {
 .action-card:focus-within {
   border-color: var(--color-accent-line);
   background: var(--color-raised);
-  transform: translateY(-2px);
 }
 .action-card__icon-frame {
   display: grid;
@@ -2347,14 +2343,11 @@ html[data-reduced-motion='true'] *::after {
   border-radius: 50%;
 }
 .action-card__arrow {
-  transition:
-    color 160ms,
-    transform 160ms;
+  transition: color 160ms;
 }
 .action-card:hover .action-card__arrow,
 .action-card:focus-within .action-card__arrow {
   color: var(--color-accent);
-  transform: translateX(3px);
 }
 
 @media (max-width: 1100px) {
@@ -4002,12 +3995,9 @@ html[data-reduced-motion='true'] *::after {
   min-height: 164px;
   padding: 26px 8px 26px 0;
   background: transparent;
-  transition:
-    background-color 160ms,
-    padding 160ms;
+  transition: background-color 160ms;
 }
 .learning-page--overview .learning-family:hover {
-  padding-left: 14px;
   background: var(--color-raised);
 }
 .learning-page--overview .learning-family:focus-visible {
@@ -4083,14 +4073,11 @@ html[data-reduced-motion='true'] *::after {
   align-self: center;
   padding-top: 0;
   color: var(--color-muted);
-  transition:
-    color 160ms,
-    transform 160ms;
+  transition: color 160ms;
 }
 .learning-page--overview .learning-family:hover .family-arrow,
 .learning-page--overview .learning-family:focus-visible .family-arrow {
   color: var(--color-accent);
-  transform: translate(2px, -2px);
 }
 .learning-page--overview > .small-note {
   max-width: 62ch;
@@ -4261,7 +4248,7 @@ html[data-reduced-motion='true'] *::after {
     padding: 24px 0;
   }
   .learning-page--overview .learning-family:hover {
-    padding-left: 8px;
+    background: var(--color-raised);
   }
   .learning-page--overview .family-title-row {
     align-items: start;
@@ -4418,7 +4405,6 @@ html[data-reduced-motion='true'] *::after {
 }
 .recall-card summary:hover,
 .recall-card summary:focus-visible {
-  padding-inline: 14px;
   background: var(--color-raised);
 }
 .recall-card summary:focus-visible {
@@ -4547,7 +4533,7 @@ html[data-reduced-motion='true'] *::after {
   }
   .recall-card summary:hover,
   .recall-card summary:focus-visible {
-    padding-inline: 8px;
+    background: var(--color-raised);
   }
   .recall-body {
     display: block;
@@ -4555,5 +4541,42 @@ html[data-reduced-motion='true'] *::after {
   }
   .recall-body__math {
     margin-top: 24px;
+  }
+}
+
+/* Shared canvas: every non-home surface aligns to the Home gutters. */
+.site-header-app,
+.site-frame,
+.site-footer {
+  max-width: 1760px;
+}
+
+.site-frame main,
+.site-frame-home main {
+  padding-inline: clamp(24px, 3vw, 56px);
+}
+
+.site-frame:not(.site-frame-home) main > .challenge-page--runner,
+.site-frame:not(.site-frame-home) main > .learning-page,
+.site-frame:not(.site-frame-home) main > .recall-page {
+  max-width: none;
+  margin-inline: 0;
+}
+
+.site-frame:not(.site-frame-home) .recall-search,
+.site-frame:not(.site-frame-home) .diagnostic-page .diagnostic-intro,
+.site-frame:not(.site-frame-home) .diagnostic-page .runner-meta,
+.site-frame:not(.site-frame-home) .diagnostic-page .step-track,
+.site-frame:not(.site-frame-home) .diagnostic-page .challenge-context,
+.site-frame:not(.site-frame-home) .diagnostic-page .comparison,
+.site-frame:not(.site-frame-home) .diagnostic-page .data-chart,
+.site-frame:not(.site-frame-home) .diagnostic-page .step-panel {
+  max-width: none;
+}
+
+@media (max-width: 760px) {
+  .site-frame main,
+  .site-frame-home main {
+    padding-inline: 22px;
   }
 }
