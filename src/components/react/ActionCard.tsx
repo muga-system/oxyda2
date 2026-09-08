@@ -20,6 +20,7 @@ interface ActionCardProps {
   title: string;
   description: string;
   icon: keyof typeof icons;
+  layout?: 'wide' | 'compact' | 'horizontal';
   reducedMotionOverride?: boolean;
 }
 
@@ -28,6 +29,7 @@ export function ActionCard({
   title,
   description,
   icon,
+  layout = 'compact',
   reducedMotionOverride = false,
 }: ActionCardProps) {
   const iconRef = useRef<AnimatedIconHandle>(null);
@@ -54,7 +56,7 @@ export function ActionCard({
 
   return (
     <a
-      className="action-card"
+      className={`action-card action-card--${layout}`}
       href={href}
       onMouseEnter={() => {
         hovered.current = true;

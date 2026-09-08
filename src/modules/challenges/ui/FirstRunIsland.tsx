@@ -5,6 +5,92 @@ import { getSkillProgress } from '../../progress/domain/progress';
 import ActionCard from '../../../components/react/ActionCard';
 import StorageNotice from '../../../components/react/StorageNotice';
 
+function MathInstrument({ label }: { label: string }) {
+  return (
+    <aside className="math-instrument" aria-label="Comparación de descuentos">
+      <header className="math-instrument__header">
+        <span>{label}</span>
+        <span>RELACIÓN 01</span>
+      </header>
+      <div className="math-instrument__equation">
+        <span className="math-instrument__eyebrow">descuento A</span>
+        <strong className="math-instrument__percent">25%</strong>
+        <span className="math-instrument__base">de $80.000</span>
+        <span className="math-instrument__operation">80.000 × 0,25</span>
+        <span className="math-instrument__rule" aria-hidden="true" />
+        <span className="math-instrument__result-label">equivale a</span>
+        <strong className="math-instrument__result">$20.000</strong>
+      </div>
+      <div
+        className="math-instrument__ledger"
+        aria-label="Comparación de descuentos"
+      >
+        <div>
+          <span>descuento A</span>
+          <strong>$20.000</strong>
+        </div>
+        <div>
+          <span>descuento B</span>
+          <strong>$18.000</strong>
+        </div>
+        <div className="math-instrument__difference">
+          <span>diferencia</span>
+          <strong>$2.000</strong>
+        </div>
+      </div>
+      <p className="math-instrument__note">
+        La misma unidad cambia la decisión.
+      </p>
+    </aside>
+  );
+}
+
+function HomeDoors() {
+  return (
+    <section className="home-doors" aria-labelledby="doors-title">
+      <header className="home-doors__header">
+        <div>
+          <span className="home-eyebrow">CUATRO FORMAS DE SEGUIR</span>
+          <h2 id="doors-title">Elegí por dónde seguir.</h2>
+        </div>
+        <span className="home-doors__index" aria-hidden="true">
+          02—05
+        </span>
+      </header>
+      <div className="action-grid">
+        <ActionCard
+          href="/aprender"
+          title="Aprender"
+          description="Ideas breves para comprender una relación y ponerla en práctica."
+          icon="book-open"
+          layout="wide"
+        />
+        <ActionCard
+          href="/recordar"
+          title="Recordar"
+          description="La explicación que necesitás, cuando la necesitás."
+          icon="search"
+          layout="compact"
+        />
+        <ActionCard
+          href="/prueba"
+          title="Poneme a prueba"
+          description="Ocho situaciones para reconocer qué ideas tenés a mano."
+          icon="scan-line"
+          layout="compact"
+        />
+        <ActionCard
+          href="/mapa"
+          title="Mi mapa"
+          description="Lo que vas comprendiendo y lo que conviene refrescar."
+          icon="map"
+          layout="horizontal"
+        />
+      </div>
+    </section>
+  );
+}
+
 export default function FirstRunIsland({
   challenges,
   families,
@@ -45,84 +131,54 @@ export default function FirstRunIsland({
     return (
       <>
         <StorageNotice message={message} />
-        <div className="first-run">
-          <div className="first-run-copy">
+        <section className="home-hero home-hero--first-run">
+          <div className="home-hero__copy">
+            <span className="home-eyebrow">MATEMÁTICA COTIDIANA</span>
             <h1>
-              Matemática para <em>pensar,</em>
+              Matemática para pensar,
               <br />
-              no solamente
-              <br />
-              para calcular.
+              <em>no solamente para calcular.</em>
             </h1>
             <p className="lead">
-              Hay ideas que no se olvidan.
-              <br />
-              Solo necesitan volver a usarse.
+              Recuperá conocimientos que alguna vez aprendiste y dejaste de
+              usar.
             </p>
-            <p>
+            <p className="home-hero__support">
               Empezá con una situación cotidiana. Mirá qué hay detrás de los
               números y tomá una decisión con sentido.
             </p>
-            <a
-              className="button button-primary first-cta"
-              href="/desafio/percentage-discount-compare"
-            >
-              Resolver mi primer desafío <span aria-hidden="true">→</span>
-            </a>
+            <div className="home-hero__actions">
+              <a
+                className="button button-primary"
+                href="/desafio/percentage-discount-compare"
+              >
+                Resolver mi primer desafío <span aria-hidden="true">→</span>
+              </a>
+              <a className="home-text-action" href="#como-funciona">
+                Explorar cómo funciona <span aria-hidden="true">↓</span>
+              </a>
+            </div>
             <p className="small-note">Sin registro. Sin reloj. A tu ritmo.</p>
           </div>
-          <div
-            className="first-run-preview"
-            aria-label="Situación del primer desafío"
-          >
-            <div className="preview-heading">
-              <span>Una campera. Dos ofertas.</span>
-              <span className="preview-cross" aria-hidden="true">
-                ×
-              </span>
-            </div>
-            <div className="preview-price">
-              <span>Precio original</span>
-              <strong>$80.000</strong>
-            </div>
-            <div className="preview-offers">
-              <div>
-                <span>Tienda A</span>
-                <strong>
-                  25<span>%</span>
-                </strong>
-                <span>de descuento</span>
-              </div>
-              <div>
-                <span>Tienda B</span>
-                <strong>$18.000</strong>
-                <span>de descuento</span>
-              </div>
-            </div>
-            <p className="preview-question">
-              ¿Cuál conviene?<span aria-hidden="true">↗</span>
-            </p>
-            <p className="preview-note">
-              Antes de calcular,
-              <br />
-              hay algo para reconocer.
-            </p>
-          </div>
-        </div>
-        <div
-          className="thinking-sequence"
-          aria-label="Una forma de abordar cada situación"
+          <MathInstrument label="Una situación real" />
+        </section>
+        <section
+          className="home-method"
+          id="como-funciona"
+          aria-labelledby="method-title"
         >
-          <span>Reconocer</span>
-          <span aria-hidden="true">→</span>
-          <span>Estimar</span>
-          <span aria-hidden="true">→</span>
-          <span>Resolver</span>
-          <span aria-hidden="true">→</span>
-          <span>Verificar</span>
-          <span aria-hidden="true">→</span>
-          <span>Decidir</span>
-        </div>
+          <div className="home-method__intro">
+            <span className="home-eyebrow">CÓMO TRABAJAMOS</span>
+            <h2 id="method-title">Pensar antes de calcular.</h2>
+          </div>
+          <div className="home-method__steps">
+            <span>01 Reconocer</span>
+            <span>02 Estimar</span>
+            <span>03 Resolver</span>
+            <span>04 Verificar</span>
+            <span>05 Decidir</span>
+          </div>
+        </section>
         {!ready && (
           <span className="sr-only" role="status">
             Leyendo tu progreso…
@@ -134,34 +190,39 @@ export default function FirstRunIsland({
   return (
     <>
       <StorageNotice message={message} />
-      <header className="home-heading">
-        <h1>
-          Volvé a poner
-          <br />
-          las ideas en juego.
-        </h1>
-        <a className="text-link" href="/mapa">
-          Abrir mi mapa <span aria-hidden="true">↗</span>
-        </a>
-      </header>
-      <section className="featured-challenge">
-        <div>
-          <p className="section-label">Desafío destacado</p>
-          <h2>{featured.title}</h2>
+      <section className="home-hero home-hero--returning">
+        <div className="home-hero__copy">
+          <span className="home-eyebrow">TU ESPACIO DE PRÁCTICA</span>
+          <h1>
+            Volvé a poner
+            <br />
+            <em>las ideas en juego.</em>
+          </h1>
+          <p className="lead">
+            Elegí una situación, una relación o una pregunta. Tu recorrido sigue
+            disponible en este navegador.
+          </p>
+          <a className="home-text-action" href="/mapa">
+            Abrir mi mapa <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+        <MathInstrument label="Relación a mano" />
+      </section>
+      <section className="home-focus" aria-labelledby="featured-title">
+        <div className="home-focus__marker" aria-hidden="true">
+          01
+        </div>
+        <div className="home-focus__body">
+          <span className="home-eyebrow">DESAFÍO DESTACADO</span>
+          <h2 id="featured-title">{featured.title}</h2>
           <p>{featured.scenario}</p>
           <a className="button button-primary" href={`/desafio/${featured.id}`}>
             Resolver esta situación <span aria-hidden="true">→</span>
           </a>
         </div>
-        <div className="featured-aside">
-          <span className="formula-mark" aria-hidden="true">
-            O × Y = 2
-          </span>
-          <p>
-            Reconocer una relación
-            <br />
-            también es hacer matemática.
-          </p>
+        <div className="home-focus__aside">
+          <span>Una relación cambia</span>
+          <strong>una decisión.</strong>
         </div>
       </section>
       {refreshSkill && refreshFamily && (
@@ -182,48 +243,20 @@ export default function FirstRunIsland({
           </a>
         </aside>
       )}
-      <div className="continue-learning">
+      <section className="home-continue" aria-labelledby="continue-title">
         <div>
-          <span className="section-label">Continuar aprendizaje</span>
-          <h2>{activeSkill.title}</h2>
+          <span className="home-eyebrow">CONTINUAR APRENDIZAJE</span>
+          <h2 id="continue-title">{activeSkill.title}</h2>
           <p>{activeSkill.description}</p>
         </div>
         <a
-          className="text-link"
+          className="home-text-action"
           href={`/aprender/${activeFamily.slug}#${activeSkill.id}`}
         >
           Abrir el concepto <span aria-hidden="true">→</span>
         </a>
-      </div>
-      <section className="home-doors" aria-labelledby="doors-title">
-        <h2 id="doors-title">Elegí por dónde seguir.</h2>
-        <div className="action-grid">
-          <ActionCard
-            href="/aprender"
-            title="Aprender"
-            description="Ideas breves para comprender una relación y ponerla en práctica."
-            icon="book-open"
-          />
-          <ActionCard
-            href="/recordar"
-            title="Recordar"
-            description="La explicación que necesitás, cuando la necesitás."
-            icon="search"
-          />
-          <ActionCard
-            href="/prueba"
-            title="Poneme a prueba"
-            description="Ocho situaciones para reconocer qué ideas tenés a mano."
-            icon="scan-line"
-          />
-          <ActionCard
-            href="/mapa"
-            title="Mi mapa"
-            description="Lo que vas comprendiendo y lo que conviene refrescar."
-            icon="map"
-          />
-        </div>
       </section>
+      <HomeDoors />
     </>
   );
 }
