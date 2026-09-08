@@ -3951,3 +3951,254 @@ html[data-reduced-motion='true'] *::after {
     margin-top: 22px;
   }
 }
+
+/* Recall: quick mathematical consultation */
+.recall-page {
+  max-width: 1040px;
+  margin: 0 auto;
+}
+.recall-heading {
+  max-width: 700px;
+  margin-bottom: 34px;
+}
+.recall-heading__index {
+  display: block;
+  margin-bottom: 14px;
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.recall-heading h1 {
+  font-size: clamp(2.1rem, 3.5vw, 3.2rem);
+}
+.recall-search {
+  max-width: 760px;
+  padding: 22px 0 28px;
+  border-block: 1px solid var(--color-line);
+}
+.recall-search > label {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.search-field__input {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border-strong);
+  transition:
+    border-color 160ms,
+    box-shadow 160ms;
+}
+.search-field__input:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: 0 2px 0 var(--color-accent);
+}
+.search-field__input .search-icon {
+  flex: 0 0 auto;
+  margin: 0 14px 0 0;
+  color: var(--color-accent);
+}
+.search-field__input input {
+  min-width: 0;
+  width: 100%;
+  padding: 10px 0 12px;
+  color: var(--color-ink);
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+}
+.search-field__input input::placeholder {
+  color: var(--color-muted-strong);
+}
+.recall-search > p {
+  margin-top: 12px;
+  color: var(--color-muted);
+  font-size: 0.78rem;
+}
+.recall-list-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+  margin-top: 34px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-line);
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.recall-list-heading .result-count {
+  margin: 0;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.recall-list {
+  border-top: 0;
+}
+.recall-card {
+  border-bottom: 1px solid var(--color-line);
+}
+.recall-card summary {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 20px;
+  gap: 18px;
+  align-items: center;
+  min-height: 82px;
+  padding: 18px 0;
+  transition:
+    background-color 160ms,
+    padding 160ms;
+}
+.recall-card summary:hover,
+.recall-card summary:focus-visible {
+  padding-inline: 14px;
+  background: var(--color-raised);
+}
+.recall-card summary:focus-visible {
+  outline-offset: -2px;
+}
+.recall-card__index {
+  align-self: start;
+  padding-top: 4px;
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+.recall-card summary .eyebrow {
+  margin-bottom: 5px;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.recall-card summary strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 550;
+}
+.recall-card summary:hover strong {
+  color: var(--color-ink);
+}
+.details-plus {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 400;
+}
+.recall-card[open] .details-plus {
+  color: var(--color-accent);
+}
+.recall-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.85fr);
+  gap: clamp(30px, 6vw, 76px);
+  max-width: 940px;
+  padding: 4px 0 30px 60px;
+}
+.recall-body__idea {
+  align-self: start;
+  padding-top: 8px;
+}
+.recall-label {
+  display: block;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.recall-body__idea > p {
+  margin-top: 12px;
+  color: var(--color-ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+.recall-body__math {
+  align-self: start;
+  padding-left: 20px;
+  border-left: 2px solid var(--color-accent);
+}
+.recall-body .formula {
+  display: block;
+  margin: 0;
+  padding: 0 0 16px;
+  border: 0;
+  border-bottom: 1px solid var(--color-line);
+  border-radius: 0;
+  background: transparent;
+}
+.recall-body .formula code {
+  display: block;
+  margin-top: 11px;
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+.recall-example {
+  padding-top: 16px;
+}
+.recall-example > p {
+  margin-top: 11px;
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.75;
+}
+.recall-body__math .button {
+  gap: 12px;
+  margin-top: 22px;
+}
+.recall-body__math .button > svg {
+  display: block;
+  flex: 0 0 auto;
+}
+.recall-page .empty-state {
+  max-width: 600px;
+  padding: 34px 0;
+  border-bottom: 1px solid var(--color-line);
+}
+.recall-page .empty-state h2 {
+  font-size: 1.35rem;
+}
+.recall-page .empty-state p {
+  margin: 12px 0 22px;
+}
+
+@media (max-width: 760px) {
+  .recall-page .recall-heading {
+    margin-bottom: 26px;
+  }
+  .recall-list-heading {
+    margin-top: 26px;
+  }
+  .recall-card summary {
+    grid-template-columns: 30px minmax(0, 1fr) 18px;
+    gap: 12px;
+    min-height: 76px;
+  }
+  .recall-card summary:hover,
+  .recall-card summary:focus-visible {
+    padding-inline: 8px;
+  }
+  .recall-body {
+    display: block;
+    padding: 0 0 26px 42px;
+  }
+  .recall-body__math {
+    margin-top: 24px;
+  }
+}

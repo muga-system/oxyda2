@@ -6,11 +6,16 @@ import { families } from '../content/skills';
 ---
 
 <SiteLayout title="Recordar">
-  <header class="page-heading">
-    <h1>Volvé a esa idea.</h1><p class="lead">
-      Una relación, una explicación breve y un ejemplo. Sin recorrer un curso
-      entero.
-    </p>
-  </header>
-  <RecallSearchIsland client:load cards={recallCards} families={families} />
+  <div class="recall-page">
+    <header class="page-heading recall-heading">
+      <span class="recall-heading__index">Consulta rápida / 10 referencias</span
+      >
+      <h1>Volvé a esa idea.</h1>
+      <p class="lead">
+        Una relación, una explicación breve y un ejemplo. Sin recorrer un curso
+        entero.
+      </p>
+    </header>
+    <RecallSearchIsland client:load cards={recallCards} families={families} />
+  </div>
 </SiteLayout>
