@@ -88,13 +88,20 @@ export default function StepPanel({
 
   return (
     <section className="step-panel" aria-labelledby={`step-${step.id}`}>
-      <p className="eyebrow accent">{step.label ?? kindLabels[step.kind]}</p>
-      <h2 ref={heading} tabIndex={-1} id={`step-${step.id}`}>
-        {step.prompt}
-      </h2>
+      <header className="step-panel__header">
+        <span className="step-panel__kind">
+          {step.label ?? kindLabels[step.kind]}
+        </span>
+        <h2 ref={heading} tabIndex={-1} id={`step-${step.id}`}>
+          {step.prompt}
+        </h2>
+      </header>
       {step.debug && (
         <pre className="debug-block">
-          <span>Razonamiento para revisar</span>
+          <span className="debug-block__header">
+            <span>Razonamiento para revisar</span>
+            <span>inspección</span>
+          </span>
           <code>{step.debug}</code>
         </pre>
       )}
@@ -121,12 +128,12 @@ export default function StepPanel({
                     setValidation('');
                   }}
                 />
-                <span className="choice-letter" aria-hidden="true">
+                <span className="choice-index" aria-hidden="true">
                   {String.fromCharCode(65 + index)}
                 </span>
-                <span>{option.label}</span>
-                <span className="choice-mark" aria-hidden="true">
-                  {raw === option.id ? '●' : '○'}
+                <span className="choice-label">{option.label}</span>
+                <span className="choice-status" aria-hidden="true">
+                  {raw === option.id ? 'Elegida' : ''}
                 </span>
               </label>
             ))}

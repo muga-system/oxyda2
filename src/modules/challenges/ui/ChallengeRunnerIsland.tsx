@@ -61,77 +61,104 @@ export default function ChallengeRunnerIsland({
 
   if (finished)
     return (
-      <div className="challenge-complete">
+      <section
+        className="challenge-complete"
+        aria-labelledby="challenge-complete-title"
+      >
         <StorageNotice message={message} />
-        <span className="completion-symbol" aria-hidden="true">
-          ✓
-        </span>
-        <p className="eyebrow">Desafío recorrido</p>
-        <h2 tabIndex={-1} ref={resultHeading}>
-          El número es una parte.
-          <br />
-          Entenderlo cambia la decisión.
-        </h2>
-        <p className="lead">{challenge.takeaway}</p>
-        <div className="used-skills">
-          <h3>Habilidades que pusiste en juego</h3>
-          <ul>
-            {skills
-              .filter((skill) => challenge.skillIds.includes(skill.id))
-              .map((skill) => (
-                <li key={skill.id}>{skill.title}</li>
-              ))}
-          </ul>
+        <header className="challenge-complete__header">
+          <span className="completion-symbol" aria-hidden="true">
+            ✓
+          </span>
+          <div>
+            <p className="eyebrow">Desafío recorrido</p>
+            <span className="challenge-complete__index">
+              {String(challenge.steps.length).padStart(2, '0')} /{' '}
+              {String(challenge.steps.length).padStart(2, '0')}
+            </span>
+          </div>
+        </header>
+        <div className="challenge-complete__body">
+          <h2 tabIndex={-1} ref={resultHeading} id="challenge-complete-title">
+            El número es una parte.
+            <br />
+            Entenderlo cambia la decisión.
+          </h2>
+          <p className="lead">{challenge.takeaway}</p>
+          <div className="used-skills">
+            <h3>Habilidades que pusiste en juego</h3>
+            <ul>
+              {skills
+                .filter((skill) => challenge.skillIds.includes(skill.id))
+                .map((skill) => (
+                  <li key={skill.id}>{skill.title}</li>
+                ))}
+            </ul>
+          </div>
+          {firstChallenge && (
+            <p>
+              Podés seguir con otra situación, aprender una idea, consultar una
+              relación o explorar tu mapa.
+            </p>
+          )}
+          <div className="answer-actions">
+            <a className="button button-primary" href="/">
+              {firstChallenge ? 'Conocer mi espacio' : 'Volver al inicio'}{' '}
+              <span aria-hidden="true">→</span>
+            </a>
+            <a className="button button-secondary" href="/mapa">
+              Ver mi mapa
+            </a>
+          </div>
         </div>
-        {firstChallenge && (
-          <p>
-            Podés seguir con otra situación, aprender una idea, consultar una
-            relación o explorar tu mapa.
-          </p>
-        )}
-        <div className="answer-actions">
-          <a className="button button-primary" href="/">
-            {firstChallenge ? 'Conocer mi espacio' : 'Volver al inicio'}{' '}
-            <span aria-hidden="true">→</span>
-          </a>
-          <a className="button button-secondary" href="/mapa">
-            Ver mi mapa
-          </a>
-        </div>
-      </div>
+      </section>
     );
 
   return (
     <>
       <StorageNotice message={message} />
-      <div className="runner-meta">
-        <span>
-          {firstChallenge ? 'Tu primer desafío' : 'Una situación para pensar'}
-        </span>
-        <span>
-          Paso {stepIndex + 1} de {challenge.steps.length}
-        </span>
-      </div>
-      <div className="step-track" aria-hidden="true">
-        {challenge.steps.map((item, index) => (
-          <span
-            key={item.id}
-            className={index <= stepIndex ? 'is-current' : ''}
+      <div className="challenge-runner">
+        <section className="runner-main" aria-label="Resolver el paso actual">
+          <div className="runner-meta">
+            <span>
+              {firstChallenge
+                ? 'Tu primer desafío'
+                : 'Una situación para pensar'}
+            </span>
+            <span>
+              Paso {stepIndex + 1} de {challenge.steps.length}
+            </span>
+          </div>
+          <div className="step-track" aria-hidden="true">
+            {challenge.steps.map((item, index) => (
+              <span
+                key={item.id}
+                className={index <= stepIndex ? 'is-current' : ''}
+              />
+            ))}
+          </div>
+          {step && (
+            <StepPanel
+              key={step.id}
+              step={step}
+              ready={ready}
+              onEvaluated={evaluated}
+              onNext={next}
+              finalStep={stepIndex === challenge.steps.length - 1}
+              focusOnMount={stepIndex > 0}
+            />
+          )}
+        </section>
+        {step && (
+          <ChallengeContext
+            challenge={challenge}
+            activeStep={step}
+            stepIndex={stepIndex}
+            totalSteps={challenge.steps.length}
+            variant="runner"
           />
-        ))}
+        )}
       </div>
-      <ChallengeContext challenge={challenge} />
-      {step && (
-        <StepPanel
-          key={step.id}
-          step={step}
-          ready={ready}
-          onEvaluated={evaluated}
-          onNext={next}
-          finalStep={stepIndex === challenge.steps.length - 1}
-          focusOnMount={stepIndex > 0}
-        />
-      )}
     </>
   );
 }
