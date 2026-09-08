@@ -1,0 +1,26 @@
+---
+import type { GetStaticPaths } from 'astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import ChallengeRunnerIsland from '../../modules/challenges/ui/ChallengeRunnerIsland';
+import { challenges } from '../../content/challenges';
+import { skills } from '../../content/skills';
+
+export const getStaticPaths = (() =>
+  challenges.map((challenge) => ({
+    params: { id: challenge.id },
+    props: { challenge },
+  }))) satisfies GetStaticPaths;
+const { challenge } = Astro.props;
+---
+
+<SiteLayout title={challenge.title}>
+  <div class="challenge-page">
+    <a class="back-link" href="/">← Inicio</a>
+    <header class="page-heading compact"><h1>{challenge.title}</h1></header>
+    <ChallengeRunnerIsland
+      client:load
+      challenge={challenge}
+      skills={skills.filter((skill) => challenge.skillIds.includes(skill.id))}
+    />
+  </div>
+</SiteLayout>

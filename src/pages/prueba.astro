@@ -1,0 +1,25 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import DiagnosticRunnerIsland from '../modules/diagnostic/ui/DiagnosticRunnerIsland';
+import { challenges } from '../content/challenges';
+import { families, skills } from '../content/skills';
+import { selectDiagnostic } from '../modules/diagnostic/domain/selectDiagnostic';
+const items = selectDiagnostic(challenges).map(({ challenge, step }) => ({
+  challenge: { ...challenge, steps: [step] },
+  step,
+}));
+---
+
+<SiteLayout title="Poneme a prueba">
+  <div class="challenge-page">
+    <header class="page-heading">
+      <h1>¿Qué ideas tenés a mano?</h1><p class="lead">Poneme a prueba</p>
+    </header>
+    <DiagnosticRunnerIsland
+      client:load
+      items={items}
+      families={families}
+      skills={skills}
+    />
+  </div>
+</SiteLayout>

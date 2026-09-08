@@ -1,0 +1,16 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import RecallSearchIsland from '../modules/recall/ui/RecallSearchIsland';
+import { recallCards } from '../content/recall';
+import { families } from '../content/skills';
+---
+
+<SiteLayout title="Recordar">
+  <header class="page-heading">
+    <h1>Volvé a esa idea.</h1><p class="lead">
+      Una relación, una explicación breve y un ejemplo. Sin recorrer un curso
+      entero.
+    </p>
+  </header>
+  <RecallSearchIsland client:load cards={recallCards} families={families} />
+</SiteLayout>

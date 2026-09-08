@@ -1,0 +1,257 @@
+import { useEffect, useRef, useState, type SubmitEvent } from 'react';
+import type { ChallengeStep } from '../../../shared/domain/types';
+import { resolveAttempt } from '../application/attempts';
+import { formatNumber } from '../../../shared/ui/format';
+import { kindLabels } from '../../../shared/ui/labels';
+
+export type AttemptResult = ReturnType<typeof resolveAttempt>;
+
+interface Props {
+  step: ChallengeStep;
+  mode?: 'normal' | 'diagnostic';
+  ready: boolean;
+  onEvaluated: (result: AttemptResult) => void;
+  onNext: () => void;
+  finalStep?: boolean;
+  focusOnMount?: boolean;
+}
+
+export default function StepPanel({
+  step,
+  mode = 'normal',
+  ready,
+  onEvaluated,
+  onNext,
+  finalStep = false,
+  focusOnMount = false,
+}: Props) {
+  const [raw, setRaw] = useState('');
+  const [attempts, setAttempts] = useState(0);
+  const [usedHint, setUsedHint] = useState(false);
+  const [hintVisible, setHintVisible] = useState(false);
+  const [result, setResult] = useState<AttemptResult | null>(null);
+  const [validation, setValidation] = useState('');
+  const heading = useRef<HTMLHeadingElement>(null);
+  const input = useRef<HTMLInputElement>(null);
+  const optionGroup = useRef<HTMLFieldSetElement>(null);
+  const nextButton = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (focusOnMount) heading.current?.focus();
+  }, [focusOnMount]);
+
+  useEffect(() => {
+    if (result) nextButton.current?.focus();
+  }, [result]);
+
+  function submit(event?: SubmitEvent<HTMLFormElement>, dontKnow = false) {
+    event?.preventDefault();
+    if (!ready || result) return;
+    if (!dontKnow && raw.trim() === '') {
+      setValidation(
+        step.answer.type === 'numeric'
+          ? 'Escribí un número para continuar.'
+          : 'Elegí una respuesta para continuar.',
+      );
+      return;
+    }
+    const answer = dontKnow ? '__unknown__' : raw;
+    const next = resolveAttempt(step, answer, { attempts, usedHint, mode });
+    if (!next.evaluation.valid) {
+      setValidation(next.evaluation.feedback);
+      return;
+    }
+    setValidation('');
+    setResult(next);
+    setAttempts(next.attempts);
+    onEvaluated(next);
+  }
+
+  function retry() {
+    setResult(null);
+    setRaw('');
+    setValidation('');
+    requestAnimationFrame(() => {
+      if (step.answer.type === 'numeric') input.current?.focus();
+      else
+        optionGroup.current?.querySelector<HTMLInputElement>('input')?.focus();
+    });
+  }
+
+  const answerSpec = step.answer;
+  const solution =
+    answerSpec.type === 'numeric'
+      ? `${formatNumber(answerSpec.expected)}${answerSpec.unit ? ` ${answerSpec.unit}` : ''}`
+      : answerSpec.options.find(
+          (option) => option.id === answerSpec.correctOptionId,
+        )?.label;
+
+  return (
+    <section className="step-panel" aria-labelledby={`step-${step.id}`}>
+      <p className="eyebrow accent">{step.label ?? kindLabels[step.kind]}</p>
+      <h2 ref={heading} tabIndex={-1} id={`step-${step.id}`}>
+        {step.prompt}
+      </h2>
+      {step.debug && (
+        <pre className="debug-block">
+          <span>Razonamiento para revisar</span>
+          <code>{step.debug}</code>
+        </pre>
+      )}
+      <form onSubmit={submit} noValidate>
+        {step.answer.type === 'single-choice' ? (
+          <fieldset
+            className="choices"
+            ref={optionGroup}
+            disabled={Boolean(result) || !ready}
+          >
+            <legend className="sr-only">Elegí una respuesta</legend>
+            {step.answer.options.map((option, index) => (
+              <label
+                className={`choice ${raw === option.id ? 'is-selected' : ''}`}
+                key={option.id}
+              >
+                <input
+                  type="radio"
+                  name={step.id}
+                  value={option.id}
+                  checked={raw === option.id}
+                  onChange={() => {
+                    setRaw(option.id);
+                    setValidation('');
+                  }}
+                />
+                <span className="choice-letter" aria-hidden="true">
+                  {String.fromCharCode(65 + index)}
+                </span>
+                <span>{option.label}</span>
+                <span className="choice-mark" aria-hidden="true">
+                  {raw === option.id ? '●' : '○'}
+                </span>
+              </label>
+            ))}
+          </fieldset>
+        ) : (
+          <div className="numeric-field">
+            <label htmlFor={`answer-${step.id}`}>
+              Tu respuesta{step.answer.unit ? `, en ${step.answer.unit}` : ''}
+            </label>
+            <div className="numeric-input-wrap">
+              <input
+                ref={input}
+                id={`answer-${step.id}`}
+                type="text"
+                inputMode="decimal"
+                autoComplete="off"
+                spellCheck={false}
+                value={raw}
+                onChange={(event) => {
+                  setRaw(event.target.value);
+                  setValidation('');
+                }}
+                disabled={Boolean(result) || !ready}
+                aria-describedby={`help-${step.id}`}
+                aria-invalid={Boolean(validation)}
+              />
+              {step.answer.unit && (
+                <span aria-hidden="true">{step.answer.unit}</span>
+              )}
+            </div>
+            <p className="input-help" id={`help-${step.id}`}>
+              Podés usar coma o punto decimal. Para miles, usá un espacio o
+              escribí las cifras juntas.
+            </p>
+          </div>
+        )}
+        <p className="validation-message" role="alert">
+          {validation}
+        </p>
+        {!result && (
+          <div className="answer-actions">
+            <button
+              className="button button-primary"
+              type="submit"
+              disabled={!ready}
+            >
+              Comprobar <span aria-hidden="true">→</span>
+            </button>
+            {mode === 'diagnostic' ? (
+              <button
+                className="button button-quiet"
+                type="button"
+                disabled={!ready}
+                onClick={() => submit(undefined, true)}
+              >
+                No sé todavía
+              </button>
+            ) : step.hints?.length ? (
+              <button
+                className="button button-quiet"
+                type="button"
+                aria-expanded={hintVisible}
+                onClick={() => {
+                  setUsedHint(true);
+                  setHintVisible(!hintVisible);
+                }}
+              >
+                {hintVisible ? 'Ocultar pista' : 'Necesito una pista'}
+              </button>
+            ) : null}
+          </div>
+        )}
+      </form>
+      {hintVisible && !result?.done && (
+        <aside className="hint">
+          <strong>Una pista</strong>
+          <p>{step.hints?.[0]}</p>
+        </aside>
+      )}
+      <div className="feedback-region" aria-live="polite" aria-atomic="true">
+        {result && (
+          <div
+            className={`feedback ${result.evaluation.correct ? 'feedback-success' : 'feedback-review'}`}
+          >
+            <div className="feedback-title">
+              <span aria-hidden="true">
+                {result.evaluation.correct ? '✓' : '↳'}
+              </span>
+              <strong>
+                {result.evaluation.correct
+                  ? 'Tiene sentido.'
+                  : result.done
+                    ? 'Revisemos la idea.'
+                    : 'Hay algo para revisar.'}
+              </strong>
+            </div>
+            <p>{result.evaluation.feedback}</p>
+            {result.done && !result.evaluation.correct && (
+              <p className="solution">
+                <strong>Respuesta: </strong>
+                {solution}
+              </p>
+            )}
+            {result.done && <p>{step.explanation}</p>}
+          </div>
+        )}
+      </div>
+      {result && (
+        <div className="step-next">
+          <button
+            ref={nextButton}
+            className="button button-primary"
+            onClick={result.done ? onNext : retry}
+          >
+            {result.done
+              ? finalStep
+                ? mode === 'diagnostic'
+                  ? 'Ver mi lectura'
+                  : 'Cerrar desafío'
+                : 'Continuar'
+              : 'Volver a intentar'}{' '}
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      )}
+    </section>
+  );
+}

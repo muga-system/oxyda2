@@ -1,0 +1,19 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import LearningOverviewIsland from '../../modules/learning/ui/LearningOverviewIsland';
+import { families, skills } from '../../content/skills';
+---
+
+<SiteLayout title="Aprender">
+  <header class="page-heading">
+    <h1>Una idea a la vez.</h1><p class="lead">
+      Cinco familias para entender relaciones que aparecen todos los días.
+      Empezá donde tengas curiosidad.
+    </p>
+  </header>
+  <LearningOverviewIsland client:load families={families} skills={skills} />
+  <p class="small-note">
+    Todos los conceptos están abiertos. La progresión orienta; vos elegís el
+    recorrido.
+  </p>
+</SiteLayout>

@@ -1,0 +1,82 @@
+---
+import type { GetStaticPaths } from 'astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import FamilyStatusIsland from '../../modules/learning/ui/FamilyStatusIsland';
+import { families, skills } from '../../content/skills';
+import { challenges } from '../../content/challenges';
+
+export const getStaticPaths = (() =>
+  families.map((family) => ({
+    params: { skill: family.slug },
+    props: { family },
+  }))) satisfies GetStaticPaths;
+const { family } = Astro.props;
+const familySkills = skills.filter((skill) => skill.familyId === family.id);
+const relatedChallenges = challenges.filter(
+  (challenge) => challenge.familyId === family.id,
+);
+---
+
+<SiteLayout title={family.title}>
+  <a class="back-link" href="/aprender">← Aprender</a>
+  <header class="page-heading compact">
+    <h1>{family.title}</h1><p class="lead">{family.description}</p>
+  </header>
+  <FamilyStatusIsland client:idle skills={familySkills} />
+  <nav
+    class="concept-nav"
+    aria-label={`Conceptos de ${family.title.toLowerCase()}`}
+  >
+    {familySkills.map((skill) => <a href={`#${skill.id}`}>{skill.title}</a>)}
+  </nav>
+  <div class="microconcepts">
+    {
+      familySkills.map((skill) => {
+        const example =
+          relatedChallenges.find((challenge) =>
+            challenge.skillIds.includes(skill.id),
+          ) ??
+          challenges.find((challenge) => challenge.skillIds.includes(skill.id));
+        return (
+          <section class="microconcept" id={skill.id}>
+            <div class="concept-example">
+              <>
+                <span>Por ejemplo</span>
+                <p>{skill.example}</p>
+              </>
+            </div>
+            {example && (
+              <a
+                class="button button-secondary"
+                href={`/desafio/${example.id}?source=learning`}
+              >
+                Poner la idea en práctica <span aria-hidden="true">→</span>
+              </a>
+            )}
+          </section>
+        );
+      })
+    }
+  </div>
+  <section class="related-challenges">
+    <h2>Situaciones de {family.title.toLowerCase()}</h2><div
+      class="challenge-links"
+    >
+      {
+        relatedChallenges.map((challenge) => (
+          <a href={`/desafio/${challenge.id}?source=learning`}>
+            <>
+              <span>
+                <>
+                  <strong>{challenge.title}</strong>
+                  <span>{challenge.steps.length} pasos para pensar</span>
+                </>
+              </span>
+              <span aria-hidden="true">↗</span>
+            </>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</SiteLayout>

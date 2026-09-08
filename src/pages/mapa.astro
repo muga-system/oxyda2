@@ -1,0 +1,15 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import ProgressMapIsland from '../modules/progress/ui/ProgressMapIsland';
+import { families, skills } from '../content/skills';
+---
+
+<SiteLayout title="Mi mapa">
+  <header class="page-heading">
+    <h1>Lo que vas teniendo a mano.</h1><p class="lead">
+      Tu mapa de ideas: lo que estás explorando, lo que podés usar y lo que
+      conviene refrescar.
+    </p>
+  </header>
+  <ProgressMapIsland client:load families={families} skills={skills} />
+</SiteLayout>

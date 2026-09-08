@@ -1,0 +1,11 @@
+node_modules
+dist
+.astro
+pnpm-lock.yaml
+PRODUCT.md
+DESIGN.md
+AGENTS.md
+ASTRA_HANDOFF.md
+docs
+.agents
+artifacts

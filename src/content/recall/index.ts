@@ -1,0 +1,128 @@
+import type { RecallCard } from '../../shared/domain/types';
+
+export const recallCards: RecallCard[] = [
+  {
+    id: 'percentage-of-number',
+    familyId: 'percentage',
+    question: '¿Cómo calculo el porcentaje de un número?',
+    idea: 'Identificá el total y tomá la parte indicada por el porcentaje. El 25% equivale a un cuarto; el 10%, a una décima parte.',
+    formula: 'Parte = total × porcentaje ÷ 100',
+    example: '25% de $80.000 = 80.000 × 25 ÷ 100 = $20.000.',
+    challengeId: 'percentage-discount-compare',
+    keywords: ['porcentaje', 'parte', 'total', 'descuento'],
+  },
+  {
+    id: 'percentage-share',
+    familyId: 'percentage',
+    question: '¿Qué porcentaje representa una cantidad?',
+    idea: 'Compará la parte con el total correcto. La división da una proporción; multiplicarla por cien permite expresarla como porcentaje.',
+    formula: 'Porcentaje = parte ÷ total × 100',
+    example: '10 devoluciones sobre 200 pedidos: 10 ÷ 200 × 100 = 5%.',
+    challengeId: 'percentage-headline',
+    keywords: ['porcentaje', 'cantidad', 'representa', 'proporción', 'tasa'],
+  },
+  {
+    id: 'before-discount',
+    familyId: 'percentage',
+    question: '¿Cuál era el valor antes de un descuento?',
+    idea: 'Calculá qué parte del precio quedó. Con 20% de descuento queda 80%, es decir, 0,80 del original. Dividí por esa parte.',
+    formula: 'Original = precio final ÷ (1 − descuento ÷ 100)',
+    example:
+      'Si después de 20% de descuento pagás $64.000: 64.000 ÷ 0,80 = $80.000. No se recupera sumando 20% al precio nuevo.',
+    challengeId: 'percentage-reverse-price',
+    keywords: ['original', 'inverso', 'descuento', 'antes', 'precio'],
+  },
+  {
+    id: 'basic-proportion',
+    familyId: 'proportion',
+    question: '¿Cómo escalo una cantidad proporcional?',
+    idea: 'Encontrá cuánto corresponde a una unidad y multiplicá por la cantidad nueva. La relación debe mantenerse.',
+    formula:
+      'Cantidad nueva = cantidad original × escala nueva ÷ escala original',
+    example:
+      '300 g para 6 personas → 300 ÷ 6 = 50 g por persona → 50 × 14 = 700 g para 14.',
+    challengeId: 'proportion-recipe-scale',
+    keywords: ['proporción', 'regla de tres', 'receta', 'escala', 'personas'],
+  },
+  {
+    id: 'unit-price',
+    familyId: 'proportion',
+    question: '¿Cómo comparo el precio por unidad?',
+    idea: 'Convertí las cantidades a la misma unidad y dividí cada precio por su cantidad. Después compará los resultados.',
+    formula: 'Precio por unidad = precio ÷ cantidad',
+    example:
+      '750 g son 0,75 kg. Un paquete de $3.600 cuesta 3.600 ÷ 0,75 = $4.800 por kilo.',
+    challengeId: 'proportion-unit-price',
+    keywords: ['precio', 'unidad', 'kilo', 'paquete', 'comparar'],
+  },
+  {
+    id: 'mean',
+    familyId: 'data',
+    question: '¿Cómo calculo el promedio?',
+    idea: 'Repartí la suma total en tantas partes iguales como datos haya. Un valor extremo puede alejar el promedio de lo habitual.',
+    formula: 'Promedio = suma de valores ÷ cantidad de valores',
+    example:
+      '10, 10, 10, 10 y 60 minutos suman 100. Promedio: 100 ÷ 5 = 20 minutos.',
+    challengeId: 'data-mean-outlier',
+    keywords: ['promedio', 'media', 'datos', 'suma'],
+  },
+  {
+    id: 'median',
+    familyId: 'data',
+    question: '¿Cómo encuentro la mediana?',
+    idea: 'Ordená los datos de menor a mayor y buscá el centro. Si quedan dos valores centrales, calculá su promedio.',
+    formula:
+      'Cantidad impar: valor central · Cantidad par: promedio de los dos centrales',
+    example:
+      'En 2, 4, 7, 9 y 30, la mediana es 7. En 2, 4, 7 y 9, es (4 + 7) ÷ 2 = 5,5.',
+    challengeId: 'data-median-salaries',
+    keywords: ['mediana', 'centro', 'ordenar', 'datos', 'salarios'],
+  },
+  {
+    id: 'convert-units',
+    familyId: 'units',
+    question: '¿Cómo convierto unidades?',
+    idea: 'Usá una equivalencia conocida. Al pasar a una unidad más pequeña, el número crece; al pasar a una más grande, disminuye. La cantidad real no cambia.',
+    formula: '1 km = 1.000 m · 1 kg = 1.000 g · 1 l = 1.000 ml · 1 h = 60 min',
+    example: '750 ml ÷ 1.000 = 0,75 l. Para volver: 0,75 l × 1.000 = 750 ml.',
+    challengeId: 'units-recipe-volume',
+    keywords: [
+      'convertir',
+      'unidades',
+      'litros',
+      'mililitros',
+      'metros',
+      'kilómetros',
+      'gramos',
+      'kilos',
+      'tiempo',
+    ],
+  },
+  {
+    id: 'travel-time',
+    familyId: 'proportion',
+    question: '¿Cómo relaciono tiempo, distancia y velocidad?',
+    idea: 'Dividí la distancia por la velocidad promedio. Si usás kilómetros y kilómetros por hora, obtenés horas. La parte decimal se convierte a minutos multiplicando por 60.',
+    formula: 'Tiempo = distancia ÷ velocidad',
+    example: '150 km ÷ 60 km/h = 2,5 horas = 2 horas y 30 minutos.',
+    challengeId: 'proportion-travel-time',
+    keywords: ['tiempo', 'distancia', 'velocidad', 'viaje', 'horas', 'minutos'],
+  },
+  {
+    id: 'estimate-first',
+    familyId: 'estimation',
+    question: '¿Cómo estimo antes de calcular?',
+    idea: 'Redondeá a números cercanos y fáciles. Ubicá el tamaño del resultado y compará el margen con lo que necesitás decidir.',
+    example:
+      '$1.980 + $3.050 + $4.020 está cerca de $2.000 + $3.000 + $4.000 = $9.000. Si tu presupuesto es $10.000, la estimación deja margen; si es $9.000, conviene calcular exactamente.',
+    challengeId: 'estimation-grocery-total',
+    keywords: [
+      'estimar',
+      'aproximar',
+      'redondear',
+      'magnitud',
+      'calcular',
+      'presupuesto',
+    ],
+  },
+] satisfies RecallCard[];

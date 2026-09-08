@@ -1,0 +1,19 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import FirstRunIsland from '../modules/challenges/ui/FirstRunIsland';
+import { challenges } from '../content/challenges';
+import { families, skills } from '../content/skills';
+---
+
+<SiteLayout home>
+  <FirstRunIsland
+    client:load
+    challenges={challenges.map(({ id, title, scenario }) => ({
+      id,
+      title,
+      scenario,
+    }))}
+    families={families}
+    skills={skills}
+  />
+</SiteLayout>
