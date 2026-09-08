@@ -934,9 +934,9 @@ fieldset:disabled .choice {
   margin-top: 22px;
 }
 .used-skills {
-  padding: 24px 0;
+  padding: 24px clamp(18px, 3vw, 32px);
   margin: 26px 0;
-  border-block: 1px solid var(--color-line);
+  border: 1px dashed var(--color-line);
 }
 .used-skills ul {
   display: flex;
@@ -1066,8 +1066,8 @@ fieldset:disabled .choice {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 24px;
-  padding: 18px 0;
-  border-block: 1px solid var(--color-line);
+  padding: 18px clamp(18px, 3vw, 32px);
+  border: 1px dashed var(--color-line);
   margin-bottom: 8px;
 }
 .concept-nav a {
@@ -2298,14 +2298,14 @@ html[data-reduced-motion='true'] *::after {
 .action-card--compact {
   grid-column: span 5;
   min-height: 118px;
-  padding: 24px 0 22px;
-  border-block: 1px solid var(--color-line);
+  padding: 24px clamp(18px, 3vw, 32px) 22px;
+  border: 1px dashed var(--color-line);
 }
 .action-card--horizontal {
   grid-column: 1 / -1;
   min-height: 112px;
-  padding: 22px 0;
-  border-block: 1px solid var(--color-line);
+  padding: 22px clamp(18px, 3vw, 32px);
+  border: 1px dashed var(--color-line);
 }
 .action-card--wide:hover,
 .action-card--wide:focus-within {
@@ -2890,8 +2890,8 @@ html[data-reduced-motion='true'] *::after {
   grid-template-columns: auto minmax(0, 1fr);
   gap: 4px 16px;
   margin-top: 28px;
-  padding: 16px 0;
-  border-block: 1px solid var(--color-line);
+  padding: 16px clamp(18px, 3vw, 32px);
+  border: 1px dashed var(--color-line);
 }
 .challenge-page--runner .challenge-context__focus-index {
   grid-column: 1 / -1;
@@ -3038,8 +3038,8 @@ html[data-reduced-motion='true'] *::after {
 }
 .challenge-page--runner .used-skills {
   margin: 28px 0;
-  padding: 18px 0;
-  border-block: 1px solid var(--color-line);
+  padding: 18px clamp(18px, 3vw, 32px);
+  border: 1px dashed var(--color-line);
 }
 .challenge-page--runner .used-skills h3 {
   font-size: 0.78rem;
@@ -3350,8 +3350,8 @@ html[data-reduced-motion='true'] *::after {
   justify-content: space-between;
   gap: 20px;
   margin-top: 28px;
-  padding: 16px 0 18px;
-  border-block: 1px solid var(--color-line);
+  padding: 16px clamp(18px, 3vw, 32px) 18px;
+  border: 1px dashed var(--color-line);
 }
 .challenge-page--runner .runner-math__base span,
 .challenge-page--runner .runner-math__operation > span,
@@ -3625,8 +3625,7 @@ html[data-reduced-motion='true'] *::after {
   max-width: 760px;
   margin-bottom: 30px;
   padding: 18px 20px 20px 22px;
-  border: 0;
-  border-block: 1px solid var(--color-line);
+  border: 1px dashed var(--color-line);
   border-radius: 0;
   background: var(--color-raised);
   box-shadow: inset 3px 0 0 var(--color-error);
@@ -3871,7 +3870,7 @@ html[data-reduced-motion='true'] *::after {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0;
   padding-top: 0;
-  border-block: 1px solid var(--color-line);
+  border: 0;
 }
 .home-layout .action-card,
 .home-layout .action-card--wide,
@@ -3883,16 +3882,16 @@ html[data-reduced-motion='true'] *::after {
   min-height: 184px;
   align-items: center;
   padding: 32px 36px;
-  border: 0;
+  border: 1px dashed var(--color-line);
   border-radius: 0;
   background: transparent;
   transform: none;
 }
 .home-layout .action-card:nth-child(-n + 2) {
-  border-bottom: 1px solid var(--color-line);
+  border-bottom: 1px dashed var(--color-line);
 }
 .home-layout .action-card:nth-child(odd) {
-  border-right: 1px solid var(--color-line);
+  border-right: 1px dashed var(--color-line);
 }
 .home-layout .action-card::before {
   content: '';
@@ -3959,8 +3958,8 @@ html[data-reduced-motion='true'] *::after {
   .home-layout .action-card:nth-child(-n + 2),
   .home-layout .action-card:nth-child(odd) {
     min-height: 122px;
-    border-right: 0;
-    border-bottom: 1px solid var(--color-line);
+    border-right: 1px dashed var(--color-line);
+    border-bottom: 1px dashed var(--color-line);
   }
   .home-layout .action-card {
     padding-inline: 20px;
@@ -4101,8 +4100,8 @@ html[data-reduced-motion='true'] *::after {
 }
 .learning-page--family .family-local-status {
   margin: 4px 0 30px;
-  padding: 14px 0;
-  border-block: 1px solid var(--color-line);
+  padding: 14px clamp(18px, 3vw, 32px);
+  border: 1px dashed var(--color-line);
 }
 .learning-page--family .family-local-status > span:first-child {
   color: var(--color-muted);
@@ -4119,8 +4118,8 @@ html[data-reduced-motion='true'] *::after {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0;
   margin-bottom: 0;
-  padding: 0;
-  border-block: 1px solid var(--color-line);
+  padding-inline: clamp(18px, 3vw, 32px);
+  border: 1px dashed var(--color-line);
 }
 .learning-page--family .concept-nav a {
   gap: 10px;
@@ -4128,7 +4127,7 @@ html[data-reduced-motion='true'] *::after {
   padding: 12px 16px 12px 0;
   color: var(--color-muted);
   font-size: 0.78rem;
-  border-bottom: 1px solid var(--color-line);
+  border-bottom: 1px dashed var(--color-line);
 }
 .learning-page--family .concept-nav a:nth-child(n + 4) {
   border-bottom: 0;
@@ -4196,9 +4195,8 @@ html[data-reduced-motion='true'] *::after {
   grid-row: 2 / span 2;
   align-self: start;
   margin: 0;
-  padding: 16px 0 18px 20px;
-  border: 0;
-  border-block: 1px solid var(--color-line);
+  padding: 16px 20px 18px;
+  border: 1px dashed var(--color-line);
   border-left: 2px solid var(--color-accent);
   border-radius: 0;
   background: transparent;
