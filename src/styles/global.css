@@ -4318,7 +4318,6 @@ html[data-reduced-motion='true'] *::after {
 .recall-search {
   max-width: 760px;
   padding: 22px 0 28px;
-  border-block: 1px solid var(--color-line);
 }
 .recall-search > label {
   display: block;
@@ -4332,14 +4331,6 @@ html[data-reduced-motion='true'] *::after {
 .search-field__input {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid var(--color-border-strong);
-  transition:
-    border-color 160ms,
-    box-shadow 160ms;
-}
-.search-field__input:focus-within {
-  border-color: var(--color-accent);
-  box-shadow: 0 2px 0 var(--color-accent);
 }
 .search-field__input .search-icon {
   flex: 0 0 auto;
@@ -4353,7 +4344,6 @@ html[data-reduced-motion='true'] *::after {
   color: var(--color-ink);
   background: transparent;
   border: 0;
-  outline: 0;
   font-size: clamp(1.15rem, 2vw, 1.45rem);
 }
 .search-field__input input::placeholder {
