@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState, type SubmitEvent } from 'react';
-import type { ChallengeStep } from '../../../shared/domain/types';
+import type {
+  ChallengeKind,
+  ChallengeStep,
+} from '../../../shared/domain/types';
 import { resolveAttempt } from '../application/attempts';
 import { formatNumber } from '../../../shared/ui/format';
 import { kindLabels } from '../../../shared/ui/labels';
+import { ArrowRightIcon } from '../../../components/react/icons/arrow';
 
 export type AttemptResult = ReturnType<typeof resolveAttempt>;
 
@@ -15,6 +19,16 @@ interface Props {
   finalStep?: boolean;
   focusOnMount?: boolean;
 }
+
+const reasoningCues: Record<ChallengeKind, string> = {
+  recognize: 'Nombrá la relación que importa.',
+  estimate: 'Anticipá la escala antes de calcular.',
+  calculate: 'Obtené el valor que falta.',
+  debug: 'Encontrá dónde se rompió el razonamiento.',
+  compare: 'Poné las cantidades en relación.',
+  reverse: 'Volvé desde el resultado hacia el origen.',
+  decide: 'Usá la relación para tomar una decisión.',
+};
 
 export default function StepPanel({
   step,
@@ -85,13 +99,20 @@ export default function StepPanel({
       : answerSpec.options.find(
           (option) => option.id === answerSpec.correctOptionId,
         )?.label;
+  const unit = answerSpec.type === 'numeric' ? answerSpec.unit : undefined;
+  const prefix = unit === '$' ? '$' : undefined;
+  const suffix = unit && unit !== '$' ? unit : undefined;
 
   return (
     <section className="step-panel" aria-labelledby={`step-${step.id}`}>
       <header className="step-panel__header">
-        <span className="step-panel__kind">
-          {step.label ?? kindLabels[step.kind]}
-        </span>
+        <div className="step-panel__signal">
+          <span className="step-panel__kind">{kindLabels[step.kind]}</span>
+          {step.label && step.label !== kindLabels[step.kind] && (
+            <span className="step-panel__subkind">{step.label}</span>
+          )}
+        </div>
+        <p className="step-panel__cue">{reasoningCues[step.kind]}</p>
         <h2 ref={heading} tabIndex={-1} id={`step-${step.id}`}>
           {step.prompt}
         </h2>
@@ -140,10 +161,19 @@ export default function StepPanel({
           </fieldset>
         ) : (
           <div className="numeric-field">
-            <label htmlFor={`answer-${step.id}`}>
-              Tu respuesta{step.answer.unit ? `, en ${step.answer.unit}` : ''}
+            <label
+              className="numeric-field__label"
+              htmlFor={`answer-${step.id}`}
+            >
+              Escribí el valor
+              {unit && <span>{unit === '$' ? 'en pesos' : `en ${unit}`}</span>}
             </label>
-            <div className="numeric-input-wrap">
+            <div className="numeric-input-wrap" data-unit={unit ?? 'number'}>
+              {prefix && (
+                <span className="numeric-input-wrap__prefix" aria-hidden="true">
+                  {prefix}
+                </span>
+              )}
               <input
                 ref={input}
                 id={`answer-${step.id}`}
@@ -160,8 +190,10 @@ export default function StepPanel({
                 aria-describedby={`help-${step.id}`}
                 aria-invalid={Boolean(validation)}
               />
-              {step.answer.unit && (
-                <span aria-hidden="true">{step.answer.unit}</span>
+              {suffix && (
+                <span className="numeric-input-wrap__suffix" aria-hidden="true">
+                  {suffix}
+                </span>
               )}
             </div>
             <p className="input-help" id={`help-${step.id}`}>
@@ -180,7 +212,7 @@ export default function StepPanel({
               type="submit"
               disabled={!ready}
             >
-              Comprobar <span aria-hidden="true">→</span>
+              Comprobar <ArrowRightIcon aria-hidden="true" size={17} />
             </button>
             {mode === 'diagnostic' ? (
               <button
@@ -209,7 +241,7 @@ export default function StepPanel({
       </form>
       {hintVisible && !result?.done && (
         <aside className="hint">
-          <strong>Una pista</strong>
+          <strong>Pista 1</strong>
           <p>{step.hints?.[0]}</p>
         </aside>
       )}
@@ -255,7 +287,7 @@ export default function StepPanel({
                   : 'Cerrar desafío'
                 : 'Continuar'
               : 'Volver a intentar'}{' '}
-            <span aria-hidden="true">→</span>
+            <ArrowRightIcon aria-hidden="true" size={17} />
           </button>
         </div>
       )}

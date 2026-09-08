@@ -72,6 +72,9 @@ export default function ChallengeContext({
     );
 
   const currentStep = activeStep ?? challenge.steps[0]!;
+  const isDiscountComparison = challenge.id === 'percentage-discount-compare';
+  const operationVisible = isDiscountComparison && stepIndex >= 2;
+  const resultVisible = isDiscountComparison && stepIndex >= 3;
 
   return (
     <aside
@@ -79,17 +82,23 @@ export default function ChallengeContext({
       aria-label="Contexto matemático"
     >
       <header className="challenge-context__header">
-        <span>Contexto</span>
+        <span>Relación en juego</span>
         <span className="challenge-context__index">
           {String(stepIndex + 1).padStart(2, '0')} /{' '}
           {String(totalSteps).padStart(2, '0')}
         </span>
       </header>
       <p className="scenario">{challenge.scenario}</p>
+      {isDiscountComparison && (
+        <div className="runner-math__base">
+          <span>Precio en ambas tiendas</span>
+          <strong>$80.000</strong>
+        </div>
+      )}
       {challenge.comparison && (
         <div className="comparison">
           <div className="comparison-heading">
-            <span>Datos disponibles</span>
+            <span>Ofertas en juego</span>
             <span>unidad</span>
           </div>
           {challenge.comparison.map((item) => (
@@ -137,12 +146,43 @@ export default function ChallengeContext({
           </p>
         </figure>
       )}
+      {isDiscountComparison && operationVisible && (
+        <div
+          className="runner-math__reveal"
+          aria-label="Operación del descuento"
+        >
+          <div className="runner-math__operation">
+            <span>Operación</span>
+            <code>80.000 × 0,25</code>
+          </div>
+          {resultVisible ? (
+            <div className="runner-math__result">
+              <div>
+                <span>A</span>
+                <strong>$20.000</strong>
+              </div>
+              <div>
+                <span>B</span>
+                <strong>$18.000</strong>
+              </div>
+              <div className="runner-math__difference">
+                <span>Δ</span>
+                <strong>$2.000</strong>
+              </div>
+            </div>
+          ) : (
+            <p className="runner-math__pending">
+              La relación queda abierta hasta resolverla.
+            </p>
+          )}
+        </div>
+      )}
       <div className="challenge-context__focus">
         <span className="challenge-context__focus-index">
           Paso {String(stepIndex + 1).padStart(2, '0')}
         </span>
-        <strong>{currentStep.label ?? kindLabels[currentStep.kind]}</strong>
-        <span>{kindLabels[currentStep.kind]}</span>
+        <strong>{kindLabels[currentStep.kind]}</strong>
+        <span>{currentStep.label ?? 'Paso actual'}</span>
       </div>
       <p className="challenge-context__note">
         La pregunta cambia cuando cambia la relación entre los datos.

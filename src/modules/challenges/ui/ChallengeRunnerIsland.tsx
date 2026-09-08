@@ -9,6 +9,7 @@ import { useProgress } from '../../progress/ui/useProgress';
 import StepPanel, { type AttemptResult } from './StepPanel';
 import ChallengeContext from '../../../components/react/ChallengeContext';
 import StorageNotice from '../../../components/react/StorageNotice';
+import { ArrowRightIcon } from '../../../components/react/icons/arrow';
 
 export default function ChallengeRunnerIsland({
   challenge,
@@ -104,7 +105,7 @@ export default function ChallengeRunnerIsland({
           <div className="answer-actions">
             <a className="button button-primary" href="/">
               {firstChallenge ? 'Conocer mi espacio' : 'Volver al inicio'}{' '}
-              <span aria-hidden="true">→</span>
+              <ArrowRightIcon aria-hidden="true" size={17} />
             </a>
             <a className="button button-secondary" href="/mapa">
               Ver mi mapa
