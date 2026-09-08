@@ -2,6 +2,7 @@
 import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/global.css';
+import NavigationLink from '../components/react/NavigationLink';
 
 interface Props {
   title?: string;
@@ -15,12 +16,12 @@ const {
 } = Astro.props;
 const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
 const links = [
-  { href: '/', label: 'Inicio', number: '00' },
-  { href: '/aprender', label: 'Aprender', number: '01' },
-  { href: '/recordar', label: 'Recordar', number: '02' },
-  { href: '/prueba', label: 'Poneme a prueba', number: '03' },
-  { href: '/mapa', label: 'Mi mapa', number: '04' },
-];
+  { href: '/', label: 'Inicio', icon: 'home' },
+  { href: '/aprender', label: 'Aprender', icon: 'book-open' },
+  { href: '/recordar', label: 'Recordar', icon: 'search' },
+  { href: '/prueba', label: 'Poneme a prueba', icon: 'scan-line' },
+  { href: '/mapa', label: 'Mi mapa', icon: 'map' },
+] as const;
 ---
 
 <!doctype html>
@@ -44,8 +45,15 @@ const links = [
       {
         home && (
           <nav class="home-nav" aria-label="Principal">
-            {links.slice(1).map((link) => (
-              <a href={link.href}>{link.label}</a>
+            {links.map((link) => (
+              <NavigationLink
+                href={link.href}
+                label={link.label}
+                icon={link.icon}
+                variant="top"
+                current={link.href === pathname}
+                client:load
+              />
             ))}
           </nav>
         )
@@ -59,20 +67,18 @@ const links = [
         !home && (
           <nav class="primary-nav" aria-label="Principal">
             {links.map((link) => (
-              <a
+              <NavigationLink
                 href={link.href}
-                aria-current={
-                  (
-                    link.href === '/'
-                      ? pathname === '/'
-                      : pathname.startsWith(link.href)
-                  )
-                    ? 'page'
-                    : undefined
+                label={link.label}
+                icon={link.icon}
+                variant="side"
+                current={
+                  link.href === '/'
+                    ? pathname === '/'
+                    : pathname.startsWith(link.href)
                 }
-              >
-                <span>{link.label}</span>
-              </a>
+                client:load
+              />
             ))}
             <p class="nav-footnote">
               Sin apuro.
