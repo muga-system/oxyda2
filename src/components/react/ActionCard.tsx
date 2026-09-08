@@ -73,11 +73,13 @@ export function ActionCard({
         stopWhenInactive();
       }}
     >
-      <Icon
-        ref={iconRef}
-        className="action-card__icon"
-        reducedMotion={reducedMotion}
-      />
+      <span className="action-card__icon-frame" aria-hidden="true">
+        <Icon
+          ref={iconRef}
+          className="action-card__icon"
+          reducedMotion={reducedMotion}
+        />
+      </span>
       <span className="action-card__body">
         <span className="action-card__title">{title}</span>
         <span className="action-card__description">{description}</span>

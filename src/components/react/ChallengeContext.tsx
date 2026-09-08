@@ -27,21 +27,30 @@ export default function ChallengeContext({
             El eje comienza en {formatNumber(challenge.chart.baseline)}{' '}
             {challenge.chart.unit}.
           </p>
-          {challenge.chart.values.map((item) => (
-            <div className="chart-row" key={item.label}>
-              <span>{item.label}</span>
-              <div className="chart-track" aria-hidden="true">
-                <span
-                  style={{
-                    width: `${Math.max(1, ((item.value - challenge.chart!.baseline) / (Math.max(...challenge.chart!.values.map((entry) => entry.value)) - challenge.chart!.baseline)) * 100)}%`,
-                  }}
-                />
+          {challenge.chart.values.map((item) => {
+            const highest = Math.max(
+              ...challenge.chart!.values.map((entry) => entry.value),
+            );
+            const span = highest - challenge.chart!.baseline;
+            const width =
+              span > 0
+                ? Math.max(
+                    1,
+                    ((item.value - challenge.chart!.baseline) / span) * 100,
+                  )
+                : 100;
+            return (
+              <div className="chart-row" key={item.label}>
+                <span>{item.label}</span>
+                <div className="chart-track" aria-hidden="true">
+                  <span style={{ width: `${width}%` }} />
+                </div>
+                <strong>
+                  {formatNumber(item.value)} {challenge.chart!.unit}
+                </strong>
               </div>
-              <strong>
-                {formatNumber(item.value)} {challenge.chart!.unit}
-              </strong>
-            </div>
-          ))}
+            );
+          })}
           <p className="chart-caption">
             Los valores están escritos junto a cada barra.
           </p>

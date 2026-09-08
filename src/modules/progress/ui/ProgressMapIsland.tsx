@@ -6,6 +6,19 @@ import { formatDate } from '../../../shared/ui/format';
 import { errorLabels } from '../../../shared/ui/labels';
 import StorageNotice from '../../../components/react/StorageNotice';
 
+const masteryLabels = {
+  unexplored: 'Sin evidencia',
+  developing: 'En desarrollo',
+  available: 'Disponible',
+  solid: 'Sólido',
+} as const;
+
+const freshnessLabels = {
+  fresh: 'Reciente',
+  cooling: 'En descenso',
+  oxidized: 'Oxidada',
+} as const;
+
 export default function ProgressMapIsland({
   families,
   skills,
@@ -100,6 +113,19 @@ export default function ProgressMapIsland({
                             {errorLabels[entry.recurringError].toLowerCase()}.
                           </p>
                         )}
+                      </div>
+                      <div
+                        className="skill-map-dimensions"
+                        aria-label={`Dominio ${masteryLabels[entry.mastery]}; frescura ${freshnessLabels[entry.freshness]}`}
+                      >
+                        <span>
+                          <small>Dominio</small>
+                          <strong>{masteryLabels[entry.mastery]}</strong>
+                        </span>
+                        <span>
+                          <small>Frescura</small>
+                          <strong>{freshnessLabels[entry.freshness]}</strong>
+                        </span>
                       </div>
                       <span
                         className={`status status-${entry.mastery} ${entry.status === 'Para refrescar' ? 'status-refresh' : ''}`}

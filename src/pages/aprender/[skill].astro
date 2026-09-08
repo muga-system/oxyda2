@@ -38,12 +38,24 @@ const relatedChallenges = challenges.filter(
           ) ??
           challenges.find((challenge) => challenge.skillIds.includes(skill.id));
         return (
-          <section class="microconcept" id={skill.id}>
+          <section
+            class="microconcept"
+            id={skill.id}
+            aria-labelledby={`${skill.id}-title`}
+          >
+            <header class="microconcept-header">
+              <span class="microconcept-index" aria-hidden="true">
+                {String(familySkills.indexOf(skill) + 1).padStart(2, '0')}
+              </span>
+              <div>
+                <h2 id={`${skill.id}-title`}>{skill.title}</h2>
+                <p class="concept-description">{skill.description}</p>
+              </div>
+            </header>
+            <p class="concept-idea">{skill.idea}</p>
             <div class="concept-example">
-              <>
-                <span>Por ejemplo</span>
-                <p>{skill.example}</p>
-              </>
+              <span>Por ejemplo</span>
+              <p>{skill.example}</p>
             </div>
             {example && (
               <a
