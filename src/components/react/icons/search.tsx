@@ -1,10 +1,7 @@
-// Adapted from https://github.com/pqoqubbw/icons/blob/main/icons/search.tsx.
-// Original geometry retained; parent control and subdued motion follow DESIGN.md.
-// MIT license: ./LICENSE.lucide-animated.txt
+// Source: https://lucide-animated.com/r/search.json
 import { motion } from 'motion/react';
 import { forwardRef } from 'react';
 import {
-  iconTransition,
   useIconAnimation,
   type AnimatedIconHandle,
   type AnimatedIconProps,
@@ -13,23 +10,27 @@ import {
 export const SearchIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
   ({ size = 28, className, reducedMotion }, ref) => {
     const controls = useIconAnimation(ref, reducedMotion);
+
     return (
       <motion.svg
         aria-hidden="true"
         focusable="false"
         className={className}
-        width={size}
-        height={size}
-        viewBox="0 0 24 24"
+        animate={controls}
         fill="none"
+        height={size}
         stroke="currentColor"
-        strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        initial="normal"
-        animate={controls}
-        transition={iconTransition}
-        variants={{ normal: { x: 0, y: 0 }, animate: { x: -2, y: -2 } }}
+        strokeWidth="2"
+        transition={{ duration: 1, bounce: 0.3 }}
+        variants={{
+          normal: { x: 0, y: 0 },
+          animate: { x: [0, 0, -3, 0], y: [0, -4, 0, 0] },
+        }}
+        viewBox="0 0 24 24"
+        width={size}
+        xmlns="http://www.w3.org/2000/svg"
       >
         <circle cx="11" cy="11" r="8" />
         <path d="m21 21-4.3-4.3" />
@@ -37,4 +38,5 @@ export const SearchIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
     );
   },
 );
+
 SearchIcon.displayName = 'SearchIcon';

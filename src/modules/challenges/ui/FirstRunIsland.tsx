@@ -7,7 +7,7 @@ import ActionCard from '../../../components/react/ActionCard';
 import StorageNotice from '../../../components/react/StorageNotice';
 import { AnimatedArrowLink } from '../../../components/react/AnimatedArrowAction';
 import type { AnimatedIconHandle } from '../../../components/react/icons/animated-icon';
-import { ArrowLeftRightIcon } from '../../../components/react/icons/arrow-left-right';
+import { ChevronsLeftRightIcon } from '../../../components/react/icons/chevrons-left-right';
 
 function MathInstrument({ label }: { label: string }) {
   const differenceIconRef = useRef<AnimatedIconHandle>(null);
@@ -92,7 +92,7 @@ function MathInstrument({ label }: { label: string }) {
         </div>
         <div className="math-instrument__difference">
           <span>
-            <ArrowLeftRightIcon
+            <ChevronsLeftRightIcon
               ref={differenceIconRef}
               className="math-instrument__difference-icon"
               size={17}
