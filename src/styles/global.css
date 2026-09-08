@@ -3842,6 +3842,7 @@ html[data-reduced-motion='true'] *::after {
 }
 .home-layout .home-hero {
   gap: clamp(48px, 5vw, 112px);
+  border-bottom: 0;
 }
 .home-loading {
   min-height: clamp(480px, 60svh, 700px);
