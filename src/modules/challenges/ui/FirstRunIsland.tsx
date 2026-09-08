@@ -4,6 +4,11 @@ import { useProgress } from '../../progress/ui/useProgress';
 import { getSkillProgress } from '../../progress/domain/progress';
 import ActionCard from '../../../components/react/ActionCard';
 import StorageNotice from '../../../components/react/StorageNotice';
+import {
+  ArrowDownIcon,
+  ArrowRightIcon,
+  ArrowUpRightIcon,
+} from '../../../components/react/icons/arrow';
 
 function MathInstrument({ label }: { label: string }) {
   return (
@@ -98,7 +103,7 @@ function HomeDoors() {
           title="Aprender"
           description="Ideas breves para comprender una relación y ponerla en práctica."
           icon="book-open"
-          layout="wide"
+          layout="compact"
         />
         <ActionCard
           href="/recordar"
@@ -119,7 +124,7 @@ function HomeDoors() {
           title="Mi mapa"
           description="Lo que vas comprendiendo y lo que conviene refrescar."
           icon="map"
-          layout="horizontal"
+          layout="compact"
         />
       </div>
     </section>
@@ -162,6 +167,13 @@ export default function FirstRunIsland({
     (family) => family.id === activeSkill.familyId,
   )!;
 
+  if (!ready)
+    return (
+      <div className="home-loading" aria-busy="true">
+        <span className="sr-only">Leyendo tu progreso…</span>
+      </div>
+    );
+
   if (!snapshot.onboardingCompleted)
     return (
       <>
@@ -187,10 +199,12 @@ export default function FirstRunIsland({
                 className="button button-primary"
                 href="/desafio/percentage-discount-compare"
               >
-                Resolver mi primer desafío <span aria-hidden="true">→</span>
+                Resolver mi primer desafío
+                <ArrowRightIcon size={18} reducedMotion />
               </a>
               <a className="home-text-action" href="#como-funciona">
-                Explorar cómo funciona <span aria-hidden="true">↓</span>
+                Explorar cómo funciona
+                <ArrowDownIcon size={17} reducedMotion />
               </a>
             </div>
             <p className="small-note">Sin registro. Sin reloj. A tu ritmo.</p>
@@ -214,11 +228,6 @@ export default function FirstRunIsland({
             <span>05 Decidir</span>
           </div>
         </section>
-        {!ready && (
-          <span className="sr-only" role="status">
-            Leyendo tu progreso…
-          </span>
-        )}
       </>
     );
 
@@ -237,9 +246,19 @@ export default function FirstRunIsland({
             Elegí una situación, una relación o una pregunta. Tu recorrido sigue
             disponible en este navegador.
           </p>
-          <a className="home-text-action" href="/mapa">
-            Abrir mi mapa <span aria-hidden="true">↗</span>
-          </a>
+          <div className="home-hero__actions">
+            <a
+              className="button button-primary"
+              href={`/desafio/${featured.id}`}
+            >
+              Resolver esta situación
+              <ArrowRightIcon size={18} reducedMotion />
+            </a>
+            <a className="button button-secondary" href="/mapa">
+              Abrir mi mapa
+              <ArrowUpRightIcon size={18} reducedMotion />
+            </a>
+          </div>
         </div>
         <MathInstrument label="Relación a mano" />
       </section>
@@ -252,7 +271,8 @@ export default function FirstRunIsland({
           <h2 id="featured-title">{featured.title}</h2>
           <p>{featured.scenario}</p>
           <a className="button button-primary" href={`/desafio/${featured.id}`}>
-            Resolver esta situación <span aria-hidden="true">→</span>
+            Resolver esta situación
+            <ArrowRightIcon size={18} reducedMotion />
           </a>
         </div>
         <div className="home-focus__aside">
@@ -274,7 +294,8 @@ export default function FirstRunIsland({
             className="button button-secondary"
             href={`/aprender/${refreshFamily.slug}#${refreshSkill.id}`}
           >
-            Retomar la idea <span aria-hidden="true">→</span>
+            Retomar la idea
+            <ArrowRightIcon size={18} reducedMotion />
           </a>
         </aside>
       )}
@@ -288,7 +309,8 @@ export default function FirstRunIsland({
           className="home-text-action"
           href={`/aprender/${activeFamily.slug}#${activeSkill.id}`}
         >
-          Abrir el concepto <span aria-hidden="true">→</span>
+          Abrir el concepto
+          <ArrowRightIcon size={17} reducedMotion />
         </a>
       </section>
       <HomeDoors />

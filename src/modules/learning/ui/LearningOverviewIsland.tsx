@@ -6,6 +6,7 @@ import {
   getSkillProgress,
 } from '../../progress/domain/progress';
 import StorageNotice from '../../../components/react/StorageNotice';
+import { ArrowUpRightIcon } from '../../../components/react/icons/arrow';
 
 export default function LearningOverviewIsland({
   families,
@@ -55,9 +56,11 @@ export default function LearningOverviewIsland({
                   {familySkills.map((skill) => skill.title).join(' · ')}
                 </span>
               </div>
-              <span className="family-arrow" aria-hidden="true">
-                ↗
-              </span>
+              <ArrowUpRightIcon
+                className="family-arrow"
+                size={18}
+                reducedMotion
+              />
             </a>
           );
         })}

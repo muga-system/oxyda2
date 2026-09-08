@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Family, RecallCard } from '../../../shared/domain/types';
 import { SearchIcon } from '../../../components/react/icons/search';
+import { ArrowRightIcon } from '../../../components/react/icons/arrow';
 
 function normalize(value: string) {
   return value
@@ -90,7 +91,7 @@ export default function RecallSearchIsland({
                 className="button button-secondary"
                 href={`/desafio/${card.challengeId}?source=recall`}
               >
-                Probar un ejemplo <span aria-hidden="true">→</span>
+                Probar un ejemplo <ArrowRightIcon size={18} reducedMotion />
               </a>
             </div>
           </details>

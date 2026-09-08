@@ -6,6 +6,7 @@ import { CompassIcon } from './icons/compass';
 import { MapPinIcon } from './icons/map-pin';
 import { ScanTextIcon } from './icons/scan-text';
 import { SearchIcon } from './icons/search';
+import { ArrowRightIcon } from './icons/arrow';
 
 const icons = {
   compass: CompassIcon,
@@ -33,6 +34,7 @@ export function ActionCard({
   reducedMotionOverride = false,
 }: ActionCardProps) {
   const iconRef = useRef<AnimatedIconHandle>(null);
+  const arrowRef = useRef<AnimatedIconHandle>(null);
   const hovered = useRef(false);
   const focused = useRef(false);
   const prefersReducedMotion = useReducedMotion();
@@ -45,13 +47,18 @@ export function ActionCard({
       document.documentElement.dataset['reducedMotion'] === 'true'
     ) {
       iconRef.current?.stopAnimation();
+      arrowRef.current?.stopAnimation();
       return;
     }
     iconRef.current?.startAnimation();
+    arrowRef.current?.startAnimation();
   }
 
   function stopWhenInactive() {
-    if (!hovered.current && !focused.current) iconRef.current?.stopAnimation();
+    if (!hovered.current && !focused.current) {
+      iconRef.current?.stopAnimation();
+      arrowRef.current?.stopAnimation();
+    }
   }
 
   return (
@@ -86,21 +93,12 @@ export function ActionCard({
         <span className="action-card__title">{title}</span>
         <span className="action-card__description">{description}</span>
       </span>
-      <svg
+      <ArrowRightIcon
+        ref={arrowRef}
         className="action-card__arrow"
-        aria-hidden="true"
-        focusable="false"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M5 12h14m-6-6 6 6-6 6" />
-      </svg>
+        size={20}
+        reducedMotion={reducedMotion}
+      />
     </a>
   );
 }
