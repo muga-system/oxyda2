@@ -6,6 +6,10 @@ SemVer.
 
 ## [Unreleased]
 
+Todavía no hay cambios publicados para la próxima versión.
+
+## [0.1.1] - 2026-09-09
+
 ### Interfaz
 
 - Unificación del shell, los anchos de contenido y las superficies principales.
@@ -39,5 +43,5 @@ SemVer.
 - Tests de dominio, aplicación, diagnóstico, catálogo y persistencia.
 - Sistema visual oscuro con fuentes locales e iconografía animada.
 
-[Unreleased]: https://github.com/muga-system/oxyda2/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/muga-system/oxyda2/compare/v0.1.1...HEAD
 [0.1.0]: https://github.com/muga-system/oxyda2/releases/tag/v0.1.0
