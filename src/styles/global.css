@@ -1142,7 +1142,10 @@ fieldset:disabled .choice {
   font-size: 1.4rem;
   margin-bottom: 20px;
 }
-.challenge-links > a.challenge-link {
+.challenge-links > astro-island {
+  display: block;
+}
+.challenge-links .challenge-link {
   padding: 18px 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
