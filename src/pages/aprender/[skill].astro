@@ -46,17 +46,14 @@ const familyIndex = families.findIndex((item) => item.id === family.id);
             <AnimatedArrowLink
               client:load
               className="challenge-link"
+              arrowClassName="challenge-link__arrow"
               href={`/desafio/${challenge.slug}?source=learning`}
               direction="up-right"
             >
-              <>
-                <span>
-                  <>
-                    <strong>{challenge.title}</strong>
-                    <span>{challenge.steps.length} pasos para pensar</span>
-                  </>
-                </span>
-              </>
+              <span class="challenge-link__body">
+                <strong>{challenge.title}</strong>
+                <span>{challenge.steps.length} pasos para pensar</span>
+              </span>
             </AnimatedArrowLink>
           ))
         }

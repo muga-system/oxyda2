@@ -1142,28 +1142,41 @@ fieldset:disabled .choice {
   font-size: 1.4rem;
   margin-bottom: 20px;
 }
-.challenge-links > a {
+.challenge-links > a.challenge-link {
   padding: 18px 0;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
   gap: 24px;
   border-bottom: 1px solid var(--color-line);
 }
-.challenge-links > a > span:first-child {
+.challenge-link__body {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 0;
 }
-.challenge-links strong {
+.challenge-link__body strong {
+  display: block;
   font-size: 0.95rem;
   font-weight: 500;
 }
-.challenge-links > a > span > span {
+.challenge-link__body > span {
+  display: block;
   font-size: 0.78rem;
   color: var(--color-muted);
 }
-.challenge-links a:hover strong {
+.challenge-link__arrow {
+  display: block;
+  flex: 0 0 auto;
+  color: var(--color-muted);
+}
+.challenge-link:hover strong,
+.challenge-link:focus-visible strong {
+  color: var(--color-accent);
+}
+.challenge-link:hover .challenge-link__arrow,
+.challenge-link:focus-visible .challenge-link__arrow {
   color: var(--color-accent);
 }
 .recall-controls {
