@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   output: 'static',
+  site: 'https://oxydados.muga.dev',
   integrations: [react()],
   vite: { plugins: [tailwindcss()] },
 });

@@ -82,6 +82,22 @@ pnpm build
 
 El build genera una salida estática en `dist/`.
 
+## Despliegue en Hostinger
+
+El dominio de producción configurado es `https://oxydados.muga.dev`. Para
+publicar la aplicación:
+
+1. Creá el subdominio en Hostinger y asignale su document root.
+2. Ejecutá `pnpm build` en este repositorio.
+3. Subí **el contenido de `dist/`** al document root del subdominio, incluidos
+   `404.html`, `favicon.svg`, `robots.txt`, las carpetas de cada ruta y
+   `_astro/`.
+4. No subas `src/`, `node_modules/` ni el repositorio completo al document root.
+
+La salida incluye `index.html` dentro de cada ruta, de modo que las páginas
+funcionan como archivos estáticos independientes y se pueden abrir directamente
+desde sus URLs públicas.
+
 ## Diseño e iconografía
 
 La dirección visual es **Dark Instrument Panel**: superficies oscuras sólidas,

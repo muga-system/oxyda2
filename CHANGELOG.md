@@ -28,6 +28,13 @@ Todavía no hay cambios publicados para la próxima versión.
   público.
 - Sincronización de la ruta de desafío y de las transiciones de navegación en
   la documentación de arquitectura.
+- Instrucciones de despliegue estático para Hostinger y el subdominio de
+  producción.
+
+### Despliegue
+
+- Configuración de `https://oxydados.muga.dev` como URL de producción de Astro.
+- Canonical por página y `robots.txt` básico para la salida estática.
 
 ## [0.1.0] - 2026-09-08
 
