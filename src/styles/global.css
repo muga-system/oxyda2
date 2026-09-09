@@ -2889,6 +2889,7 @@ html[data-reduced-motion='true'] *::after {
   justify-content: space-between;
   gap: 16px;
   padding-bottom: 12px;
+  padding-inline: clamp(14px, 2vw, 24px);
   border-bottom: 1px solid var(--color-line);
   color: var(--color-muted);
   font-size: 0.72rem;
@@ -2942,7 +2943,7 @@ html[data-reduced-motion='true'] *::after {
   display: flex;
   justify-content: space-between;
   gap: 16px;
-  padding-bottom: 9px;
+  padding: 0 clamp(14px, 2vw, 24px) 9px;
   border-bottom: 1px solid var(--color-line);
   color: var(--color-muted);
   font-size: 0.68rem;
@@ -2954,7 +2955,7 @@ html[data-reduced-motion='true'] *::after {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 3px 12px;
-  padding: 13px 0;
+  padding: 13px clamp(14px, 2vw, 24px);
   border-bottom: 1px solid var(--color-line);
 }
 .challenge-page--runner .comparison-item__label {
@@ -3411,7 +3412,7 @@ html[data-reduced-motion='true'] *::after {
   align-items: baseline;
   justify-content: space-between;
   gap: 18px;
-  padding: 16px 0;
+  padding: 16px clamp(14px, 2vw, 24px);
 }
 .challenge-page--runner .runner-math__operation code {
   color: var(--color-accent);
@@ -3419,7 +3420,7 @@ html[data-reduced-motion='true'] *::after {
   font-size: clamp(1rem, 2vw, 1.35rem);
 }
 .challenge-page--runner .runner-math__pending {
-  padding: 0 0 16px;
+  padding: 0 clamp(14px, 2vw, 24px) 16px;
   color: var(--color-muted);
   font-size: 0.78rem;
 }
@@ -3432,10 +3433,10 @@ html[data-reduced-motion='true'] *::after {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  padding: 14px 16px 16px 0;
+  padding: 14px clamp(14px, 2vw, 24px) 16px;
 }
 .challenge-page--runner .runner-math__result > div + div {
-  padding-left: 16px;
+  padding-left: clamp(14px, 2vw, 24px);
   border-left: 1px solid var(--color-line);
 }
 .challenge-page--runner .runner-math__result strong {
@@ -3449,7 +3450,7 @@ html[data-reduced-motion='true'] *::after {
 }
 .challenge-page--runner .challenge-context__focus {
   margin-top: 32px;
-  padding: 18px 0;
+  padding: 18px clamp(14px, 2vw, 24px);
 }
 .challenge-page--runner .challenge-context__focus strong {
   font-family: var(--font-mono);
