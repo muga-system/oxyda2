@@ -1,6 +1,10 @@
-Lucide Animated — https://github.com/pqoqubbw/icons
-Icons adapted for OxYda2: compass, book-text, search, scan-text, map-pin.
-Adaptations preserve the original geometry and simplify control/motion.
+Lucide Animated — https://lucide-animated.com/
+Registry source — https://github.com/pqoqubbw/icons
+
+Components adapted for OxYda2: arrow, book-text, chevrons-left-right, compass,
+home, map-pin, scan-text, search.
+Adaptations preserve the original geometry and simplify control/motion for the
+local reduced-motion and imperative animation boundaries.
 
 MIT License
 

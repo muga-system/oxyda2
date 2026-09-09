@@ -68,7 +68,7 @@ No es necesario crear carpetas vacías. Crear cada módulo cuando exista una res
 Rutas visibles en español:
 
 - `/`
-- `/desafio/[id]`
+- `/desafio/[slug]`
 - `/aprender`
 - `/aprender/[skill]`
 - `/recordar`
@@ -76,6 +76,10 @@ Rutas visibles en español:
 - `/mapa`
 
 Código interno y nombres de tipos en inglés.
+
+La navegación común usa `ClientRouter` de `astro:transitions` desde
+`src/layouts/SiteLayout.astro`. Las páginas siguen siendo entradas estáticas de
+Astro; la transición no convierte el proyecto en una SPA.
 
 ## Límites
 
