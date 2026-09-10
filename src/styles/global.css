@@ -4054,6 +4054,64 @@ html[data-reduced-motion='true'] *::after {
   }
 }
 
+/* Choice rows: full separators and taller dashed letter markers. */
+.challenge-page--runner .choices,
+.diagnostic-page .choices {
+  width: 100%;
+  max-width: none;
+  gap: 0;
+  border-top: 1px solid var(--color-line);
+}
+.challenge-page--runner .choice,
+.diagnostic-page .choice {
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  min-height: 88px;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--color-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  transition:
+    background-color 160ms,
+    border-color 160ms;
+}
+.challenge-page--runner .choice:hover,
+.challenge-page--runner .choice.is-selected,
+.diagnostic-page .choice:hover,
+.diagnostic-page .choice.is-selected {
+  border-color: var(--color-line);
+  background: var(--color-accent-selected);
+  box-shadow: none;
+}
+.challenge-page--runner .choice-index,
+.diagnostic-page .choice-index {
+  align-self: stretch;
+  width: 48px;
+  height: auto;
+  min-height: 64px;
+  border: 1px dashed var(--color-accent);
+  border-radius: 0;
+  color: var(--color-accent);
+}
+.challenge-page--runner .choice:focus-within,
+.diagnostic-page .choice:focus-within {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+@media (max-width: 600px) {
+  .challenge-page--runner .choice,
+  .diagnostic-page .choice {
+    grid-template-columns: 44px minmax(0, 1fr);
+    min-height: 80px;
+  }
+  .challenge-page--runner .choice-index,
+  .diagnostic-page .choice-index {
+    width: 44px;
+    min-height: 56px;
+  }
+}
+
 /* Home refinement: stable actions, wider canvas, and one card language */
 .home-layout .site-header-app,
 .home-layout .site-frame-home,
