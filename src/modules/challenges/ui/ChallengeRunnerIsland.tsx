@@ -10,6 +10,7 @@ import StepPanel, { type AttemptResult } from './StepPanel';
 import ChallengeContext from '../../../components/react/ChallengeContext';
 import StorageNotice from '../../../components/react/StorageNotice';
 import { AnimatedArrowLink } from '../../../components/react/AnimatedArrowAction';
+import ChallengeScene from './ChallengeScene';
 
 export default function ChallengeRunnerIsland({
   challenge,
@@ -137,6 +138,7 @@ export default function ChallengeRunnerIsland({
               />
             ))}
           </div>
+          {firstChallenge && step && <ChallengeScene step={step} />}
           {step && (
             <StepPanel
               key={step.id}
