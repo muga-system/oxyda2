@@ -4065,7 +4065,7 @@ html[data-reduced-motion='true'] *::after {
 .challenge-page--runner .choice,
 .diagnostic-page .choice {
   grid-template-columns: 64px minmax(0, 1fr) auto;
-  min-height: 76px;
+  min-height: 65px;
   padding: 0;
   border: 0;
   border-bottom: 1px solid var(--color-line);
@@ -4096,6 +4096,10 @@ html[data-reduced-motion='true'] *::after {
   font-size: 1.1rem;
   font-weight: 600;
 }
+.challenge-page--runner .choice-status,
+.diagnostic-page .choice-status {
+  padding-right: clamp(12px, 2vw, 20px);
+}
 .challenge-page--runner .choice:focus-within,
 .diagnostic-page .choice:focus-within {
   outline: 2px solid var(--color-accent);
@@ -4105,7 +4109,7 @@ html[data-reduced-motion='true'] *::after {
   .challenge-page--runner .choice,
   .diagnostic-page .choice {
     grid-template-columns: 56px minmax(0, 1fr);
-    min-height: 68px;
+    min-height: 57px;
   }
   .challenge-page--runner .choice-index,
   .diagnostic-page .choice-index {
