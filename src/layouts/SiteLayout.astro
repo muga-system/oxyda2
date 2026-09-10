@@ -16,6 +16,7 @@ const {
   home = false,
 } = Astro.props;
 const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+const runner = pathname.startsWith('/desafio/') || pathname === '/prueba';
 const canonicalUrl = Astro.site
   ? new URL(Astro.url.pathname, Astro.site).toString()
   : undefined;
@@ -67,7 +68,13 @@ const links = [
         }
       </nav>
     </header>
-    <div class:list={['site-frame', home && 'site-frame-home']}>
+    <div
+      class:list={[
+        'site-frame',
+        home && 'site-frame-home',
+        runner && 'site-frame-runner',
+      ]}
+    >
       <main id="contenido" tabindex="-1"><slot /></main>
     </div>
     <footer class="site-footer">

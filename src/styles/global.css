@@ -3665,6 +3665,40 @@ html[data-reduced-motion='true'] *::after {
   }
 }
 
+/* Challenge transitions: keep the workspace anchored while the step changes. */
+.challenge-page--runner .step-panel {
+  view-transition-name: challenge-step;
+  animation: challenge-step-enter 240ms ease-out both;
+}
+.challenge-page--runner .challenge-context--runner {
+  view-transition-name: challenge-context;
+}
+.challenge-page--runner .feedback-region:empty {
+  min-height: 0;
+}
+::view-transition-old(challenge-step),
+::view-transition-new(challenge-step),
+::view-transition-old(challenge-context),
+::view-transition-new(challenge-context) {
+  animation-duration: 220ms;
+  animation-timing-function: ease-out;
+}
+@keyframes challenge-step-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .challenge-page--runner .step-panel {
+    animation: none;
+  }
+}
+
 /* Diagnostic: one quiet situation at a time */
 .diagnostic-page {
   max-width: 900px;
@@ -4760,6 +4794,9 @@ html[data-reduced-motion='true'] *::after {
   border-left: 0;
   padding-inline: clamp(24px, 3vw, 56px);
 }
+.site-frame-runner main {
+  padding-bottom: 48px;
+}
 
 .site-frame:not(.site-frame-home) main > .challenge-page--runner,
 .site-frame:not(.site-frame-home) main > .learning-page,
@@ -4799,5 +4836,8 @@ html[data-reduced-motion='true'] *::after {
   .site-frame main,
   .site-frame-home main {
     padding-inline: 22px;
+  }
+  .site-frame-runner main {
+    padding-bottom: 40px;
   }
 }

@@ -52,7 +52,12 @@ export default function StepPanel({
   const nextButton = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    if (focusOnMount) heading.current?.focus();
+    if (focusOnMount) {
+      const scrollX = window.scrollX;
+      const scrollY = window.scrollY;
+      heading.current?.focus({ preventScroll: true });
+      window.scrollTo(scrollX, scrollY);
+    }
   }, [focusOnMount]);
 
   useEffect(() => {

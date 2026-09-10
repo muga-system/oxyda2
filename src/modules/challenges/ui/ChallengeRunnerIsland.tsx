@@ -11,6 +11,7 @@ import ChallengeContext from '../../../components/react/ChallengeContext';
 import StorageNotice from '../../../components/react/StorageNotice';
 import { AnimatedArrowLink } from '../../../components/react/AnimatedArrowAction';
 import ChallengeScene from './ChallengeScene';
+import { runViewTransition } from '../../../shared/ui/viewTransition';
 
 export default function ChallengeRunnerIsland({
   challenge,
@@ -54,11 +55,13 @@ export default function ChallengeRunnerIsland({
   }
 
   function next() {
-    if (stepIndex + 1 < challenge.steps.length) setStepIndex(stepIndex + 1);
-    else {
-      complete(challenge.id, firstChallenge);
-      setFinished(true);
-    }
+    runViewTransition(() => {
+      if (stepIndex + 1 < challenge.steps.length) setStepIndex(stepIndex + 1);
+      else {
+        complete(challenge.id, firstChallenge);
+        setFinished(true);
+      }
+    });
   }
 
   if (finished)

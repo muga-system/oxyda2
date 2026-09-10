@@ -6,6 +6,7 @@ import StepPanel, { type AttemptResult } from '../../challenges/ui/StepPanel';
 import { useProgress } from '../../progress/ui/useProgress';
 import ChallengeContext from '../../../components/react/ChallengeContext';
 import StorageNotice from '../../../components/react/StorageNotice';
+import { runViewTransition } from '../../../shared/ui/viewTransition';
 import {
   AnimatedArrowButton,
   AnimatedArrowLink,
@@ -71,7 +72,12 @@ export default function DiagnosticRunnerIsland({
     if (finished) resultHeading.current?.focus();
   }, [finished]);
   useEffect(() => {
-    if (started && !finished) scenarioHeading.current?.focus();
+    if (started && !finished) {
+      const scrollX = window.scrollX;
+      const scrollY = window.scrollY;
+      scenarioHeading.current?.focus({ preventScroll: true });
+      window.scrollTo(scrollX, scrollY);
+    }
   }, [started, index, finished]);
 
   function evaluated(result: AttemptResult) {
@@ -84,6 +90,13 @@ export default function DiagnosticRunnerIsland({
     });
     record(evidences);
     setSessionEvidence((previous) => [...previous, ...evidences]);
+  }
+
+  function next() {
+    runViewTransition(() => {
+      if (index + 1 === items.length) setFinished(true);
+      else setIndex(index + 1);
+    });
   }
 
   if (!started)
@@ -211,10 +224,7 @@ export default function DiagnosticRunnerIsland({
             mode="diagnostic"
             ready={ready}
             onEvaluated={evaluated}
-            onNext={() => {
-              if (index + 1 === items.length) setFinished(true);
-              else setIndex(index + 1);
-            }}
+            onNext={next}
             finalStep={index + 1 === items.length}
           />
         </>
