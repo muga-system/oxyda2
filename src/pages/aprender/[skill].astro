@@ -1,6 +1,7 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import SiteLayout from '../../layouts/SiteLayout.astro';
+import SectionHeading from '../../components/astro/SectionHeading.astro';
 import FamilyStatusIsland from '../../modules/learning/ui/FamilyStatusIsland';
 import FamilyConceptsIsland from '../../modules/learning/ui/FamilyConceptsIsland';
 import { families, skills } from '../../content/skills';
@@ -17,7 +18,6 @@ const familySkills = skills.filter((skill) => skill.familyId === family.id);
 const relatedChallenges = challenges.filter(
   (challenge) => challenge.familyId === family.id,
 );
-const familyIndex = families.findIndex((item) => item.id === family.id);
 const familyIllustration =
   family.id === 'percentage'
     ? {
@@ -25,7 +25,7 @@ const familyIllustration =
         srcset:
           '/learning/porcentajes-320.png 320w, /learning/porcentajes-640.png 640w',
         width: 640,
-        height: 645,
+        height: 666,
         alt: 'Ilustración de engranajes que representan porcentajes y relaciones',
       }
     : family.id === 'proportion'
@@ -34,7 +34,7 @@ const familyIllustration =
           srcset:
             '/learning/proporciones-320.png 320w, /learning/proporciones-640.png 640w',
           width: 640,
-          height: 350,
+          height: 624,
           alt: 'Ilustración de dos engranajes conectados que representan proporciones',
         }
       : family.id === 'estimation'
@@ -43,7 +43,7 @@ const familyIllustration =
             srcset:
               '/learning/estimacion-320.png 320w, /learning/estimacion-640.png 640w',
             width: 640,
-            height: 397,
+            height: 628,
             alt: 'Ilustración de dos filas de bloques que representan una estimación',
           }
         : family.id === 'data'
@@ -52,10 +52,19 @@ const familyIllustration =
               srcset:
                 '/learning/datos-320.png 320w, /learning/datos-640.png 640w',
               width: 640,
-              height: 759,
+              height: 668,
               alt: 'Ilustración de una escalera que representa la lectura de datos',
             }
-          : undefined;
+          : family.id === 'units'
+            ? {
+                src: '/learning/unidades-640.png',
+                srcset:
+                  '/learning/unidades-320.png 320w, /learning/unidades-640.png 640w',
+                width: 640,
+                height: 648,
+                alt: 'Ilustración de una medida conectada que representa unidades',
+              }
+            : undefined;
 ---
 
 <SiteLayout title={family.title}>
@@ -67,13 +76,12 @@ const familyIllustration =
         familyIllustration && 'learning-family-hero--illustrated',
       ]}
     >
-      <header class="page-heading compact learning-family-heading">
-        <span class="family-heading-index">
-          Familia {String(familyIndex + 1).padStart(2, '0')} / 05
-        </span>
-        <h1>{family.title}</h1>
-        <p class="lead">{family.description}</p>
-      </header>
+      <SectionHeading
+        className="learning-family-heading"
+        compact
+        title={family.title}
+        description={family.description}
+      />
       {
         familyIllustration && (
           <figure class="learning-family-visual">

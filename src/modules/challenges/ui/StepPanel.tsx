@@ -268,6 +268,7 @@ export default function StepPanel({
               disabled={!ready}
               icon={CircleCheckIcon}
               label="Comprobar respuesta"
+              showLabel
             />
             {mode === 'diagnostic' ? (
               <AnimatedIconButton
@@ -278,6 +279,7 @@ export default function StepPanel({
                 onClick={() => submit(undefined, true)}
                 icon={SearchIcon}
                 label="No sé todavía"
+                showLabel
               />
             ) : step.hints?.length ? (
               <AnimatedIconButton
@@ -291,6 +293,7 @@ export default function StepPanel({
                 }}
                 icon={SearchIcon}
                 label={hintVisible ? 'Ocultar pista' : 'Necesito una pista'}
+                showLabel
                 aria-controls={`hint-dialog-${step.id}`}
               />
             ) : null}

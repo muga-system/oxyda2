@@ -8,6 +8,30 @@ SemVer.
 
 Todavía no hay cambios publicados para la próxima versión.
 
+## [0.1.4] - 2026-09-11
+
+### Interfaz y navegación
+
+- Acceso directo al catálogo completo de desafíos desde la home y las rutas
+  relacionadas.
+- Encabezados compartidos para las secciones internas, con una geometría
+  consistente entre páginas.
+- Familias de desafíos desplegables, con todos los ejercicios disponibles y
+  sin scrolls internos que oculten contenido.
+- Acciones de respuesta y pistas con etiquetas visibles para mejorar su
+  descubrimiento y uso con teclado.
+- Estados de progreso y diagnóstico unificados bajo el estado «Sin explorar».
+
+### Identidad y recursos visuales
+
+- Reemplazo de las ilustraciones del sitio por la nueva serie de imágenes del
+  producto.
+- Incorporación de la ilustración de Unidades en su página de familia.
+- Actualización del monograma, favicon y Apple Touch Icon con variantes
+  optimizadas para cada tamaño.
+- Generación de variantes responsive de 320 y 640 píxeles para las
+  ilustraciones.
+
 ## [0.1.1] - 2026-09-09
 
 ### Interfaz
@@ -50,5 +74,6 @@ Todavía no hay cambios publicados para la próxima versión.
 - Tests de dominio, aplicación, diagnóstico, catálogo y persistencia.
 - Sistema visual oscuro con fuentes locales e iconografía animada.
 
-[Unreleased]: https://github.com/muga-system/oxyda2/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/muga-system/oxyda2/compare/v0.1.4...HEAD
+[0.1.4]: https://github.com/muga-system/oxyda2/releases/tag/v0.1.4
 [0.1.0]: https://github.com/muga-system/oxyda2/releases/tag/v0.1.0

@@ -1,5 +1,6 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import SectionHeading from '../components/astro/SectionHeading.astro';
 import RecallSearchIsland from '../modules/recall/ui/RecallSearchIsland';
 import { recallCards } from '../content/recall';
 import { families } from '../content/skills';
@@ -8,16 +9,11 @@ import { families } from '../content/skills';
 <SiteLayout title="Recordar">
   <div class="recall-page">
     <div class="recall-overview-hero">
-      <header class="page-heading recall-heading">
-        <span class="section-heading__eyebrow recall-heading__index"
-          >Consulta rápida / 10 referencias</span
-        >
-        <h1>Volvé a esa idea.</h1>
-        <p class="lead">
-          Una relación, una explicación breve y un ejemplo. Sin recorrer un
-          curso entero.
-        </p>
-      </header>
+      <SectionHeading
+        className="recall-heading"
+        title="Volvé a esa idea."
+        description="Una relación, una explicación breve y un ejemplo. Sin recorrer un curso entero."
+      />
       <figure class="recall-overview-visual">
         <img
           src="/recall/recordar-640.png"

@@ -9,7 +9,7 @@ import { getChallengeSlug } from '../../../content/challenges';
 import { AnimatedArrowLink } from '../../../components/react/AnimatedArrowAction';
 
 const masteryLabels = {
-  unexplored: 'Sin evidencia',
+  unexplored: 'Sin explorar',
   developing: 'En desarrollo',
   available: 'Disponible',
   solid: 'Sólido',

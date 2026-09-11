@@ -7,6 +7,8 @@ conocimientos matemáticos útiles a través de situaciones cotidianas. La
 aplicación guía al usuario para reconocer una relación, estimar un resultado,
 resolver cuando hace falta, verificarlo y decidir qué significa.
 
+Versión actual: **0.1.4**.
+
 ## Qué incluye
 
 - Primera visita con un desafío guiado de comparación de descuentos.
@@ -35,6 +37,7 @@ navegador donde se utiliza.
 | `/recordar`         | Búsqueda y consulta rápida de relaciones matemáticas    |
 | `/prueba`           | Diagnóstico inicial de ocho situaciones                 |
 | `/mapa`             | Estado personal de las habilidades practicadas          |
+| `/desafio`          | Catálogo completo de situaciones para resolver          |
 | `/desafio/[slug]`   | Resolución guiada de un desafío                         |
 
 ## Stack
@@ -90,8 +93,8 @@ publicar la aplicación:
 1. Creá el subdominio en Hostinger y asignale su document root.
 2. Ejecutá `pnpm build` en este repositorio.
 3. Subí **el contenido de `dist/`** al document root del subdominio, incluidos
-   `404.html`, `favicon.svg`, `robots.txt`, las carpetas de cada ruta y
-   `_astro/`.
+   `404.html`, `favicon-16.png`, `favicon-32.png`, `apple-touch-icon.png`,
+   `robots.txt`, las carpetas de cada ruta y `_astro/`.
 4. No subas `src/`, `node_modules/` ni el repositorio completo al document root.
 
 La salida incluye `index.html` dentro de cada ruta, de modo que las páginas

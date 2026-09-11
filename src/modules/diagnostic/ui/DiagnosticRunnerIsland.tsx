@@ -13,7 +13,7 @@ import {
 } from '../../../components/react/AnimatedArrowAction';
 
 type DiagnosticStatus =
-  'Sólido' | 'Disponible' | 'En desarrollo' | 'Para explorar';
+  'Sólido' | 'Disponible' | 'En desarrollo' | 'Sin explorar';
 
 const synthesisGroups: {
   status: DiagnosticStatus;
@@ -32,7 +32,7 @@ const synthesisGroups: {
     description: 'Hay una relación para revisar con más tiempo.',
   },
   {
-    status: 'Para explorar',
+    status: 'Sin explorar',
     description: 'Todavía no apareció evidencia en estas situaciones.',
   },
 ];
@@ -42,7 +42,7 @@ function getDiagnosticStatus(
   evidences: readonly Evidence[],
 ): DiagnosticStatus {
   const related = evidences.filter((evidence) => evidence.skillId === skillId);
-  if (!related.length) return 'Para explorar';
+  if (!related.length) return 'Sin explorar';
   if (related.every((evidence) => evidence.correct)) return 'Sólido';
   if (related.some((evidence) => evidence.correct)) return 'Disponible';
   return 'En desarrollo';

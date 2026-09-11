@@ -2,6 +2,7 @@
 import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/global.css';
+import '../styles/professional-pass.css';
 import NavigationLink from '../components/react/NavigationLink';
 import { ClientRouter } from 'astro:transitions';
 
@@ -79,7 +80,7 @@ const links = [
                   ? pathname === '/'
                   : pathname.startsWith(link.href)
               }
-              client:load
+              client:idle
             />
           ))
         }

@@ -24,6 +24,7 @@ type Props = Omit<
   label: string;
   iconSize?: number;
   reducedMotionOverride?: boolean;
+  showLabel?: boolean;
 };
 
 function useIconInteraction(reducedMotionOverride: boolean) {
@@ -79,6 +80,7 @@ export const AnimatedIconButton = forwardRef<HTMLButtonElement, Props>(
       label,
       iconSize = 22,
       reducedMotionOverride = false,
+      showLabel = false,
       className,
       ...props
     },
@@ -92,6 +94,7 @@ export const AnimatedIconButton = forwardRef<HTMLButtonElement, Props>(
         ref={ref as Ref<HTMLButtonElement>}
         className={className}
         aria-label={label}
+        data-show-label={showLabel ? 'true' : undefined}
         onMouseEnter={interaction.onMouseEnter}
         onMouseLeave={interaction.onMouseLeave}
         onFocus={interaction.onFocus}
@@ -103,6 +106,7 @@ export const AnimatedIconButton = forwardRef<HTMLButtonElement, Props>(
           size={iconSize}
           reducedMotion={interaction.reducedMotion}
         />
+        {showLabel && <span className="button__label">{label}</span>}
       </button>
     );
   },

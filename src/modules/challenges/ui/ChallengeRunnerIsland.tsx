@@ -114,9 +114,6 @@ export default function ChallengeRunnerIsland({
   const currentChallenge =
     challenges.find((item) => item.id === currentId) ?? challenge;
   const step = currentChallenge.steps[stepIndex];
-  const overallProgress = challenges.length
-    ? Math.round((completedIds.size / challenges.length) * 100)
-    : 0;
   const currentFamily = families.find(
     (family) => family.id === currentChallenge.familyId,
   );
@@ -273,18 +270,19 @@ export default function ChallengeRunnerIsland({
               (item) => item.familyId === family.id,
             );
             return (
-              <section
+              <details
                 className="challenge-family"
                 key={family.id}
                 aria-labelledby={`family-${family.id}`}
+                open={family.id === currentFamily?.id}
               >
-                <header className="challenge-family__header">
+                <summary className="challenge-family__header">
                   <FamilyIcon familyId={family.id} />
                   <h3 id={`family-${family.id}`}>{family.title}</h3>
                   <span className="challenge-family__count">
                     {familyChallenges.length}
                   </span>
-                </header>
+                </summary>
                 <ol className="challenge-family__list">
                   {familyChallenges.map((item) => {
                     const status = statusFor(item.id);
@@ -327,7 +325,7 @@ export default function ChallengeRunnerIsland({
                     );
                   })}
                 </ol>
-              </section>
+              </details>
             );
           })}
         </div>
@@ -396,7 +394,7 @@ export default function ChallengeRunnerIsland({
                 </p>
               </div>
               <span className="workspace-header__progress">
-                {completedIds.size} / {challenges.length} · {overallProgress}%
+                {completedIds.size} de {challenges.length} resueltas
               </span>
             </header>
             {step && (
