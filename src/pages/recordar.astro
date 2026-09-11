@@ -7,15 +7,29 @@ import { families } from '../content/skills';
 
 <SiteLayout title="Recordar">
   <div class="recall-page">
-    <header class="page-heading recall-heading">
-      <span class="recall-heading__index">Consulta rápida / 10 referencias</span
-      >
-      <h1>Volvé a esa idea.</h1>
-      <p class="lead">
-        Una relación, una explicación breve y un ejemplo. Sin recorrer un curso
-        entero.
-      </p>
-    </header>
+    <div class="recall-overview-hero">
+      <header class="page-heading recall-heading">
+        <span class="section-heading__eyebrow recall-heading__index"
+          >Consulta rápida / 10 referencias</span
+        >
+        <h1>Volvé a esa idea.</h1>
+        <p class="lead">
+          Una relación, una explicación breve y un ejemplo. Sin recorrer un
+          curso entero.
+        </p>
+      </header>
+      <figure class="recall-overview-visual">
+        <img
+          src="/recall/recordar-640.png"
+          srcset="/recall/recordar-320.png 320w, /recall/recordar-640.png 640w"
+          sizes="(max-width: 760px) 240px, 360px"
+          width="640"
+          height="639"
+          alt="Ilustración de una flecha que señala una idea para recordar"
+          decoding="async"
+        />
+      </figure>
+    </div>
     <RecallSearchIsland client:load cards={recallCards} families={families} />
   </div>
 </SiteLayout>

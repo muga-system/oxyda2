@@ -17,6 +17,7 @@ const {
 } = Astro.props;
 const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
 const runner = pathname.startsWith('/desafio/') || pathname === '/prueba';
+const challengeRunner = pathname.startsWith('/desafio/');
 const canonicalUrl = Astro.site
   ? new URL(Astro.url.pathname, Astro.site).toString()
   : undefined;
@@ -37,18 +38,34 @@ const links = [
     <meta name="description" content={description} />
     <meta name="theme-color" content="#0b0b0f" />
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <ClientRouter />
     <title>
       {title ? `${title} · OxYda2` : 'OxYda2 · Matemática para pensar'}
     </title>
   </head>
-  <body class:list={[home && 'home-layout']}>
+  <body
+    class:list={[
+      home && 'home-layout',
+      runner && 'runner-layout',
+      challengeRunner && 'challenge-runner-layout',
+    ]}
+  >
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
     <header class="site-header site-header-app">
-      <a class="brand" href="/" aria-label="OxYda2, inicio"
-        >Ox<span>Y</span>da<span class="brand-two">2</span></a
-      >
+      <a class="brand" href="/" aria-label="OxYda2, inicio">
+        <img
+          class="brand__mark"
+          src="/brand/monograma-128.png"
+          width="42"
+          height="42"
+          alt=""
+          decoding="async"
+        />
+        <span class="sr-only">OxYda2</span>
+      </a>
       <nav class="home-nav" aria-label="Principal">
         {
           links.map((link) => (

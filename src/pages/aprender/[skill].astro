@@ -18,18 +18,78 @@ const relatedChallenges = challenges.filter(
   (challenge) => challenge.familyId === family.id,
 );
 const familyIndex = families.findIndex((item) => item.id === family.id);
+const familyIllustration =
+  family.id === 'percentage'
+    ? {
+        src: '/learning/porcentajes-640.png',
+        srcset:
+          '/learning/porcentajes-320.png 320w, /learning/porcentajes-640.png 640w',
+        width: 640,
+        height: 645,
+        alt: 'Ilustración de engranajes que representan porcentajes y relaciones',
+      }
+    : family.id === 'proportion'
+      ? {
+          src: '/learning/proporciones-640.png',
+          srcset:
+            '/learning/proporciones-320.png 320w, /learning/proporciones-640.png 640w',
+          width: 640,
+          height: 350,
+          alt: 'Ilustración de dos engranajes conectados que representan proporciones',
+        }
+      : family.id === 'estimation'
+        ? {
+            src: '/learning/estimacion-640.png',
+            srcset:
+              '/learning/estimacion-320.png 320w, /learning/estimacion-640.png 640w',
+            width: 640,
+            height: 397,
+            alt: 'Ilustración de dos filas de bloques que representan una estimación',
+          }
+        : family.id === 'data'
+          ? {
+              src: '/learning/datos-640.png',
+              srcset:
+                '/learning/datos-320.png 320w, /learning/datos-640.png 640w',
+              width: 640,
+              height: 759,
+              alt: 'Ilustración de una escalera que representa la lectura de datos',
+            }
+          : undefined;
 ---
 
 <SiteLayout title={family.title}>
   <div class="learning-page learning-page--family">
     <a class="back-link" href="/aprender">← Aprender</a>
-    <header class="page-heading compact learning-family-heading">
-      <span class="family-heading-index">
-        Familia {String(familyIndex + 1).padStart(2, '0')} / 05
-      </span>
-      <h1>{family.title}</h1>
-      <p class="lead">{family.description}</p>
-    </header>
+    <div
+      class:list={[
+        'learning-family-hero',
+        familyIllustration && 'learning-family-hero--illustrated',
+      ]}
+    >
+      <header class="page-heading compact learning-family-heading">
+        <span class="family-heading-index">
+          Familia {String(familyIndex + 1).padStart(2, '0')} / 05
+        </span>
+        <h1>{family.title}</h1>
+        <p class="lead">{family.description}</p>
+      </header>
+      {
+        familyIllustration && (
+          <figure class="learning-family-visual">
+            <img
+              src={familyIllustration.src}
+              srcset={familyIllustration.srcset}
+              sizes="(max-width: 720px) 240px, 360px"
+              width={familyIllustration.width}
+              height={familyIllustration.height}
+              alt={familyIllustration.alt}
+              decoding="async"
+            />
+          </figure>
+        )
+      }
+    </div>
     <FamilyStatusIsland client:load skills={familySkills} />
     <FamilyConceptsIsland
       client:load
@@ -48,6 +108,7 @@ const familyIndex = families.findIndex((item) => item.id === family.id);
               className="challenge-link"
               arrowClassName="challenge-link__arrow"
               href={`/desafio/${challenge.slug}?source=learning`}
+              reload
               direction="up-right"
             >
               <span class="challenge-link__body">

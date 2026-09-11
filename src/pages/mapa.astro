@@ -5,11 +5,28 @@ import { families, skills } from '../content/skills';
 ---
 
 <SiteLayout title="Mi mapa">
-  <header class="page-heading">
-    <h1>Lo que vas teniendo a mano.</h1><p class="lead">
-      Tu mapa de ideas: lo que estás explorando, lo que podés usar y lo que
-      conviene refrescar.
-    </p>
-  </header>
-  <ProgressMapIsland client:load families={families} skills={skills} />
+  <div class="map-page">
+    <div class="map-overview-hero">
+      <header class="page-heading map-heading">
+        <span class="section-heading__eyebrow">Mi mapa / progreso</span>
+        <h1>Lo que vas teniendo a mano.</h1>
+        <p class="lead">
+          Tu mapa de ideas: lo que estás explorando, lo que podés usar y lo que
+          conviene refrescar.
+        </p>
+      </header>
+      <figure class="map-overview-visual">
+        <img
+          src="/map/mapa-640.png"
+          srcset="/map/mapa-320.png 320w, /map/mapa-640.png 640w"
+          sizes="(max-width: 720px) 240px, 360px"
+          width="640"
+          height="763"
+          alt="Ilustración de un mapa de ideas conectado"
+          decoding="async"
+        />
+      </figure>
+    </div>
+    <ProgressMapIsland client:load families={families} skills={skills} />
+  </div>
 </SiteLayout>

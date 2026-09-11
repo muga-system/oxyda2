@@ -6,13 +6,27 @@ import { families, skills } from '../../content/skills';
 
 <SiteLayout title="Aprender">
   <div class="learning-page learning-page--overview">
-    <header class="page-heading">
-      <h1>Una idea a la vez.</h1>
-      <p class="lead">
-        Cinco familias para entender relaciones que aparecen todos los días.
-        Empezá donde tengas curiosidad.
-      </p>
-    </header>
+    <div class="learning-overview-hero">
+      <header class="page-heading">
+        <span class="section-heading__eyebrow">Aprender / 05 familias</span>
+        <h1>Una idea a la vez.</h1>
+        <p class="lead">
+          Cinco familias para entender relaciones que aparecen todos los días.
+          Empezá donde tengas curiosidad.
+        </p>
+      </header>
+      <figure class="learning-overview-visual">
+        <img
+          src="/learning/aprender-640.png"
+          srcset="/learning/aprender-320.png 320w, /learning/aprender-640.png 640w"
+          sizes="(max-width: 760px) 240px, 360px"
+          width="640"
+          height="522"
+          alt="Ilustración de un libro abierto que representa el aprendizaje"
+          decoding="async"
+        />
+      </figure>
+    </div>
     <LearningOverviewIsland client:load families={families} skills={skills} />
     <p class="small-note">
       Todos los conceptos están abiertos. La progresión orienta; vos elegís el

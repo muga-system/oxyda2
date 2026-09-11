@@ -12,13 +12,29 @@ const items = selectDiagnostic(challenges).map(({ challenge, step }) => ({
 
 <SiteLayout title="Poneme a prueba">
   <div class="challenge-page challenge-page--runner diagnostic-page">
-    <header class="page-heading diagnostic-page__heading">
-      <h1>¿Qué ideas tenés a mano?</h1>
-      <p class="lead">
-        Ocho situaciones breves para descubrir qué relaciones siguen
-        disponibles.
-      </p>
-    </header>
+    <div class="diagnostic-overview-hero">
+      <header class="page-heading diagnostic-page__heading">
+        <span class="section-heading__eyebrow"
+          >Diagnóstico / 08 situaciones</span
+        >
+        <h1>¿Qué ideas tenés a mano?</h1>
+        <p class="lead">
+          Ocho situaciones breves para descubrir qué relaciones siguen
+          disponibles.
+        </p>
+      </header>
+      <figure class="diagnostic-overview-visual">
+        <img
+          src="/diagnostic/prueba-640.png"
+          srcset="/diagnostic/prueba-320.png 320w, /diagnostic/prueba-640.png 640w"
+          sizes="(max-width: 760px) 220px, 280px"
+          width="640"
+          height="868"
+          alt="Ilustración de una pregunta que invita a poner a prueba una idea"
+          decoding="async"
+        />
+      </figure>
+    </div>
     <DiagnosticRunnerIsland client:load items={items} skills={skills} />
   </div>
 </SiteLayout>
