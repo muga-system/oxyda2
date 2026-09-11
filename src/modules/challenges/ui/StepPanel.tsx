@@ -10,6 +10,7 @@ import { AnimatedArrowButton } from '../../../components/react/AnimatedArrowActi
 import { AnimatedIconButton } from '../../../components/react/AnimatedIconAction';
 import { CircleCheckIcon } from '../../../components/react/icons/circle-check';
 import { SearchIcon } from '../../../components/react/icons/search';
+import ChoiceLetterImage from './ChoiceLetterImage';
 
 export type AttemptResult = ReturnType<typeof resolveAttempt>;
 
@@ -205,7 +206,7 @@ export default function StepPanel({
                   }}
                 />
                 <span className="choice-index" aria-hidden="true">
-                  {String.fromCharCode(65 + index)}
+                  <ChoiceLetterImage index={index} />
                 </span>
                 <span className="choice-label">{option.label}</span>
                 <span className="choice-status" aria-hidden="true">

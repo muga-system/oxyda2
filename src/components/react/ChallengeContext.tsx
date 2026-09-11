@@ -193,10 +193,10 @@ export default function ChallengeContext({
         </span>
         <strong>{kindLabels[currentStep.kind]}</strong>
         <span>{currentStep.label ?? 'Paso actual'}</span>
+        <p className="challenge-context__note">
+          La pregunta cambia cuando cambia la relación entre los datos.
+        </p>
       </div>
-      <p className="challenge-context__note">
-        La pregunta cambia cuando cambia la relación entre los datos.
-      </p>
     </aside>
   );
 }

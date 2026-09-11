@@ -1,4 +1,11 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from 'react';
 import { useReducedMotion } from 'motion/react';
 import type {
   Challenge,
@@ -16,6 +23,7 @@ import { AnimatedArrowLink } from '../../../components/react/AnimatedArrowAction
 import { runViewTransition } from '../../../shared/ui/viewTransition';
 import type { AnimatedIconHandle } from '../../../components/react/icons/animated-icon';
 import { BookTextIcon } from '../../../components/react/icons/book-text';
+import { BookmarkCheckIcon } from '../../../components/react/icons/bookmark-check';
 import { ChevronsLeftRightIcon } from '../../../components/react/icons/chevrons-left-right';
 import { CompassIcon } from '../../../components/react/icons/compass';
 import { MapPinIcon } from '../../../components/react/icons/map-pin';
@@ -23,6 +31,12 @@ import { ScanTextIcon } from '../../../components/react/icons/scan-text';
 import { SearchIcon } from '../../../components/react/icons/search';
 
 type ChallengeStatus = 'pending' | 'active' | 'completed';
+
+type FamiliesScrollbarState = {
+  isScrollable: boolean;
+  thumbOffset: number;
+  thumbSize: number;
+};
 
 const statusLabels: Record<ChallengeStatus, string> = {
   pending: 'Disponible',
@@ -64,6 +78,17 @@ function FamilyIcon({ familyId }: { familyId: FamilyId }) {
       aria-hidden="true"
     >
       <Icon ref={iconRef} size={18} reducedMotion={reducedMotion} />
+    </span>
+  );
+}
+
+function CompletionStatusIcon() {
+  const prefersReducedMotion = useReducedMotion();
+  const reducedMotion = prefersReducedMotion === true;
+
+  return (
+    <span className="challenge-list__status-icon" aria-hidden="true">
+      <BookmarkCheckIcon size={20} reducedMotion={reducedMotion} />
     </span>
   );
 }
@@ -117,10 +142,131 @@ export default function ChallengeRunnerIsland({
   const currentFamily = families.find(
     (family) => family.id === currentChallenge.familyId,
   );
+  const [openFamilyId, setOpenFamilyId] = useState<FamilyId | null>(
+    currentFamily?.id ?? families[0]?.id ?? null,
+  );
+  const familiesRef = useRef<HTMLDivElement>(null);
+  const scrollbarRef = useRef<HTMLDivElement>(null);
+  const [familiesScrollbar, setFamiliesScrollbar] =
+    useState<FamiliesScrollbarState>({
+      isScrollable: false,
+      thumbOffset: 0,
+      thumbSize: 0,
+    });
 
   useEffect(() => {
     setCompletedIds(new Set(snapshot.completedChallengeIds));
   }, [snapshot.completedChallengeIds]);
+
+  useLayoutEffect(() => {
+    setOpenFamilyId(currentFamily?.id ?? null);
+  }, [challenge.id, currentChallenge.id, currentFamily?.id]);
+
+  useLayoutEffect(() => {
+    const element = familiesRef.current;
+    const scrollbar = scrollbarRef.current;
+    if (!element || !scrollbar) return;
+
+    let frame = 0;
+    const syncScrollbar = () => {
+      if (frame) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const scrollableDistance = element.scrollHeight - element.clientHeight;
+        const isScrollable = scrollableDistance > 1;
+
+        if (!isScrollable) {
+          setFamiliesScrollbar({
+            isScrollable: false,
+            thumbOffset: 0,
+            thumbSize: 0,
+          });
+          return;
+        }
+
+        const trackHeight = scrollbar.clientHeight;
+        const thumbSize = Math.min(
+          trackHeight,
+          Math.max(
+            40,
+            (element.clientHeight / element.scrollHeight) * trackHeight,
+          ),
+        );
+        const trackDistance = Math.max(0, trackHeight - thumbSize);
+        const thumbOffset =
+          (element.scrollTop / scrollableDistance) * trackDistance;
+
+        setFamiliesScrollbar({ isScrollable: true, thumbOffset, thumbSize });
+      });
+    };
+
+    const resizeObserver = new ResizeObserver(syncScrollbar);
+    resizeObserver.observe(element);
+    resizeObserver.observe(scrollbar);
+    Array.from(element.children).forEach((child) =>
+      resizeObserver.observe(child),
+    );
+    element.addEventListener('scroll', syncScrollbar, { passive: true });
+    window.addEventListener('resize', syncScrollbar);
+    syncScrollbar();
+
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      resizeObserver.disconnect();
+      element.removeEventListener('scroll', syncScrollbar);
+      window.removeEventListener('resize', syncScrollbar);
+    };
+  }, [currentChallenge.id, openFamilyId]);
+
+  useEffect(() => {
+    if (!openFamilyId) return;
+
+    const revealFamily = () => {
+      const container = familiesRef.current;
+      const family = container?.querySelector<HTMLElement>(
+        `[data-family-id="${openFamilyId}"]`,
+      );
+      if (!container || !family) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const familyRect = family.getBoundingClientRect();
+      const familyTop =
+        container.scrollTop + familyRect.top - containerRect.top;
+      const familyBottom = familyTop + familyRect.height;
+      const visibleTop = container.scrollTop;
+      const visibleBottom = visibleTop + container.clientHeight;
+      const maxScroll = Math.max(
+        0,
+        container.scrollHeight - container.clientHeight,
+      );
+      const targetScroll = Math.min(
+        maxScroll,
+        Math.max(
+          0,
+          familyBottom > visibleBottom
+            ? familyBottom - container.clientHeight
+            : familyTop < visibleTop
+              ? familyTop
+              : container.scrollTop,
+        ),
+      );
+
+      if (Math.abs(targetScroll - container.scrollTop) < 1) return;
+      container.scrollTo({
+        top: targetScroll,
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'auto'
+          : 'smooth',
+      });
+    };
+
+    const frame = requestAnimationFrame(revealFamily);
+    const settled = window.setTimeout(revealFamily, 340);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.clearTimeout(settled);
+    };
+  }, [openFamilyId]);
 
   useEffect(() => {
     session.current = crypto.randomUUID();
@@ -264,70 +410,126 @@ export default function ChallengeRunnerIsland({
             {completedIds.size} / {challenges.length}
           </span>
         </header>
-        <div className="challenge-families">
-          {families.map((family) => {
-            const familyChallenges = challenges.filter(
-              (item) => item.familyId === family.id,
-            );
-            return (
-              <details
-                className="challenge-family"
-                key={family.id}
-                aria-labelledby={`family-${family.id}`}
-                open={family.id === currentFamily?.id}
-              >
-                <summary className="challenge-family__header">
-                  <FamilyIcon familyId={family.id} />
-                  <h3 id={`family-${family.id}`}>{family.title}</h3>
-                  <span className="challenge-family__count">
-                    {familyChallenges.length}
-                  </span>
-                </summary>
-                <ol className="challenge-family__list">
-                  {familyChallenges.map((item) => {
-                    const status = statusFor(item.id);
-                    const index = challenges.indexOf(item);
-                    return (
-                      <li
-                        key={item.id}
-                        className={`challenge-list__item is-${status} ${item.id === currentId ? 'is-selected' : ''}`}
+        <div className="challenge-families-scrollarea">
+          <div className="challenge-families" ref={familiesRef}>
+            {families.map((family) => {
+              const familyChallenges = challenges.filter(
+                (item) => item.familyId === family.id,
+              );
+              const isOpen = openFamilyId === family.id;
+              return (
+                <section
+                  className={`challenge-family ${isOpen ? 'is-open' : ''}`}
+                  data-family-id={family.id}
+                  key={family.id}
+                  aria-labelledby={`family-${family.id}`}
+                >
+                  <button
+                    type="button"
+                    className="challenge-family__header"
+                    aria-expanded={isOpen}
+                    aria-controls={`family-options-${family.id}`}
+                    onClick={() =>
+                      setOpenFamilyId((previous) =>
+                        previous === family.id ? null : family.id,
+                      )
+                    }
+                  >
+                    <FamilyIcon familyId={family.id} />
+                    <span className="challenge-family__heading">
+                      <span
+                        className="challenge-family__title"
+                        id={`family-${family.id}`}
+                        role="heading"
+                        aria-level={3}
                       >
-                        <button
-                          type="button"
-                          className="challenge-list__button"
-                          onClick={() => selectChallenge(item.id)}
-                          aria-current={
-                            item.id === currentId ? 'step' : undefined
-                          }
-                          aria-label={`${String(index + 1).padStart(2, '0')} ${item.title}, ${statusLabels[status]}. ${item.scenario}`}
-                        >
-                          <span
-                            className="challenge-list__index"
-                            aria-hidden="true"
+                        {family.title}
+                      </span>
+                      <span className="challenge-family__description">
+                        {family.description}
+                      </span>
+                    </span>
+                    <span className="challenge-family__meta">
+                      <span className="challenge-family__count">
+                        {familyChallenges.length} opciones
+                      </span>
+                      <span
+                        className="challenge-family__toggle"
+                        aria-hidden="true"
+                      >
+                        {isOpen ? '−' : '+'}
+                      </span>
+                    </span>
+                  </button>
+                  <div
+                    className="challenge-family__content"
+                    id={`family-options-${family.id}`}
+                    aria-hidden={!isOpen}
+                    inert={!isOpen}
+                  >
+                    <ol className="challenge-family__list">
+                      {familyChallenges.map((item) => {
+                        const status = statusFor(item.id);
+                        const index = challenges.indexOf(item);
+                        return (
+                          <li
+                            key={item.id}
+                            className={`challenge-list__item is-${status} ${item.id === currentId ? 'is-selected' : ''}`}
                           >
-                            {String(index + 1).padStart(2, '0')}
-                          </span>
-                          <span className="challenge-list__copy">
-                            <strong>{item.title}</strong>
-                            <span
-                              className="challenge-list__status-marker"
-                              aria-hidden="true"
+                            <button
+                              type="button"
+                              className="challenge-list__button"
+                              onClick={() => selectChallenge(item.id)}
+                              aria-current={
+                                item.id === currentId ? 'step' : undefined
+                              }
+                              aria-label={`${String(index + 1).padStart(2, '0')} ${item.title}, ${statusLabels[status]}. ${item.scenario}`}
                             >
-                              {status === 'completed'
-                                ? '✓'
-                                : status === 'active'
-                                  ? '●'
-                                  : null}
-                            </span>
-                          </span>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ol>
-              </details>
-            );
-          })}
+                              <span
+                                className="challenge-list__index"
+                                aria-hidden="true"
+                              >
+                                {String(index + 1).padStart(2, '0')}
+                              </span>
+                              <span className="challenge-list__copy">
+                                <strong>{item.title}</strong>
+                                <span className="challenge-list__description">
+                                  {item.scenario}
+                                </span>
+                                <span
+                                  className="challenge-list__status-marker"
+                                  aria-hidden="true"
+                                >
+                                  {status === 'completed' ? (
+                                    <CompletionStatusIcon />
+                                  ) : status === 'active' ? (
+                                    '●'
+                                  ) : null}
+                                </span>
+                              </span>
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ol>
+                  </div>
+                </section>
+              );
+            })}
+          </div>
+          <div
+            className={`challenge-families__scrollbar ${familiesScrollbar.isScrollable ? 'is-scrollable' : ''}`}
+            ref={scrollbarRef}
+            aria-hidden="true"
+            style={
+              {
+                '--challenge-scroll-thumb-offset': `${familiesScrollbar.thumbOffset}px`,
+                '--challenge-scroll-thumb-size': `${familiesScrollbar.thumbSize}px`,
+              } as CSSProperties
+            }
+          >
+            <span className="challenge-families__scrollbar-thumb" />
+          </div>
         </div>
       </aside>
 
