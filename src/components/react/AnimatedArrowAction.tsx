@@ -23,6 +23,7 @@ interface SharedProps {
   direction?: Direction;
   arrowClassName?: string;
   reducedMotionOverride?: boolean;
+  reload?: boolean;
 }
 
 type LinkProps = SharedProps &
@@ -109,6 +110,7 @@ export function AnimatedArrowLink({
   direction = 'right',
   arrowClassName,
   reducedMotionOverride = false,
+  reload = false,
   className,
   ...props
 }: LinkProps) {
@@ -116,6 +118,7 @@ export function AnimatedArrowLink({
   return (
     <a
       {...props}
+      data-astro-reload={reload || undefined}
       className={className}
       onMouseEnter={interaction.onMouseEnter}
       onMouseLeave={interaction.onMouseLeave}

@@ -11,10 +11,23 @@ interface ViewTransitionDocument {
  * available, while keeping the current reading position stable as the panel
  * changes height.
  */
-export function runViewTransition(update: () => void): void {
+export function runViewTransition(
+  update: () => void,
+  options: { preserveWorkspaceScroll?: boolean } = {},
+): void {
+  const preserveWorkspaceScroll = options.preserveWorkspaceScroll ?? true;
   const scrollX = window.scrollX;
   const scrollY = window.scrollY;
-  const restoreScroll = () => window.scrollTo(scrollX, scrollY);
+  const workspace = document.querySelector<HTMLElement>(
+    '.challenge-workspace__inner, .challenge-shell',
+  );
+  const workspaceScrollTop = preserveWorkspaceScroll
+    ? (workspace?.scrollTop ?? 0)
+    : 0;
+  const restoreScroll = () => {
+    window.scrollTo(scrollX, scrollY);
+    if (workspace) workspace.scrollTop = workspaceScrollTop;
+  };
   const settleScroll = () => {
     restoreScroll();
     requestAnimationFrame(restoreScroll);

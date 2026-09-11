@@ -72,9 +72,19 @@ export default function ChallengeContext({
     );
 
   const currentStep = activeStep ?? challenge.steps[0]!;
-  const isDiscountComparison = challenge.id === 'percentage-discount-compare';
-  const operationVisible = isDiscountComparison && stepIndex >= 2;
-  const resultVisible = isDiscountComparison && stepIndex >= 3;
+  const context = challenge.context;
+  const operationStepIndex = challenge.steps.findIndex(
+    (step) => step.kind === 'calculate',
+  );
+  const decisionStepIndex = challenge.steps.findIndex(
+    (step) => step.kind === 'decide',
+  );
+  const operationVisible =
+    Boolean(context?.operation) &&
+    (operationStepIndex < 0 || stepIndex >= operationStepIndex);
+  const resultVisible =
+    Boolean(context?.result?.length) &&
+    (decisionStepIndex < 0 || stepIndex >= decisionStepIndex);
 
   return (
     <aside
@@ -88,11 +98,10 @@ export default function ChallengeContext({
           {String(totalSteps).padStart(2, '0')}
         </span>
       </header>
-      <p className="scenario">{challenge.scenario}</p>
-      {isDiscountComparison && (
+      {context?.base && (
         <div className="runner-math__base">
-          <span>Precio en ambas tiendas</span>
-          <strong>$80.000</strong>
+          <span>{context.base.label}</span>
+          <strong>{context.base.value}</strong>
         </div>
       )}
       {challenge.comparison && (
@@ -146,34 +155,35 @@ export default function ChallengeContext({
           </p>
         </figure>
       )}
-      {isDiscountComparison && operationVisible && (
+      {operationVisible && context?.operation && (
         <div
           className="runner-math__reveal"
           aria-label="Operación del descuento"
         >
           <div className="runner-math__operation">
-            <span>Operación</span>
-            <code>80.000 × 0,25</code>
+            <span>{context.operation.label}</span>
+            <code>{context.operation.value}</code>
           </div>
           {resultVisible ? (
             <div className="runner-math__result">
-              <div>
-                <span>A</span>
-                <strong>$20.000</strong>
-              </div>
-              <div>
-                <span>B</span>
-                <strong>$18.000</strong>
-              </div>
-              <div className="runner-math__difference">
-                <span>Δ</span>
-                <strong>$2.000</strong>
-              </div>
+              {context.result?.map((item, index) => (
+                <div
+                  className={
+                    index === context.result!.length - 1
+                      ? 'runner-math__difference'
+                      : undefined
+                  }
+                  key={item.label}
+                >
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                </div>
+              ))}
             </div>
           ) : (
-            <p className="runner-math__pending">
-              La relación queda abierta hasta resolverla.
-            </p>
+            context.pendingLabel && (
+              <p className="runner-math__pending">{context.pendingLabel}</p>
+            )
           )}
         </div>
       )}

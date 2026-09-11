@@ -97,6 +97,7 @@ export default function RecallSearchIsland({
                 <AnimatedArrowLink
                   className="button button-secondary"
                   href={`/desafio/${getChallengeSlug(card.challengeId)}?source=recall`}
+                  reload
                 >
                   Probar un ejemplo
                 </AnimatedArrowLink>

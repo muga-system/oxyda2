@@ -55,11 +55,15 @@ export default function ProgressMapIsland({
             <AnimatedArrowLink
               className="button button-primary"
               href={`/desafio/${getChallengeSlug('percentage-discount-compare')}`}
+              reload
             >
               Resolver mi primer desafío
             </AnimatedArrowLink>
             <a className="text-link" href="/prueba">
               Poneme a prueba
+            </a>
+            <a className="text-link" href="/desafio">
+              Ver todos los desafíos
             </a>
           </div>
         </div>

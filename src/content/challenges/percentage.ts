@@ -18,6 +18,51 @@ export const percentageChallenges = [
       { label: 'Tienda A', value: '25%', detail: 'de descuento' },
       { label: 'Tienda B', value: '$18.000', detail: 'de descuento' },
     ],
+    context: {
+      base: { label: 'Precio en ambas tiendas', value: '$80.000' },
+      operation: { label: 'Operación', value: '80.000 × 0,25' },
+      result: [
+        { label: 'A', value: '$20.000' },
+        { label: 'B', value: '$18.000' },
+        { label: 'Δ', value: '$2.000' },
+      ],
+      pendingLabel: 'La relación queda abierta hasta resolverla.',
+    },
+    visuals: {
+      'same-unit': {
+        variant: 'comparison',
+        items: [
+          { label: 'Oferta A', value: '25%', bar: 25 },
+          { label: 'Oferta B', value: '$18.000', bar: 90 },
+        ],
+        caption: 'Dos ofertas. Una misma medida para compararlas.',
+      },
+      'quarter-estimate': {
+        variant: 'estimate',
+        metric: { label: 'Precio original', value: '$80.000' },
+        parts: 4,
+        activeParts: 1,
+        answer: '≈ $20.000',
+      },
+      'discount-amount': {
+        variant: 'operation',
+        base: { label: 'Base', value: '80.000' },
+        operator: '× 0,25',
+        result: { label: 'Resultado', value: '?' },
+      },
+      'choose-store': {
+        variant: 'decision',
+        items: [
+          { label: 'Tienda A', value: '$60.000', detail: 'precio final' },
+          { label: 'Tienda B', value: '$62.000', detail: 'precio final' },
+        ],
+      },
+      'verify-discount': {
+        variant: 'verification',
+        label: 'Una cuarta parte',
+        value: '20.000 × 4 = 80.000',
+      },
+    },
     takeaway:
       'Antes de comparar un porcentaje con una cantidad, llevalos a la misma unidad. El 25% de $80.000 es $20.000: A descuenta $2.000 más.',
     steps: [

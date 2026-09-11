@@ -9,7 +9,13 @@ import { AnimatedArrowLink } from '../../../components/react/AnimatedArrowAction
 import type { AnimatedIconHandle } from '../../../components/react/icons/animated-icon';
 import { ChevronsLeftRightIcon } from '../../../components/react/icons/chevrons-left-right';
 
-function MathInstrument({ label }: { label: string }) {
+function MathInstrument({
+  label,
+  challenge,
+}: {
+  label: string;
+  challenge: Challenge;
+}) {
   const differenceIconRef = useRef<AnimatedIconHandle>(null);
   const prefersReducedMotion = useReducedMotion();
   const reducedMotion = prefersReducedMotion === true;
@@ -24,6 +30,13 @@ function MathInstrument({ label }: { label: string }) {
     }
     differenceIconRef.current?.startAnimation();
   }
+
+  const base = challenge.context?.base;
+  const relation = challenge.comparison?.[0];
+  const operation = challenge.context?.operation;
+  const result = challenge.context?.result?.[0];
+  const comparison = challenge.context?.result ?? challenge.comparison ?? [];
+  const comparisonDetails = challenge.comparison ?? [];
 
   return (
     <aside
@@ -41,32 +54,32 @@ function MathInstrument({ label }: { label: string }) {
           <span className="math-step__index">01</span>
           <div>
             <span className="math-step__label">Entrada</span>
-            <strong>$80.000</strong>
-            <small>precio original</small>
+            <strong>{base?.value ?? '—'}</strong>
+            <small>{base?.label ?? 'valor de referencia'}</small>
           </div>
         </div>
         <div className="math-step math-step--relation">
           <span className="math-step__index">02</span>
           <div>
             <span className="math-step__label">Relación</span>
-            <strong>25%</strong>
-            <small>descuento A</small>
+            <strong>{relation?.value ?? '—'}</strong>
+            <small>{relation?.detail ?? 'relación visible'}</small>
           </div>
         </div>
         <div className="math-step math-step--operation">
           <span className="math-step__index">03</span>
           <div>
             <span className="math-step__label">Operación</span>
-            <strong>80.000 × 0,25</strong>
-            <small>parte del total</small>
+            <strong>{operation?.value ?? '—'}</strong>
+            <small>{operation?.label ?? 'operación'}</small>
           </div>
         </div>
         <div className="math-step math-step--result">
           <span className="math-step__index">04</span>
           <div>
             <span className="math-step__label">Resultado</span>
-            <strong>$20.000</strong>
-            <small>descuento A</small>
+            <strong>{result?.value ?? '—'}</strong>
+            <small>{result?.label ?? 'resultado'}</small>
           </div>
         </div>
       </div>
@@ -78,18 +91,15 @@ function MathInstrument({ label }: { label: string }) {
           <span>Comparación</span>
           <span>A ↔ B</span>
         </header>
-        <div>
-          <span>
-            <b>A</b> descuento directo
-          </span>
-          <strong>$20.000</strong>
-        </div>
-        <div>
-          <span>
-            <b>B</b> oferta equivalente
-          </span>
-          <strong>$18.000</strong>
-        </div>
+        {comparison.slice(0, 2).map((item, index) => (
+          <div key={item.label}>
+            <span>
+              <b>{item.label}</b>{' '}
+              {comparisonDetails[index]?.detail ?? 'resultado comparable'}
+            </span>
+            <strong>{item.value}</strong>
+          </div>
+        ))}
         <div className="math-instrument__difference">
           <span>
             <ChevronsLeftRightIcon
@@ -98,9 +108,9 @@ function MathInstrument({ label }: { label: string }) {
               size={17}
               reducedMotion={reducedMotion}
             />
-            diferencia
+            {comparison[2]?.label ?? 'diferencia'}
           </span>
-          <strong>$2.000</strong>
+          <strong>{comparison[2]?.value ?? '—'}</strong>
         </div>
       </div>
       <p className="math-instrument__note">
@@ -115,11 +125,11 @@ function HomeDoors() {
     <section className="home-doors" aria-labelledby="doors-title">
       <header className="home-doors__header">
         <div>
-          <span className="home-eyebrow">CUATRO FORMAS DE SEGUIR</span>
+          <span className="home-eyebrow">CINCO FORMAS DE SEGUIR</span>
           <h2 id="doors-title">Elegí por dónde seguir.</h2>
         </div>
         <span className="home-doors__index" aria-hidden="true">
-          02—05
+          02—06
         </span>
       </header>
       <div className="action-grid">
@@ -151,6 +161,13 @@ function HomeDoors() {
           icon="map"
           layout="compact"
         />
+        <ActionCard
+          href="/desafio"
+          title="Desafíos"
+          description="Situaciones abiertas para poner una relación en juego."
+          icon="compass"
+          layout="compact"
+        />
       </div>
     </section>
   );
@@ -161,7 +178,7 @@ export default function FirstRunIsland({
   families,
   skills,
 }: {
-  challenges: Pick<Challenge, 'id' | 'slug' | 'title' | 'scenario'>[];
+  challenges: Challenge[];
   families: Family[];
   skills: Skill[];
 }) {
@@ -177,6 +194,9 @@ export default function FirstRunIsland({
     challenges.find(
       (challenge) => !snapshot.completedChallengeIds.includes(challenge.id),
     ) ?? challenges[0]!;
+  const instrumentChallenge =
+    challenges.find((challenge) => challenge.context && challenge.comparison) ??
+    challenges[0]!;
   const refresh = progress.find((entry) => entry.status === 'Para refrescar');
   const refreshSkill = skills.find((skill) => skill.id === refresh?.skillId);
   const refreshFamily = families.find(
@@ -223,6 +243,7 @@ export default function FirstRunIsland({
               <AnimatedArrowLink
                 className="button button-primary"
                 href="/desafio/comparar-descuentos"
+                reload
               >
                 Resolver mi primer desafío
               </AnimatedArrowLink>
@@ -233,10 +254,16 @@ export default function FirstRunIsland({
               >
                 Explorar cómo funciona
               </AnimatedArrowLink>
+              <AnimatedArrowLink className="home-text-action" href="/desafio">
+                Ver todos los desafíos
+              </AnimatedArrowLink>
             </div>
             <p className="small-note">Sin registro. Sin reloj. A tu ritmo.</p>
           </div>
-          <MathInstrument label="Una situación real" />
+          <MathInstrument
+            label="Una situación real"
+            challenge={instrumentChallenge}
+          />
         </section>
         <section
           className="home-method"
@@ -277,6 +304,7 @@ export default function FirstRunIsland({
             <AnimatedArrowLink
               className="button button-primary"
               href={`/desafio/${featured.slug}`}
+              reload
             >
               Resolver esta situación
             </AnimatedArrowLink>
@@ -289,7 +317,10 @@ export default function FirstRunIsland({
             </AnimatedArrowLink>
           </div>
         </div>
-        <MathInstrument label="Relación a mano" />
+        <MathInstrument
+          label="Relación a mano"
+          challenge={instrumentChallenge}
+        />
       </section>
       <section className="home-focus" aria-labelledby="featured-title">
         <div className="home-focus__marker" aria-hidden="true">
@@ -302,6 +333,7 @@ export default function FirstRunIsland({
           <AnimatedArrowLink
             className="button button-primary"
             href={`/desafio/${featured.slug}`}
+            reload
           >
             Resolver esta situación
           </AnimatedArrowLink>

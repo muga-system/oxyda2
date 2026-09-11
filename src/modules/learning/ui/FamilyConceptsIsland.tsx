@@ -93,6 +93,7 @@ export default function FamilyConceptsIsland({
                 <AnimatedArrowLink
                   className="button button-secondary concept-practice"
                   href={`/desafio/${challenge.slug}?source=learning`}
+                  reload
                 >
                   Poner la idea en práctica
                 </AnimatedArrowLink>

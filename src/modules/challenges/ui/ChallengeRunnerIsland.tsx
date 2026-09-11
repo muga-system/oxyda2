@@ -1,33 +1,129 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useReducedMotion } from 'motion/react';
 import type {
   Challenge,
   EvidenceSource,
+  FamilyId,
   Skill,
 } from '../../../shared/domain/types';
+import { families } from '../../../content/skills';
 import { makeEvidences } from '../application/attempts';
 import { useProgress } from '../../progress/ui/useProgress';
 import StepPanel, { type AttemptResult } from './StepPanel';
 import ChallengeContext from '../../../components/react/ChallengeContext';
 import StorageNotice from '../../../components/react/StorageNotice';
 import { AnimatedArrowLink } from '../../../components/react/AnimatedArrowAction';
-import ChallengeScene from './ChallengeScene';
 import { runViewTransition } from '../../../shared/ui/viewTransition';
+import type { AnimatedIconHandle } from '../../../components/react/icons/animated-icon';
+import { BookTextIcon } from '../../../components/react/icons/book-text';
+import { ChevronsLeftRightIcon } from '../../../components/react/icons/chevrons-left-right';
+import { CompassIcon } from '../../../components/react/icons/compass';
+import { MapPinIcon } from '../../../components/react/icons/map-pin';
+import { ScanTextIcon } from '../../../components/react/icons/scan-text';
+import { SearchIcon } from '../../../components/react/icons/search';
+
+type ChallengeStatus = 'pending' | 'active' | 'completed';
+
+const statusLabels: Record<ChallengeStatus, string> = {
+  pending: 'Disponible',
+  active: 'Activo',
+  completed: 'Completado',
+};
+
+function FamilyIcon({ familyId }: { familyId: FamilyId }) {
+  const iconRef = useRef<AnimatedIconHandle>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const reducedMotion = prefersReducedMotion === true;
+  const Icon =
+    familyId === 'percentage'
+      ? ScanTextIcon
+      : familyId === 'proportion'
+        ? ChevronsLeftRightIcon
+        : familyId === 'estimation'
+          ? CompassIcon
+          : familyId === 'units'
+            ? MapPinIcon
+            : familyId === 'data'
+              ? SearchIcon
+              : BookTextIcon;
+
+  function animate() {
+    if (
+      reducedMotion ||
+      document.documentElement.dataset['reducedMotion'] === 'true'
+    )
+      return;
+    iconRef.current?.startAnimation();
+  }
+
+  return (
+    <span
+      className="challenge-family__icon"
+      onMouseEnter={animate}
+      onFocus={animate}
+      aria-hidden="true"
+    >
+      <Icon ref={iconRef} size={18} reducedMotion={reducedMotion} />
+    </span>
+  );
+}
+
+function ScenarioText({ text }: { text: string }) {
+  const question = '¿Cuál conviene?';
+  const questionIndex = text.indexOf(question);
+
+  if (questionIndex < 0) return <>{text}</>;
+
+  return (
+    <>
+      {text.slice(0, questionIndex)}
+      <span className="workspace-header__question">{question}</span>
+      {text.slice(questionIndex + question.length)}
+    </>
+  );
+}
+
+function getStatus(
+  challenge: Challenge,
+  currentId: string,
+  completedIds: Set<string>,
+): ChallengeStatus {
+  if (completedIds.has(challenge.id)) return 'completed';
+  if (challenge.id === currentId) return 'active';
+  return 'pending';
+}
 
 export default function ChallengeRunnerIsland({
   challenge,
+  challenges,
   skills,
 }: {
   challenge: Challenge;
+  challenges: Challenge[];
   skills: Skill[];
 }) {
-  const { ready, message, record, complete } = useProgress();
+  const { snapshot, ready, message, record, complete } = useProgress();
+  const [currentId, setCurrentId] = useState(challenge.id);
+  const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
   const [stepIndex, setStepIndex] = useState(0);
   const [finished, setFinished] = useState(false);
   const [source, setSource] = useState<EvidenceSource>('challenge');
   const session = useRef('');
   const resultHeading = useRef<HTMLHeadingElement>(null);
-  const step = challenge.steps[stepIndex];
-  const firstChallenge = challenge.id === 'percentage-discount-compare';
+  const workspaceContent = useRef<HTMLDivElement>(null);
+  const currentChallenge =
+    challenges.find((item) => item.id === currentId) ?? challenge;
+  const step = currentChallenge.steps[stepIndex];
+  const overallProgress = challenges.length
+    ? Math.round((completedIds.size / challenges.length) * 100)
+    : 0;
+  const currentFamily = families.find(
+    (family) => family.id === currentChallenge.familyId,
+  );
+
+  useEffect(() => {
+    setCompletedIds(new Set(snapshot.completedChallengeIds));
+  }, [snapshot.completedChallengeIds]);
 
   useEffect(() => {
     session.current = crypto.randomUUID();
@@ -38,14 +134,60 @@ export default function ChallengeRunnerIsland({
       setSource(requestedSource);
   }, []);
 
+  useLayoutEffect(() => {
+    if (finished) return;
+    const content = workspaceContent.current;
+    const header = content?.querySelector<HTMLElement>('.step-panel__header');
+    if (!content || !header) return;
+
+    const syncHeaderHeight = () => {
+      const headerRect = header.getBoundingClientRect();
+      const headerMarginBottom = Number.parseFloat(
+        getComputedStyle(header).marginBottom,
+      );
+      content.style.setProperty(
+        '--runner-step-header-height',
+        `${headerRect.height + (Number.isNaN(headerMarginBottom) ? 0 : headerMarginBottom)}px`,
+      );
+    };
+
+    syncHeaderHeight();
+    const observer = new ResizeObserver(syncHeaderHeight);
+    observer.observe(header);
+
+    return () => {
+      observer.disconnect();
+      content.style.removeProperty('--runner-step-header-height');
+    };
+  }, [currentChallenge.id, finished, step?.id]);
+
   useEffect(() => {
-    if (finished) resultHeading.current?.focus();
+    session.current = crypto.randomUUID();
+    const workspace = document.querySelector<HTMLElement>(
+      '.challenge-workspace__inner',
+    );
+    if (workspace) {
+      workspace.scrollTop = 0;
+      requestAnimationFrame(() => {
+        workspace.scrollTop = 0;
+      });
+    }
+  }, [currentId]);
+
+  useEffect(() => {
+    if (finished) resultHeading.current?.focus({ preventScroll: true });
   }, [finished]);
+
+  const filteredSkills = useMemo(
+    () =>
+      skills.filter((skill) => currentChallenge.skillIds.includes(skill.id)),
+    [currentChallenge.skillIds, skills],
+  );
 
   function evaluated(result: AttemptResult) {
     if (!step) return;
     record(
-      makeEvidences(challenge, step, result, {
+      makeEvidences(currentChallenge, step, result, {
         sessionId: session.current,
         source,
         answeredAt: new Date().toISOString(),
@@ -54,116 +196,251 @@ export default function ChallengeRunnerIsland({
     );
   }
 
-  function next() {
-    runViewTransition(() => {
-      if (stepIndex + 1 < challenge.steps.length) setStepIndex(stepIndex + 1);
-      else {
-        complete(challenge.id, firstChallenge);
-        setFinished(true);
-      }
-    });
+  function statusFor(id: string): ChallengeStatus {
+    const target = challenges.find((item) => item.id === id);
+    return target ? getStatus(target, currentId, completedIds) : 'pending';
   }
 
-  if (finished)
-    return (
-      <section
-        className="challenge-complete"
-        aria-labelledby="challenge-complete-title"
-      >
-        <StorageNotice message={message} />
-        <header className="challenge-complete__header">
-          <span className="completion-symbol" aria-hidden="true">
-            ✓
-          </span>
-          <div>
-            <p className="eyebrow">Desafío recorrido</p>
-            <span className="challenge-complete__index">
-              {String(challenge.steps.length).padStart(2, '0')} /{' '}
-              {String(challenge.steps.length).padStart(2, '0')}
-            </span>
-          </div>
-        </header>
-        <div className="challenge-complete__body">
-          <h2 tabIndex={-1} ref={resultHeading} id="challenge-complete-title">
-            El número es una parte.
-            <br />
-            Entenderlo cambia la decisión.
-          </h2>
-          <p className="lead">{challenge.takeaway}</p>
-          <div className="used-skills">
-            <h3>Habilidades que pusiste en juego</h3>
-            <ul>
-              {skills
-                .filter((skill) => challenge.skillIds.includes(skill.id))
-                .map((skill) => (
-                  <li key={skill.id}>{skill.title}</li>
-                ))}
-            </ul>
-          </div>
-          {firstChallenge && (
-            <p>
-              Podés seguir con otra situación, aprender una idea, consultar una
-              relación o explorar tu mapa.
-            </p>
-          )}
-          <div className="answer-actions">
-            <AnimatedArrowLink className="button button-primary" href="/">
-              {firstChallenge ? 'Conocer mi espacio' : 'Volver al inicio'}
-            </AnimatedArrowLink>
-            <a className="button button-secondary" href="/mapa">
-              Ver mi mapa
-            </a>
-          </div>
-        </div>
-      </section>
+  function selectChallenge(id: string) {
+    const target = challenges.find((item) => item.id === id);
+    if (!target) return;
+    runViewTransition(
+      () => {
+        setCurrentId(target.id);
+        setStepIndex(0);
+        setFinished(false);
+        window.history.replaceState({}, '', `/desafio/${target.slug}`);
+        document.title = `${target.title} · OxYda2`;
+      },
+      { preserveWorkspaceScroll: false },
     );
+  }
+
+  function advanceToNext() {
+    const completedNext = new Set(completedIds);
+    completedNext.add(currentChallenge.id);
+    setCompletedIds(completedNext);
+    complete(
+      currentChallenge.id,
+      currentChallenge.id === 'percentage-discount-compare',
+    );
+    const nextChallenge = challenges.find(
+      (item) => !completedNext.has(item.id),
+    );
+    if (!nextChallenge) {
+      setFinished(true);
+      return;
+    }
+    setCurrentId(nextChallenge.id);
+    setStepIndex(0);
+    setFinished(false);
+    window.history.replaceState({}, '', `/desafio/${nextChallenge.slug}`);
+    document.title = `${nextChallenge.title} · OxYda2`;
+  }
+
+  function next() {
+    runViewTransition(
+      () => {
+        if (stepIndex + 1 < currentChallenge.steps.length)
+          setStepIndex(stepIndex + 1);
+        else advanceToNext();
+      },
+      {
+        preserveWorkspaceScroll: stepIndex + 1 < currentChallenge.steps.length,
+      },
+    );
+  }
 
   return (
-    <>
-      <StorageNotice message={message} />
-      <div className="challenge-runner">
-        <section className="runner-main" aria-label="Resolver el paso actual">
-          <div className="runner-meta">
-            <span>
-              {firstChallenge
-                ? 'Tu primer desafío'
-                : 'Una situación para pensar'}
-            </span>
-            <span>
-              Paso {stepIndex + 1} de {challenge.steps.length}
-            </span>
+    <div className="challenge-app-shell challenge-shell">
+      <aside
+        className="challenge-sidebar"
+        id="desafios"
+        aria-label="Recorrido de desafíos"
+      >
+        <header className="challenge-sidebar__header">
+          <h2 aria-live="polite">{currentChallenge.title}</h2>
+          <span
+            className="challenge-sidebar__count"
+            aria-label={`${completedIds.size} de ${challenges.length} desafíos completados`}
+          >
+            {completedIds.size} / {challenges.length}
+          </span>
+        </header>
+        <div className="challenge-families">
+          {families.map((family) => {
+            const familyChallenges = challenges.filter(
+              (item) => item.familyId === family.id,
+            );
+            return (
+              <section
+                className="challenge-family"
+                key={family.id}
+                aria-labelledby={`family-${family.id}`}
+              >
+                <header className="challenge-family__header">
+                  <FamilyIcon familyId={family.id} />
+                  <h3 id={`family-${family.id}`}>{family.title}</h3>
+                  <span className="challenge-family__count">
+                    {familyChallenges.length}
+                  </span>
+                </header>
+                <ol className="challenge-family__list">
+                  {familyChallenges.map((item) => {
+                    const status = statusFor(item.id);
+                    const index = challenges.indexOf(item);
+                    return (
+                      <li
+                        key={item.id}
+                        className={`challenge-list__item is-${status} ${item.id === currentId ? 'is-selected' : ''}`}
+                      >
+                        <button
+                          type="button"
+                          className="challenge-list__button"
+                          onClick={() => selectChallenge(item.id)}
+                          aria-current={
+                            item.id === currentId ? 'step' : undefined
+                          }
+                          aria-label={`${String(index + 1).padStart(2, '0')} ${item.title}, ${statusLabels[status]}. ${item.scenario}`}
+                        >
+                          <span
+                            className="challenge-list__index"
+                            aria-hidden="true"
+                          >
+                            {String(index + 1).padStart(2, '0')}
+                          </span>
+                          <span className="challenge-list__copy">
+                            <strong>{item.title}</strong>
+                            <span
+                              className="challenge-list__status-marker"
+                              aria-hidden="true"
+                            >
+                              {status === 'completed'
+                                ? '✓'
+                                : status === 'active'
+                                  ? '●'
+                                  : null}
+                            </span>
+                          </span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </section>
+            );
+          })}
+        </div>
+      </aside>
+
+      <main
+        className="challenge-workspace"
+        aria-label="Espacio de trabajo del desafío"
+      >
+        <StorageNotice message={message} />
+        {finished ? (
+          <section
+            className="challenge-complete"
+            aria-labelledby="challenge-complete-title"
+          >
+            <header className="challenge-complete__header">
+              <span className="completion-symbol" aria-hidden="true">
+                ✓
+              </span>
+              <div>
+                <p className="eyebrow">Recorrido completo</p>
+                <span className="challenge-complete__index">
+                  {completedIds.size} / {challenges.length}
+                </span>
+              </div>
+            </header>
+            <div className="challenge-complete__body">
+              <h1
+                tabIndex={-1}
+                ref={resultHeading}
+                id="challenge-complete-title"
+              >
+                Terminaste el recorrido.
+                <br />
+                Las relaciones quedan a mano.
+              </h1>
+              <p className="lead">{currentChallenge.takeaway}</p>
+              <div className="used-skills">
+                <h2>Habilidades que pusiste en juego</h2>
+                <ul>
+                  {filteredSkills.map((skill) => (
+                    <li key={skill.id}>{skill.title}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="answer-actions">
+                <AnimatedArrowLink className="button button-primary" href="/">
+                  Volver al inicio
+                </AnimatedArrowLink>
+                <a className="button button-secondary" href="/mapa">
+                  Ver mi mapa
+                </a>
+              </div>
+            </div>
+          </section>
+        ) : (
+          <div className="challenge-workspace__inner">
+            <header className="workspace-header">
+              <div className="workspace-header__intro">
+                <span className="eyebrow">
+                  {currentFamily?.title ?? 'Desafío'}
+                </span>
+                <h1>{currentChallenge.title}</h1>
+                <p>
+                  <ScenarioText text={currentChallenge.scenario} />
+                </p>
+              </div>
+              <span className="workspace-header__progress">
+                {completedIds.size} / {challenges.length} · {overallProgress}%
+              </span>
+            </header>
+            {step && (
+              <div className="workspace-content" ref={workspaceContent}>
+                <section
+                  className="workspace-task"
+                  aria-label="Resolver el paso actual"
+                >
+                  <div className="runner-meta">
+                    <span>{step.label ?? 'Paso actual'}</span>
+                    <span>
+                      Paso {stepIndex + 1} de {currentChallenge.steps.length}
+                    </span>
+                  </div>
+                  <div className="step-track" aria-hidden="true">
+                    {currentChallenge.steps.map((item, index) => (
+                      <span
+                        key={item.id}
+                        className={index <= stepIndex ? 'is-current' : ''}
+                      />
+                    ))}
+                  </div>
+                  <StepPanel
+                    key={`${currentChallenge.id}-${step.id}`}
+                    step={step}
+                    ready={ready}
+                    onEvaluated={evaluated}
+                    onNext={next}
+                    finalStep={stepIndex === currentChallenge.steps.length - 1}
+                    focusOnMount={stepIndex > 0}
+                  />
+                </section>
+                <ChallengeContext
+                  challenge={currentChallenge}
+                  activeStep={step}
+                  stepIndex={stepIndex}
+                  totalSteps={currentChallenge.steps.length}
+                  variant="runner"
+                />
+              </div>
+            )}
           </div>
-          <div className="step-track" aria-hidden="true">
-            {challenge.steps.map((item, index) => (
-              <span
-                key={item.id}
-                className={index <= stepIndex ? 'is-current' : ''}
-              />
-            ))}
-          </div>
-          {firstChallenge && step && <ChallengeScene step={step} />}
-          {step && (
-            <StepPanel
-              key={step.id}
-              step={step}
-              ready={ready}
-              onEvaluated={evaluated}
-              onNext={next}
-              finalStep={stepIndex === challenge.steps.length - 1}
-              focusOnMount={stepIndex > 0}
-            />
-          )}
-        </section>
-        {step && (
-          <ChallengeContext
-            challenge={challenge}
-            activeStep={step}
-            stepIndex={stepIndex}
-            totalSteps={challenge.steps.length}
-            variant="runner"
-          />
         )}
-      </div>
-    </>
+      </main>
+    </div>
   );
 }

@@ -7,6 +7,9 @@ import { resolveAttempt } from '../application/attempts';
 import { formatNumber } from '../../../shared/ui/format';
 import { kindLabels } from '../../../shared/ui/labels';
 import { AnimatedArrowButton } from '../../../components/react/AnimatedArrowAction';
+import { AnimatedIconButton } from '../../../components/react/AnimatedIconAction';
+import { CircleCheckIcon } from '../../../components/react/icons/circle-check';
+import { SearchIcon } from '../../../components/react/icons/search';
 
 export type AttemptResult = ReturnType<typeof resolveAttempt>;
 
@@ -50,19 +53,59 @@ export default function StepPanel({
   const input = useRef<HTMLInputElement>(null);
   const optionGroup = useRef<HTMLFieldSetElement>(null);
   const nextButton = useRef<HTMLButtonElement>(null);
+  const feedbackDialog = useRef<HTMLDialogElement>(null);
+  const hintDialog = useRef<HTMLDialogElement>(null);
+  const hintCloseButton = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (focusOnMount) {
       const scrollX = window.scrollX;
       const scrollY = window.scrollY;
+      const workspace = document.querySelector<HTMLElement>(
+        '.challenge-workspace__inner, .challenge-shell',
+      );
+      const workspaceScrollTop = workspace?.scrollTop ?? 0;
       heading.current?.focus({ preventScroll: true });
       window.scrollTo(scrollX, scrollY);
+      if (workspace) workspace.scrollTop = workspaceScrollTop;
     }
   }, [focusOnMount]);
 
   useEffect(() => {
-    if (result) nextButton.current?.focus();
+    const dialog = feedbackDialog.current;
+    if (!result) {
+      if (dialog?.open) dialog.close();
+      return;
+    }
+
+    if (dialog && !dialog.open) dialog.showModal();
+    const workspace = document.querySelector<HTMLElement>(
+      '.challenge-workspace__inner, .challenge-shell',
+    );
+    const workspaceScrollTop = workspace?.scrollTop ?? 0;
+    nextButton.current?.focus({ preventScroll: true });
+    if (workspace) workspace.scrollTop = workspaceScrollTop;
+
+    return () => {
+      if (dialog?.open) dialog.close();
+    };
   }, [result]);
+
+  useEffect(() => {
+    const dialog = hintDialog.current;
+    if (!dialog) return;
+
+    if (hintVisible) {
+      if (!dialog.open) dialog.showModal();
+      hintCloseButton.current?.focus({ preventScroll: true });
+    } else if (dialog.open) {
+      dialog.close();
+    }
+
+    return () => {
+      if (dialog.open) dialog.close();
+    };
+  }, [hintVisible]);
 
   function submit(event?: SubmitEvent<HTMLFormElement>, dontKnow = false) {
     event?.preventDefault();
@@ -82,6 +125,7 @@ export default function StepPanel({
       return;
     }
     setValidation('');
+    setHintVisible(false);
     setResult(next);
     setUnknownAnswer(dontKnow);
     setAttempts(next.attempts);
@@ -94,9 +138,12 @@ export default function StepPanel({
     setRaw('');
     setValidation('');
     requestAnimationFrame(() => {
-      if (step.answer.type === 'numeric') input.current?.focus();
+      if (step.answer.type === 'numeric')
+        input.current?.focus({ preventScroll: true });
       else
-        optionGroup.current?.querySelector<HTMLInputElement>('input')?.focus();
+        optionGroup.current
+          ?.querySelector<HTMLInputElement>('input')
+          ?.focus({ preventScroll: true });
     });
   }
 
@@ -215,91 +262,146 @@ export default function StepPanel({
         </p>
         {!result && (
           <div className="answer-actions">
-            <AnimatedArrowButton
-              className="button button-primary"
+            <AnimatedIconButton
+              className="button button-primary answer-actions__icon-button"
               type="submit"
               disabled={!ready}
-            >
-              Comprobar
-            </AnimatedArrowButton>
+              icon={CircleCheckIcon}
+              label="Comprobar respuesta"
+            />
             {mode === 'diagnostic' ? (
-              <button
-                className="button button-quiet"
+              <AnimatedIconButton
+                className="button button-quiet answer-actions__icon-button"
+                data-action="hint"
                 type="button"
                 disabled={!ready}
                 onClick={() => submit(undefined, true)}
-              >
-                No sé todavía
-              </button>
+                icon={SearchIcon}
+                label="No sé todavía"
+              />
             ) : step.hints?.length ? (
-              <button
-                className="button button-quiet"
+              <AnimatedIconButton
+                className="button button-quiet answer-actions__icon-button"
+                data-action="hint"
                 type="button"
                 aria-expanded={hintVisible}
                 onClick={() => {
                   setUsedHint(true);
                   setHintVisible(!hintVisible);
                 }}
-              >
-                {hintVisible ? 'Ocultar pista' : 'Necesito una pista'}
-              </button>
+                icon={SearchIcon}
+                label={hintVisible ? 'Ocultar pista' : 'Necesito una pista'}
+                aria-controls={`hint-dialog-${step.id}`}
+              />
             ) : null}
           </div>
         )}
       </form>
-      {hintVisible && !result?.done && (
-        <aside className="hint">
-          <strong>Pista 1</strong>
-          <p>{step.hints?.[0]}</p>
-        </aside>
-      )}
-      <div className="feedback-region" aria-live="polite" aria-atomic="true">
-        {result && (
-          <div
-            className={`feedback ${unknownAnswer ? 'feedback-neutral' : result.evaluation.correct ? 'feedback-success' : 'feedback-review'}`}
+      <dialog
+        ref={hintDialog}
+        id={`hint-dialog-${step.id}`}
+        className="feedback-dialog hint-dialog"
+        aria-labelledby={`hint-dialog-title-${step.id}`}
+        aria-describedby={`hint-dialog-copy-${step.id}`}
+        onCancel={() => setHintVisible(false)}
+      >
+        <div className="feedback-dialog__inner">
+          <div className="feedback-dialog__header">
+            <span
+              className="feedback-dialog__symbol hint-dialog__symbol"
+              aria-hidden="true"
+            >
+              ?
+            </span>
+            <div>
+              <span className="feedback-dialog__eyebrow">Pista 1</span>
+              <h2 id={`hint-dialog-title-${step.id}`}>Una pista para seguir</h2>
+            </div>
+          </div>
+          <p
+            className="feedback-dialog__feedback"
+            id={`hint-dialog-copy-${step.id}`}
           >
-            <div className="feedback-title">
-              <span aria-hidden="true">
+            {step.hints?.[0]}
+          </p>
+          <div className="step-next">
+            <button
+              ref={hintCloseButton}
+              className="button button-primary"
+              type="button"
+              onClick={() => setHintVisible(false)}
+            >
+              Cerrar pista
+            </button>
+          </div>
+        </div>
+      </dialog>
+      <dialog
+        ref={feedbackDialog}
+        className={`feedback-dialog ${unknownAnswer ? 'feedback-dialog--neutral' : result?.evaluation.correct ? 'feedback-dialog--success' : 'feedback-dialog--review'}`}
+        aria-labelledby={`feedback-dialog-title-${step.id}`}
+        aria-describedby={`feedback-dialog-copy-${step.id}`}
+        onCancel={(event) => event.preventDefault()}
+      >
+        {result && (
+          <div className="feedback-dialog__inner">
+            <div className="feedback-dialog__header">
+              <span className="feedback-dialog__symbol" aria-hidden="true">
                 {unknownAnswer ? '·' : result.evaluation.correct ? '✓' : '↳'}
               </span>
-              <strong>
-                {unknownAnswer
-                  ? 'Registrado.'
-                  : result.evaluation.correct
-                    ? 'Tiene sentido.'
-                    : result.done
-                      ? 'Revisemos la idea.'
-                      : 'Hay algo para revisar.'}
-              </strong>
+              <div>
+                <span className="feedback-dialog__eyebrow">
+                  {unknownAnswer
+                    ? 'Respuesta registrada'
+                    : result.evaluation.correct
+                      ? 'Paso resuelto'
+                      : 'Para revisar'}
+                </span>
+                <h2 id={`feedback-dialog-title-${step.id}`}>
+                  {unknownAnswer
+                    ? 'Registrado.'
+                    : result.evaluation.correct
+                      ? 'Tiene sentido.'
+                      : result.done
+                        ? 'Revisemos la idea.'
+                        : 'Hay algo para revisar.'}
+                </h2>
+              </div>
             </div>
-            <p>{result.evaluation.feedback}</p>
-            {result.done && !result.evaluation.correct && !unknownAnswer && (
-              <p className="solution">
-                <strong>Respuesta: </strong>
-                {solution}
+            <div id={`feedback-dialog-copy-${step.id}`}>
+              <p className="feedback-dialog__feedback">
+                {result.evaluation.feedback}
               </p>
-            )}
-            {result.done && !unknownAnswer && <p>{step.explanation}</p>}
+              {result.done && !result.evaluation.correct && !unknownAnswer && (
+                <p className="feedback-dialog__solution">
+                  <strong>Respuesta: </strong>
+                  {solution}
+                </p>
+              )}
+              {result.done && !unknownAnswer && (
+                <p className="feedback-dialog__explanation">
+                  {step.explanation}
+                </p>
+              )}
+            </div>
+            <div className="step-next">
+              <AnimatedArrowButton
+                ref={nextButton}
+                className="button button-primary"
+                onClick={result.done ? onNext : retry}
+              >
+                {result.done
+                  ? finalStep
+                    ? mode === 'diagnostic'
+                      ? 'Ver mi lectura'
+                      : 'Cerrar desafío'
+                    : 'Continuar'
+                  : 'Volver a intentar'}
+              </AnimatedArrowButton>
+            </div>
           </div>
         )}
-      </div>
-      {result && (
-        <div className="step-next">
-          <AnimatedArrowButton
-            ref={nextButton}
-            className="button button-primary"
-            onClick={result.done ? onNext : retry}
-          >
-            {result.done
-              ? finalStep
-                ? mode === 'diagnostic'
-                  ? 'Ver mi lectura'
-                  : 'Cerrar desafío'
-                : 'Continuar'
-              : 'Volver a intentar'}
-          </AnimatedArrowButton>
-        </div>
-      )}
+      </dialog>
     </section>
   );
 }

@@ -59,6 +59,48 @@ export interface ChallengeStep {
   errorFeedback?: Partial<Record<ErrorKind, string>>;
   debug?: string;
 }
+
+export type ChallengeVisual =
+  | {
+      variant: 'comparison';
+      items: {
+        label: string;
+        value: string;
+        detail?: string;
+        bar?: number;
+      }[];
+      caption?: string;
+    }
+  | {
+      variant: 'estimate';
+      metric: { label: string; value: string };
+      parts: number;
+      activeParts: number;
+      answer: string;
+    }
+  | {
+      variant: 'operation';
+      base: { label: string; value: string };
+      operator: string;
+      result: { label: string; value: string };
+    }
+  | {
+      variant: 'decision';
+      items: { label: string; value: string; detail?: string }[];
+    }
+  | {
+      variant: 'verification';
+      label: string;
+      value: string;
+    };
+
+export interface ChallengeContextData {
+  base?: { label: string; value: string };
+  operation?: { label: string; value: string };
+  result?: { label: string; value: string }[];
+  pendingLabel?: string;
+}
+
 export interface Challenge {
   id: string;
   /** Stable route segment shown in the public URL. */
@@ -76,6 +118,10 @@ export interface Challenge {
     baseline: number;
     unit: string;
   };
+  /** Optional visual support for a step. Values live with the challenge data. */
+  visuals?: Record<string, ChallengeVisual>;
+  /** Optional values progressively revealed in the context panel. */
+  context?: ChallengeContextData;
 }
 export interface Skill {
   id: string;

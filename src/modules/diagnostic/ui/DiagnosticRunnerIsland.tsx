@@ -75,8 +75,11 @@ export default function DiagnosticRunnerIsland({
     if (started && !finished) {
       const scrollX = window.scrollX;
       const scrollY = window.scrollY;
+      const workspace = document.querySelector<HTMLElement>('.challenge-shell');
+      const workspaceScrollTop = workspace?.scrollTop ?? 0;
       scenarioHeading.current?.focus({ preventScroll: true });
       window.scrollTo(scrollX, scrollY);
+      if (workspace) workspace.scrollTop = workspaceScrollTop;
     }
   }, [started, index, finished]);
 
@@ -191,7 +194,7 @@ export default function DiagnosticRunnerIsland({
     );
 
   return (
-    <>
+    <div className="challenge-shell diagnostic-shell">
       <StorageNotice message={message} />
       <div className="runner-meta" role="status" aria-live="polite">
         <span>Diagnóstico</span>
@@ -229,6 +232,6 @@ export default function DiagnosticRunnerIsland({
           />
         </>
       )}
-    </>
+    </div>
   );
 }
