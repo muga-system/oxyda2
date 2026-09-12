@@ -1,122 +1,23 @@
-import { useReducedMotion } from 'motion/react';
-import { useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 import type { Challenge, Family, Skill } from '../../../shared/domain/types';
 import { useProgress } from '../../progress/ui/useProgress';
 import { getSkillProgress } from '../../progress/domain/progress';
 import ActionCard from '../../../components/react/ActionCard';
 import StorageNotice from '../../../components/react/StorageNotice';
 import { AnimatedArrowLink } from '../../../components/react/AnimatedArrowAction';
-import type { AnimatedIconHandle } from '../../../components/react/icons/animated-icon';
-import { ChevronsLeftRightIcon } from '../../../components/react/icons/chevrons-left-right';
 
-function MathInstrument({
-  label,
-  challenge,
-}: {
-  label: string;
-  challenge: Challenge;
-}) {
-  const differenceIconRef = useRef<AnimatedIconHandle>(null);
-  const prefersReducedMotion = useReducedMotion();
-  const reducedMotion = prefersReducedMotion === true;
-
-  function startDifferenceAnimation() {
-    if (
-      reducedMotion ||
-      document.documentElement.dataset['reducedMotion'] === 'true'
-    ) {
-      differenceIconRef.current?.stopAnimation();
-      return;
-    }
-    differenceIconRef.current?.startAnimation();
-  }
-
-  const base = challenge.context?.base;
-  const relation = challenge.comparison?.[0];
-  const operation = challenge.context?.operation;
-  const result = challenge.context?.result?.[0];
-  const comparison = challenge.context?.result ?? challenge.comparison ?? [];
-  const comparisonDetails = challenge.comparison ?? [];
-
+function HomeHeroArt() {
   return (
-    <aside
-      className="math-instrument"
-      aria-label="Comparación de descuentos"
-      onMouseEnter={startDifferenceAnimation}
-      onMouseLeave={() => differenceIconRef.current?.stopAnimation()}
-    >
-      <header className="math-instrument__header">
-        <span>{label}</span>
-        <span className="math-instrument__header-index">01 / 04</span>
-      </header>
-      <div className="math-instrument__steps">
-        <div className="math-step">
-          <span className="math-step__index">01</span>
-          <div>
-            <span className="math-step__label">Entrada</span>
-            <strong>{base?.value ?? '—'}</strong>
-            <small>{base?.label ?? 'valor de referencia'}</small>
-          </div>
-        </div>
-        <div className="math-step math-step--relation">
-          <span className="math-step__index">02</span>
-          <div>
-            <span className="math-step__label">Relación</span>
-            <strong>{relation?.value ?? '—'}</strong>
-            <small>{relation?.detail ?? 'relación visible'}</small>
-          </div>
-        </div>
-        <div className="math-step math-step--operation">
-          <span className="math-step__index">03</span>
-          <div>
-            <span className="math-step__label">Operación</span>
-            <strong>{operation?.value ?? '—'}</strong>
-            <small>{operation?.label ?? 'operación'}</small>
-          </div>
-        </div>
-        <div className="math-step math-step--result">
-          <span className="math-step__index">04</span>
-          <div>
-            <span className="math-step__label">Resultado</span>
-            <strong>{result?.value ?? '—'}</strong>
-            <small>{result?.label ?? 'resultado'}</small>
-          </div>
-        </div>
-      </div>
-      <div
-        className="math-instrument__comparison"
-        aria-label="Comparación de descuentos"
-      >
-        <header>
-          <span>Comparación</span>
-          <span>A ↔ B</span>
-        </header>
-        {comparison.slice(0, 2).map((item, index) => (
-          <div key={item.label}>
-            <span>
-              <b>{item.label}</b>{' '}
-              {comparisonDetails[index]?.detail ?? 'resultado comparable'}
-            </span>
-            <strong>{item.value}</strong>
-          </div>
-        ))}
-        <div className="math-instrument__difference">
-          <span>
-            <ChevronsLeftRightIcon
-              ref={differenceIconRef}
-              className="math-instrument__difference-icon"
-              size={17}
-              reducedMotion={reducedMotion}
-            />
-            {comparison[2]?.label ?? 'diferencia'}
-          </span>
-          <strong>{comparison[2]?.value ?? '—'}</strong>
-        </div>
-      </div>
-      <p className="math-instrument__note">
-        La misma unidad cambia la decisión.
-      </p>
-    </aside>
+    <figure className="home-hero__art" aria-hidden="true">
+      <img
+        src="/hero/hero.png"
+        width="1536"
+        height="1024"
+        alt=""
+        decoding="async"
+        fetchPriority="high"
+      />
+    </figure>
   );
 }
 
@@ -194,9 +95,6 @@ export default function FirstRunIsland({
     challenges.find(
       (challenge) => !snapshot.completedChallengeIds.includes(challenge.id),
     ) ?? challenges[0]!;
-  const instrumentChallenge =
-    challenges.find((challenge) => challenge.context && challenge.comparison) ??
-    challenges[0]!;
   const refresh = progress.find((entry) => entry.status === 'Para refrescar');
   const refreshSkill = skills.find((skill) => skill.id === refresh?.skillId);
   const refreshFamily = families.find(
@@ -260,10 +158,7 @@ export default function FirstRunIsland({
             </div>
             <p className="small-note">Sin registro. Sin reloj. A tu ritmo.</p>
           </div>
-          <MathInstrument
-            label="Una situación real"
-            challenge={instrumentChallenge}
-          />
+          <HomeHeroArt />
         </section>
         <section
           className="home-method"
@@ -317,10 +212,7 @@ export default function FirstRunIsland({
             </AnimatedArrowLink>
           </div>
         </div>
-        <MathInstrument
-          label="Relación a mano"
-          challenge={instrumentChallenge}
-        />
+        <HomeHeroArt />
       </section>
       <section className="home-focus" aria-labelledby="featured-title">
         <div className="home-focus__marker" aria-hidden="true">

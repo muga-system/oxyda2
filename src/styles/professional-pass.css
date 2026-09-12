@@ -96,7 +96,7 @@ body.challenge-runner-layout {
 
 .challenge-runner-layout .challenge-families__scrollbar {
   position: absolute;
-  inset: 2px 2px 2px auto;
+  inset: 2px 0 2px auto;
   width: 10px;
   border: 1px dashed var(--color-line);
   background: transparent;
@@ -488,8 +488,11 @@ body.challenge-runner-layout {
 }
 
 .challenge-runner-layout .challenge-family .challenge-list__index {
-  align-self: center;
+  display: grid;
+  align-self: stretch;
+  place-items: center;
   padding-top: 0;
+  color: var(--color-accent-warm);
   font-size: 0.82rem;
   line-height: 1;
 }
@@ -519,6 +522,13 @@ body.challenge-runner-layout {
   height: 20px;
   transform: translateY(-50%);
   place-items: center;
+}
+
+.challenge-runner-layout
+  .challenge-family
+  .challenge-list__item.is-completed
+  .challenge-list__status-marker {
+  color: var(--color-accent-warm);
 }
 
 .challenge-runner-layout .challenge-family .challenge-list__status-marker svg {
@@ -591,6 +601,9 @@ body.challenge-runner-layout
 
 .feedback-dialog {
   border-top-width: 1px;
+  border-right: 1px dashed var(--color-border-strong);
+  border-bottom: 1px dashed var(--color-border-strong);
+  border-left: 1px dashed var(--color-border-strong);
 }
 
 @media (prefers-reduced-motion: reduce) {

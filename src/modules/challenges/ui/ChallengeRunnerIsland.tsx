@@ -591,7 +591,7 @@ export default function ChallengeRunnerIsland({
                   {currentFamily?.title ?? 'Desafío'}
                 </span>
                 <h1>{currentChallenge.title}</h1>
-                <p>
+                <p title={currentChallenge.scenario}>
                   <ScenarioText text={currentChallenge.scenario} />
                 </p>
               </div>

@@ -8,6 +8,7 @@
   --color-muted: #9898a3;
   --color-line: #2b2b34;
   --color-accent: #f9b98c;
+  --color-accent-warm: #e27652;
   --color-success: #40c977;
   --color-error: #fa423e;
   --color-skill: #479ffa;
@@ -2908,179 +2909,18 @@ html[data-reduced-motion='true'] *::after {
 .home-text-action:hover {
   text-decoration: underline;
 }
-.math-instrument {
+.home-hero__art {
   position: relative;
   min-width: 0;
-  border-block: 1px solid var(--color-line);
-  padding: 16px 0 18px;
+  margin: 0;
+  background: var(--color-surface);
 }
-.math-instrument::before,
-.math-instrument::after {
-  content: '';
-  position: absolute;
-  width: 42px;
-  height: 2px;
-  background: var(--color-accent);
-}
-.math-instrument::before {
-  top: -1px;
-  left: 0;
-}
-.math-instrument::after {
-  right: 0;
-  bottom: -1px;
-}
-.math-instrument__header,
-.math-instrument__comparison > div {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-.math-instrument__header {
-  color: var(--color-muted);
-  font-size: 0.7rem;
-  font-weight: 650;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-.math-instrument__header-index {
-  color: var(--color-muted-strong);
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  font-weight: 400;
-}
-.math-instrument__steps {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin-top: 28px;
-  border-top: 1px solid var(--color-line);
-}
-.math-step {
-  position: relative;
-  display: grid;
-  grid-template-columns: 24px minmax(0, 1fr);
-  gap: 12px;
-  min-height: 112px;
-  padding: 14px 16px 16px 0;
-  border-bottom: 1px solid var(--color-line);
-}
-.math-step:nth-child(2n) {
-  padding-left: 16px;
-  border-left: 1px solid var(--color-line);
-}
-.math-step::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 8px;
-  height: 2px;
-  background: var(--color-accent);
-}
-.math-step:nth-child(2n)::after {
-  left: 16px;
-}
-.math-step__index {
-  color: var(--color-muted-strong);
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  line-height: 1.5;
-}
-.math-step__label {
+.home-hero__art img {
   display: block;
-  color: var(--color-muted);
-  font-size: 0.66rem;
-  font-weight: 650;
-  letter-spacing: 0.07em;
-  line-height: 1.5;
-  text-transform: uppercase;
-}
-.math-step strong {
-  display: block;
-  margin-top: 8px;
-  color: var(--color-ink);
-  font-family: var(--font-mono);
-  font-size: clamp(1.45rem, 2.8vw, 2.4rem);
-  font-weight: 420;
-  letter-spacing: -0.07em;
-  line-height: 1;
-}
-.math-step small {
-  display: block;
-  margin-top: 6px;
-  color: var(--color-muted);
-  font-size: 0.72rem;
-}
-.math-step--relation strong {
-  font-size: clamp(1.8rem, 3.4vw, 2.8rem);
-}
-.math-step--operation strong,
-.math-step--result strong {
-  color: var(--color-accent);
-}
-.math-step--operation strong {
-  font-size: clamp(0.9rem, 1.55vw, 1.24rem);
-  letter-spacing: -0.04em;
-}
-.math-instrument__comparison {
-  margin-top: 16px;
-  padding-top: 12px;
-  border-top: 1px solid var(--color-line);
-}
-.math-instrument__comparison > header {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  color: var(--color-accent);
-  font-size: 0.68rem;
-  font-weight: 650;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.math-instrument__comparison > div {
-  min-height: 32px;
-  color: var(--color-muted);
-  font-size: 0.78rem;
-}
-.math-instrument__comparison > div:first-of-type {
-  margin-top: 8px;
-}
-.math-instrument__comparison strong {
-  color: var(--color-ink);
-  font-family: var(--font-mono);
-  font-size: 0.88rem;
-  font-weight: 400;
-}
-.math-instrument__comparison b {
-  display: inline-block;
-  min-width: 20px;
-  color: var(--color-accent);
-  font-family: var(--font-mono);
-  font-weight: 400;
-}
-.math-instrument__comparison .math-instrument__difference {
-  margin-top: 8px;
-  padding-top: 10px;
-  border-top: 1px solid var(--color-line);
-}
-.math-instrument__difference span,
-.math-instrument__difference strong {
-  color: var(--color-accent);
-}
-.math-instrument__difference > span {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-.math-instrument__difference-icon {
-  display: block;
-  flex: 0 0 auto;
-}
-.math-instrument__note {
-  margin-top: 16px;
-  color: var(--color-muted);
-  font-size: 0.78rem;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: contain;
 }
 .home-method {
   max-width: 1240px;
@@ -3312,7 +3152,7 @@ html[data-reduced-motion='true'] *::after {
   .home-hero__copy {
     max-width: 66ch;
   }
-  .math-instrument {
+  .home-hero__art {
     width: min(100%, 620px);
     justify-self: start;
   }
@@ -3380,21 +3220,6 @@ html[data-reduced-motion='true'] *::after {
   }
   .home-hero__actions .button {
     width: 100%;
-  }
-  .math-instrument__steps {
-    margin-top: 24px;
-  }
-  .math-step {
-    min-height: 104px;
-  }
-  .math-step strong {
-    font-size: clamp(1.35rem, 7vw, 2rem);
-  }
-  .math-step--relation strong {
-    font-size: clamp(1.6rem, 8vw, 2.4rem);
-  }
-  .math-step--operation strong {
-    font-size: 0.88rem;
   }
   .home-method {
     grid-template-columns: 1fr;
@@ -6537,6 +6362,8 @@ html[data-reduced-motion='true'] *::after {
 .challenge-runner-layout .workspace-header p {
   grid-column: 2;
   max-width: none;
+  min-width: 0;
+  min-height: calc(1.4em * 2);
   margin: 0.35rem 0 0;
   color: var(--color-muted);
   font-size: clamp(0.8rem, 1vw, 0.95rem);
