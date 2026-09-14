@@ -12,7 +12,7 @@ function HomeHeroArt() {
       <picture>
         <source
           type="image/webp"
-          srcSet="/hero/hero-480.webp 480w, /hero/hero-768.webp 768w, /hero/hero-1200.webp 1200w, /hero/hero-1536.webp 1536w"
+          srcSet="/hero/hero-480.webp?v=2 480w, /hero/hero-768.webp?v=2 768w, /hero/hero-1200.webp?v=2 1200w, /hero/hero-1536.webp?v=2 1536w"
           sizes="(max-width: 1023px) 100vw, 50vw"
         />
         <img
