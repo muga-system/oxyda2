@@ -844,3 +844,128 @@ html:has(body.challenge-runner-layout) {
   display: block;
   width: 100%;
 }
+
+/* The header keeps its full-bleed rule while the content stays inside the
+   existing gutters. Narrow layouts use one compact row and move navigation
+   into a native details menu. */
+.site-header.site-header-app {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+}
+
+.mobile-menu {
+  display: none;
+  position: relative;
+  justify-self: end;
+}
+
+.mobile-menu__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--color-line);
+  color: var(--color-muted);
+  cursor: pointer;
+  list-style: none;
+}
+
+.mobile-menu__trigger::-webkit-details-marker {
+  display: none;
+}
+
+.mobile-menu__trigger::marker {
+  content: '';
+}
+
+.mobile-menu__trigger:hover,
+.mobile-menu__trigger:focus-visible,
+.mobile-menu[open] .mobile-menu__trigger {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.mobile-menu__icon {
+  display: grid;
+  width: 18px;
+  gap: 4px;
+}
+
+.mobile-menu__icon span {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transition:
+    transform 160ms ease,
+    opacity 160ms ease;
+}
+
+.mobile-menu[open] .mobile-menu__icon span:first-child {
+  transform: translateY(5px) rotate(45deg);
+}
+
+.mobile-menu[open] .mobile-menu__icon span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu[open] .mobile-menu__icon span:last-child {
+  transform: translateY(-5px) rotate(-45deg);
+}
+
+.mobile-menu__links {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 8px);
+  right: 0;
+  display: grid;
+  width: min(17rem, calc(100vw - 2rem));
+  gap: 2px;
+  padding: 8px;
+  border: 1px solid var(--color-line);
+  background: var(--color-raised);
+  box-shadow: 0 12px 26px rgb(0 0 0 / 24%);
+}
+
+.mobile-menu__links .nav-link--top {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  color: var(--color-muted);
+  font-size: 0.78rem;
+}
+
+.mobile-menu__links .nav-link--top:hover,
+.mobile-menu__links .nav-link--top:focus-visible,
+.mobile-menu__links .nav-link--top[aria-current='page'] {
+  background: var(--color-accent-selected);
+  color: var(--color-ink);
+}
+
+@media (max-width: 900px) {
+  .site-header-app {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 14px 18px;
+    padding-block: 16px;
+  }
+
+  .site-header-app .home-nav,
+  .runner-layout .site-header-app .home-nav,
+  .challenge-runner-layout .site-header-app .home-nav {
+    display: none;
+  }
+
+  .mobile-menu {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu__icon span {
+    transition: none;
+  }
+}

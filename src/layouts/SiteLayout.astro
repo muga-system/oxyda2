@@ -88,6 +88,34 @@ const links = [
           ))
         }
       </nav>
+      <details class="mobile-menu">
+        <summary class="mobile-menu__trigger" aria-label="Abrir navegación">
+          <span class="mobile-menu__icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <span class="sr-only">Menú</span>
+        </summary>
+        <nav class="mobile-menu__links" aria-label="Navegación móvil">
+          {
+            links.map((link) => (
+              <NavigationLink
+                href={link.href}
+                label={link.label}
+                icon={link.icon}
+                variant="top"
+                current={
+                  link.href === '/'
+                    ? pathname === '/'
+                    : pathname.startsWith(link.href)
+                }
+                client:idle
+              />
+            ))
+          }
+        </nav>
+      </details>
     </header>
     <div
       class:list={[
