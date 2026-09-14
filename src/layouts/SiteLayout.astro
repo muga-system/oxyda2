@@ -17,7 +17,7 @@ const {
   home = false,
 } = Astro.props;
 const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
-const runner = pathname.startsWith('/desafio/') || pathname === '/prueba';
+const runner = pathname === '/prueba';
 const challengeRunner = pathname.startsWith('/desafio/');
 const canonicalUrl = Astro.site
   ? new URL(Astro.url.pathname, Astro.site).toString()
@@ -35,7 +35,10 @@ const links = [
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#0b0b0f" />
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
@@ -90,7 +93,7 @@ const links = [
       class:list={[
         'site-frame',
         home && 'site-frame-home',
-        runner && 'site-frame-runner',
+        (runner || challengeRunner) && 'site-frame-runner',
       ]}
     >
       <main id="contenido" tabindex="-1"><slot /></main>

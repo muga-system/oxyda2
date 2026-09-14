@@ -714,3 +714,133 @@ html:has(body.challenge-runner-layout) {
   background: var(--color-accent-selected);
   color: var(--color-accent);
 }
+
+/* Responsive runner contract: desktop owns one shared work-area scroll;
+   smaller viewports return to document flow so every control remains reachable. */
+@media (min-width: 1024px) {
+  .challenge-runner-layout .workspace-content {
+    min-width: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+  }
+
+  .challenge-runner-layout .workspace-task,
+  .challenge-runner-layout .workspace-content > .challenge-context--runner {
+    width: auto;
+    min-width: 0;
+    height: auto;
+  }
+}
+
+@media (max-width: 1023px) {
+  html:has(body.challenge-runner-layout),
+  html:has(body.runner-layout) {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  body.challenge-runner-layout,
+  body.runner-layout {
+    height: auto;
+    min-height: 100svh;
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+
+  .challenge-runner-layout .site-frame-runner,
+  .challenge-runner-layout .site-frame-runner main,
+  .challenge-runner-layout .challenge-page--runner,
+  .challenge-runner-layout .challenge-app-shell,
+  .challenge-runner-layout .challenge-workspace,
+  .challenge-runner-layout .challenge-workspace__inner,
+  .challenge-runner-layout .workspace-content,
+  .runner-layout .site-frame-runner,
+  .runner-layout .site-frame-runner main,
+  .runner-layout .diagnostic-page,
+  .runner-layout .diagnostic-page > .diagnostic-shell {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .challenge-runner-layout .challenge-app-shell {
+    display: block;
+  }
+
+  .challenge-runner-layout .challenge-sidebar {
+    display: block;
+    height: auto;
+    overflow: visible;
+  }
+
+  .challenge-runner-layout .challenge-families-scrollarea,
+  .challenge-runner-layout .challenge-families {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .challenge-runner-layout .challenge-families__scrollbar {
+    display: none;
+  }
+
+  .challenge-runner-layout .challenge-workspace__inner {
+    display: block;
+    width: 100%;
+    padding-bottom: 32px;
+  }
+
+  .challenge-runner-layout .workspace-content {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    grid-template-columns: none;
+    grid-template-rows: none;
+  }
+
+  .challenge-runner-layout .workspace-task,
+  .challenge-runner-layout .workspace-content > .challenge-context--runner,
+  .challenge-runner-layout .workspace-task > .step-panel,
+  .challenge-runner-layout .workspace-task > .step-panel form {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+  }
+
+  .challenge-runner-layout .workspace-task > .step-panel,
+  .challenge-runner-layout .workspace-task > .step-panel form {
+    display: block;
+    flex: none;
+  }
+
+  .challenge-runner-layout
+    .workspace-task
+    > .step-panel
+    form
+    > .answer-actions {
+    margin-top: var(--runner-step-gap, 0.75rem);
+  }
+
+  .challenge-runner-layout .workspace-content > .challenge-context--runner {
+    border-top: 1px solid var(--color-line);
+    border-left: 0;
+  }
+
+  .runner-layout .diagnostic-page {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .runner-layout .diagnostic-page > .diagnostic-shell {
+    width: 100%;
+    max-height: none;
+    padding-bottom: 32px;
+  }
+}
+
+.home-hero__art picture {
+  display: block;
+  width: 100%;
+}

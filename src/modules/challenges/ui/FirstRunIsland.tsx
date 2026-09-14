@@ -9,14 +9,21 @@ import { AnimatedArrowLink } from '../../../components/react/AnimatedArrowAction
 function HomeHeroArt() {
   return (
     <figure className="home-hero__art" aria-hidden="true">
-      <img
-        src="/hero/hero.png"
-        width="1536"
-        height="1024"
-        alt=""
-        decoding="async"
-        fetchPriority="high"
-      />
+      <picture>
+        <source
+          type="image/webp"
+          srcSet="/hero/hero-480.webp 480w, /hero/hero-768.webp 768w, /hero/hero-1200.webp 1200w, /hero/hero-1536.webp 1536w"
+          sizes="(max-width: 1023px) 100vw, 50vw"
+        />
+        <img
+          src="/hero/hero.png"
+          width="1536"
+          height="1024"
+          alt=""
+          decoding="async"
+          fetchPriority="high"
+        />
+      </picture>
     </figure>
   );
 }
