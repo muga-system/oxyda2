@@ -1,0 +1,44 @@
+# OxYda2 — configuración para Hostinger (Apache / LiteSpeed).
+# Se copia a dist/ en cada build. Ver docs/02-deploy-hostinger.md.
+
+Options -Indexes
+DirectoryIndex index.html
+
+# Página propia para direcciones inexistentes.
+ErrorDocument 404 /404.html
+
+# Siempre HTTPS.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# Compresión de texto.
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain application/javascript application/json image/svg+xml
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType font/woff2 .woff2
+  AddType image/webp .webp
+</IfModule>
+
+# Caché: HTML siempre revalidado; _astro cambia de nombre en cada build,
+# así que puede quedar en caché un año; imágenes y fuentes, un mes.
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  <FilesMatch "\.(png|webp|jpg|jpeg|svg|ico|woff2)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+  <If "%{REQUEST_URI} =~ m#^/_astro/#">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </If>
+
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>

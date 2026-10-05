@@ -6,3 +6,6 @@ dist/
 !.env.example
 artifacts/
 .agents/skills/impeccable/scripts/bin/
+
+# Paquetes de publicación
+oxyda2-*.zip
