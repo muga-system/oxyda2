@@ -2,14 +2,16 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import FirstRunIsland from '../modules/challenges/ui/FirstRunIsland';
 import { challenges } from '../content/challenges';
+import { recallCards } from '../content/recall';
 import { families, skills } from '../content/skills';
 ---
 
-<SiteLayout home>
+<SiteLayout>
   <FirstRunIsland
     client:load
     challenges={challenges}
     families={families}
     skills={skills}
+    recallCards={recallCards.slice(0, 3)}
   />
 </SiteLayout>

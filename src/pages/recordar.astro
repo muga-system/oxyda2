@@ -1,31 +1,18 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-import SectionHeading from '../components/astro/SectionHeading.astro';
+import PageHead from '../components/astro/PageHead.astro';
 import RecallSearchIsland from '../modules/recall/ui/RecallSearchIsland';
 import { recallCards } from '../content/recall';
 import { families } from '../content/skills';
+import { areaIllustrations } from '../shared/ui/illustrations';
 ---
 
 <SiteLayout title="Recordar">
-  <div class="recall-page">
-    <div class="recall-overview-hero">
-      <SectionHeading
-        className="recall-heading"
-        title="Volvé a esa idea."
-        description="Una relación, una explicación breve y un ejemplo. Sin recorrer un curso entero."
-      />
-      <figure class="recall-overview-visual">
-        <img
-          src="/recall/recordar-640.png"
-          srcset="/recall/recordar-320.png 320w, /recall/recordar-640.png 640w"
-          sizes="(max-width: 760px) 240px, 360px"
-          width="640"
-          height="639"
-          alt="Ilustración de una flecha que señala una idea para recordar"
-          decoding="async"
-        />
-      </figure>
-    </div>
-    <RecallSearchIsland client:load cards={recallCards} families={families} />
-  </div>
+  <PageHead
+    label="Recordar"
+    title="La relación justa, cuando la necesitás."
+    description="Una relación, una explicación breve y un ejemplo. Sin recorrer un curso entero."
+    illustration={areaIllustrations.recall}
+  />
+  <RecallSearchIsland client:load cards={recallCards} families={families} />
 </SiteLayout>

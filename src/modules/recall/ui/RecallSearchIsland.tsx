@@ -1,15 +1,64 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type CSSProperties } from 'react';
 import type { Family, RecallCard } from '../../../shared/domain/types';
 import { SearchIcon } from '../../../components/react/icons/search';
 import { AnimatedArrowLink } from '../../../components/react/AnimatedArrowAction';
 import { getChallengeSlug } from '../../../content/challenges';
+import { familyIllustrations } from '../../../shared/ui/illustrations';
 
 function normalize(value: string) {
-  return value
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .trim();
+  return value.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+}
+
+function RecallDetail({
+  card,
+  familyTitle,
+}: {
+  card: RecallCard;
+  familyTitle: string;
+}) {
+  return (
+    <article
+      className="recall-detail dots"
+      id={`recall-${card.id}`}
+      aria-labelledby={`recall-${card.id}-title`}
+    >
+      <header className="recall-detail__head">
+        <img
+          src={familyIllustrations[card.familyId].src}
+          width="52"
+          height="52"
+          alt=""
+        />
+        <div>
+          <span className="label">{familyTitle}</span>
+          <h2 id={`recall-${card.id}-title`}>{card.question}</h2>
+        </div>
+      </header>
+      <div className="recall-detail__body">
+        <div className="recall-detail__block">
+          <span className="label">Idea</span>
+          <p>{card.idea}</p>
+        </div>
+        {card.formula && (
+          <div className="recall-detail__block">
+            <span className="label">Relación</span>
+            <code>{card.formula}</code>
+          </div>
+        )}
+        <div className="recall-detail__block recall-detail__block--example">
+          <span className="label">Ejemplo</span>
+          <p>{card.example}</p>
+        </div>
+      </div>
+      <AnimatedArrowLink
+        className="button button-primary"
+        href={`/desafio/${getChallengeSlug(card.challengeId)}?source=recall`}
+        reload
+      >
+        Probar un ejemplo
+      </AnimatedArrowLink>
+    </article>
+  );
 }
 
 export default function RecallSearchIsland({
@@ -20,6 +69,7 @@ export default function RecallSearchIsland({
   families: Family[];
 }) {
   const [query, setQuery] = useState('');
+  const [selectedId, setSelectedId] = useState(cards[0]?.id ?? '');
   const words = normalize(query).split(/\s+/).filter(Boolean);
   const familyLabels = useMemo(
     () => new Map(families.map((family) => [family.id, family.title])),
@@ -32,13 +82,15 @@ export default function RecallSearchIsland({
       ).includes(word),
     ),
   );
-  const hasQuery = words.length > 0;
+  const selected =
+    results.find((card) => card.id === selectedId) ?? results[0] ?? null;
+
   return (
     <>
       <div className="recall-search">
         <label htmlFor="recall-search">¿Qué necesitás recuperar?</label>
-        <div className="search-field__input">
-          <SearchIcon size={22} className="search-icon" reducedMotion />
+        <div className="search-field">
+          <SearchIcon size={18} className="search-field__icon" reducedMotion />
           <input
             type="search"
             id="recall-search"
@@ -48,73 +100,57 @@ export default function RecallSearchIsland({
             autoComplete="off"
           />
         </div>
-        <p>
-          Consultá una relación, fórmula o procedimiento sin recorrer un curso
-          completo.
-        </p>
-      </div>
-      <div className="recall-list-heading">
-        <span>{hasQuery ? 'Coincidencias' : 'Referencias rápidas'}</span>
         <span className="result-count" role="status" aria-live="polite">
           {results.length === 1
             ? '1 referencia'
             : `${results.length} referencias`}
         </span>
       </div>
-      <div className="recall-list">
-        {results.map((card, index) => (
-          <details className="recall-card" key={card.id}>
-            <summary>
-              <span className="recall-card__index" aria-hidden="true">
-                {String(index + 1).padStart(2, '0')}
-              </span>
-              <span>
-                <span className="eyebrow">
-                  {familyLabels.get(card.familyId)}
-                </span>
-                <strong>{card.question}</strong>
-              </span>
-              <span className="details-plus" aria-hidden="true">
-                +
-              </span>
-            </summary>
-            <div className="recall-body">
-              <div className="recall-body__idea">
-                <span className="recall-label">Idea</span>
-                <p>{card.idea}</p>
-              </div>
-              <div className="recall-body__math">
-                {card.formula && (
-                  <div className="formula">
-                    <span className="recall-label">Relación</span>
-                    <code>{card.formula}</code>
-                  </div>
-                )}
-                <div className="recall-example">
-                  <span className="recall-label">Ejemplo</span>
-                  <p>{card.example}</p>
-                </div>
-                <AnimatedArrowLink
-                  className="button button-secondary"
-                  href={`/desafio/${getChallengeSlug(card.challengeId)}?source=recall`}
-                  reload
+      {results.length > 0 ? (
+        <ul
+          className="recall-browser"
+          style={{ '--recall-rows': results.length } as CSSProperties}
+        >
+          {results.map((card) => {
+            const isSelected = card.id === selected?.id;
+            return (
+              <li key={card.id} className="recall-browser__item">
+                <button
+                  type="button"
+                  className="recall-browser__option"
+                  aria-pressed={isSelected}
+                  aria-controls={isSelected ? `recall-${card.id}` : undefined}
+                  onClick={() => setSelectedId(card.id)}
                 >
-                  Probar un ejemplo
-                </AnimatedArrowLink>
-              </div>
-            </div>
-          </details>
-        ))}
-      </div>
-      {results.length === 0 && (
+                  <img
+                    src={familyIllustrations[card.familyId].src}
+                    width="22"
+                    height="22"
+                    alt=""
+                  />
+                  <span className="recall-browser__copy">
+                    <strong>{card.question}</strong>
+                    <span>{familyLabels.get(card.familyId)}</span>
+                  </span>
+                </button>
+                {isSelected && (
+                  <RecallDetail
+                    card={card}
+                    familyTitle={familyLabels.get(card.familyId) ?? ''}
+                  />
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
         <div className="empty-state">
           <h2>No encontramos esa relación.</h2>
           <p>Probá con una palabra más breve o buscá en todas las familias.</p>
           <button
+            type="button"
             className="button button-secondary"
-            onClick={() => {
-              setQuery('');
-            }}
+            onClick={() => setQuery('')}
           >
             Ver todas las referencias
           </button>

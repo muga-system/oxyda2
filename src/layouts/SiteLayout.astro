@@ -1,34 +1,30 @@
 ---
-import '@fontsource-variable/inter';
-import '@fontsource-variable/jetbrains-mono';
+import '@fontsource-variable/geist';
+import '@fontsource-variable/geist-mono';
 import '../styles/global.css';
-import '../styles/professional-pass.css';
-import NavigationLink from '../components/react/NavigationLink';
 import { ClientRouter } from 'astro:transitions';
 
 interface Props {
   title?: string;
   description?: string;
-  home?: boolean;
 }
 const {
   title,
   description = 'Matemática para pensar, no solamente para calcular. Recuperá conocimientos con situaciones cotidianas, a tu ritmo.',
-  home = false,
 } = Astro.props;
 const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
-const runner = pathname === '/prueba';
-const challengeRunner = pathname.startsWith('/desafio/');
 const canonicalUrl = Astro.site
   ? new URL(Astro.url.pathname, Astro.site).toString()
   : undefined;
 const links = [
-  { href: '/', label: 'Inicio', icon: 'home' },
-  { href: '/aprender', label: 'Aprender', icon: 'book-open' },
-  { href: '/recordar', label: 'Recordar', icon: 'search' },
-  { href: '/prueba', label: 'Poneme a prueba', icon: 'scan-line' },
-  { href: '/mapa', label: 'Mi mapa', icon: 'map' },
+  { href: '/', label: 'Inicio', desktop: false },
+  { href: '/aprender', label: 'Aprender', desktop: true },
+  { href: '/recordar', label: 'Recordar', desktop: true },
+  { href: '/prueba', label: 'Poneme a prueba', desktop: true },
+  { href: '/mapa', label: 'Mi mapa', desktop: true },
 ] as const;
+const isCurrent = (href: string) =>
+  href === '/' ? pathname === '/' : pathname.startsWith(href);
 ---
 
 <!doctype html>
@@ -40,7 +36,7 @@ const links = [
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#0b0b0f" />
+    <meta name="theme-color" content="#000000" />
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
@@ -50,85 +46,69 @@ const links = [
       {title ? `${title} · OxYda2` : 'OxYda2 · Matemática para pensar'}
     </title>
   </head>
-  <body
-    class:list={[
-      home && 'home-layout',
-      runner && 'runner-layout',
-      challengeRunner && 'challenge-runner-layout',
-    ]}
-  >
+  <body>
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
-    <header class="site-header site-header-app">
-      <a class="brand" href="/" aria-label="OxYda2, inicio">
-        <img
-          class="brand__mark"
-          src="/brand/monograma-128.png"
-          width="42"
-          height="42"
-          alt=""
-          decoding="async"
-        />
-        <span class="sr-only">OxYda2</span>
-      </a>
-      <nav class="home-nav" aria-label="Principal">
-        {
-          links.map((link) => (
-            <NavigationLink
-              href={link.href}
-              label={link.label}
-              icon={link.icon}
-              variant="top"
-              current={
-                link.href === '/'
-                  ? pathname === '/'
-                  : pathname.startsWith(link.href)
-              }
-              client:idle
-            />
-          ))
-        }
-      </nav>
-      <details class="mobile-menu">
-        <summary class="mobile-menu__trigger" aria-label="Abrir navegación">
-          <span class="mobile-menu__icon" aria-hidden="true">
-            <span></span>
-            <span></span>
-            <span></span>
-          </span>
-          <span class="sr-only">Menú</span>
-        </summary>
-        <nav class="mobile-menu__links" aria-label="Navegación móvil">
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="brand" href="/" aria-label="OxYda2, inicio">
+          <img
+            class="brand__mark"
+            src="/brand/monograma-128.png"
+            width="24"
+            height="24"
+            alt=""
+            decoding="async"
+          />
+          <span class="brand__name" aria-hidden="true">OxYda2</span>
+        </a>
+        <nav class="site-nav" aria-label="Principal">
           {
-            links.map((link) => (
-              <NavigationLink
-                href={link.href}
-                label={link.label}
-                icon={link.icon}
-                variant="top"
-                current={
-                  link.href === '/'
-                    ? pathname === '/'
-                    : pathname.startsWith(link.href)
-                }
-                client:idle
-              />
-            ))
+            links
+              .filter((link) => link.desktop)
+              .map((link) => (
+                <a
+                  href={link.href}
+                  aria-current={isCurrent(link.href) ? 'page' : undefined}
+                >
+                  {link.label}
+                </a>
+              ))
           }
         </nav>
-      </details>
+        <details class="mobile-menu">
+          <summary class="mobile-menu__trigger">
+            <span class="mobile-menu__icon" aria-hidden="true">
+              <span></span>
+              <span></span>
+            </span>
+            Menú
+          </summary>
+          <nav class="mobile-menu__links" aria-label="Navegación móvil">
+            {
+              links.map((link) => (
+                <a
+                  href={link.href}
+                  aria-current={isCurrent(link.href) ? 'page' : undefined}
+                >
+                  {link.label}
+                </a>
+              ))
+            }
+          </nav>
+        </details>
+      </div>
     </header>
-    <div
-      class:list={[
-        'site-frame',
-        home && 'site-frame-home',
-        (runner || challengeRunner) && 'site-frame-runner',
-      ]}
-    >
-      <main id="contenido" tabindex="-1"><slot /></main>
-    </div>
+    <main id="contenido" tabindex="-1" class="frame">
+      <slot />
+    </main>
     <footer class="site-footer">
-      <span>OxYda2 <span class="muted">/</span> Matemática disponible.</span>
-      <span>Sin cuenta. Progreso en este navegador.</span>
+      <div class="site-footer__inner">
+        <span>OxYda2 · Matemática disponible.</span>
+        <span class="site-footer__status">
+          <span class="dot dot--success" aria-hidden="true"></span>
+          Sin cuenta. Progreso guardado en este navegador.
+        </span>
+      </div>
     </footer>
     <noscript
       ><p class="noscript-message">

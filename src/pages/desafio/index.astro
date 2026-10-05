@@ -1,66 +1,59 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
-import SectionHeading from '../../components/astro/SectionHeading.astro';
+import PageHead from '../../components/astro/PageHead.astro';
 import { challenges } from '../../content/challenges';
 import { families } from '../../content/skills';
+import { familyIllustrations } from '../../shared/ui/illustrations';
 ---
 
 <SiteLayout title="Desafíos">
-  <div class="challenge-index-page">
-    <SectionHeading
-      className="challenge-index-heading"
-      title="Elegí una situación para poner una idea en juego."
-      description="Todas las situaciones están disponibles. Podés seguir el recorrido, volver a una idea o entrar directamente donde tengas curiosidad."
-    />
-
-    <div class="challenge-index-groups">
-      {
-        families.map((family, familyIndex) => {
-          const familyChallenges = challenges.filter(
-            (challenge) => challenge.familyId === family.id,
-          );
-          return (
-            <section
-              class="challenge-index-group"
-              aria-labelledby={`challenge-family-${family.id}`}
-            >
-              <header class="challenge-index-group__header">
-                <span class="eyebrow">
-                  Familia {String(familyIndex + 1).padStart(2, '0')}
-                </span>
-                <div>
-                  <h2 id={`challenge-family-${family.id}`}>{family.title}</h2>
-                  <p>{family.description}</p>
-                </div>
-                <span class="challenge-index-group__count">
-                  {String(familyChallenges.length).padStart(2, '0')}
-                </span>
-              </header>
-              <ol class="challenge-index-list">
-                {familyChallenges.map((challenge) => (
-                  <li>
-                    <a href={`/desafio/${challenge.slug}`} data-astro-reload>
-                      <span class="challenge-index-list__number">
-                        {String(challenges.indexOf(challenge) + 1).padStart(
-                          2,
-                          '0',
-                        )}
-                      </span>
-                      <span class="challenge-index-list__copy">
-                        <strong>{challenge.title}</strong>
-                        <span>{challenge.scenario}</span>
-                      </span>
-                      <span class="challenge-index-list__meta">
-                        {challenge.steps.length} pasos →
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ol>
-            </section>
-          );
-        })
-      }
-    </div>
-  </div>
+  <PageHead
+    label="Desafíos"
+    title="Elegí una situación para poner una idea en juego."
+    description="Todas las situaciones están disponibles. Podés seguir el recorrido, volver a una idea o entrar donde tengas curiosidad."
+  />
+  {
+    families.map((family, familyIndex) => {
+      const familyChallenges = challenges.filter(
+        (challenge) => challenge.familyId === family.id,
+      );
+      return (
+        <section class="row" aria-labelledby={`challenge-family-${family.id}`}>
+          <div class="cell cell--intro challenge-group">
+            <img
+              src={familyIllustrations[family.id].src}
+              width="56"
+              height="56"
+              alt=""
+            />
+            <span class="label">
+              {String(familyIndex + 1).padStart(2, '0')} — Familia
+            </span>
+            <h2 id={`challenge-family-${family.id}`}>{family.title}</h2>
+            <p>{family.description}</p>
+          </div>
+          <ol class="cell cell--wide cell--flush link-list link-list--rich">
+            {familyChallenges.map((challenge) => (
+              <li>
+                <a href={`/desafio/${challenge.slug}`} data-astro-reload>
+                  <span class="link-list__number">
+                    {String(challenges.indexOf(challenge) + 1).padStart(2, '0')}
+                  </span>
+                  <span class="link-list__copy">
+                    <span class="link-list__title">{challenge.title}</span>
+                    <span class="link-list__description">
+                      {challenge.scenario}
+                    </span>
+                  </span>
+                  <span class="link-list__meta">
+                    {challenge.steps.length} pasos →
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </section>
+      );
+    })
+  }
 </SiteLayout>

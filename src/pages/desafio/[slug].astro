@@ -14,12 +14,10 @@ const { challenge } = Astro.props;
 ---
 
 <SiteLayout title={challenge.title}>
-  <div class="challenge-page challenge-page--runner">
-    <ChallengeRunnerIsland
-      client:load
-      challenge={challenge}
-      challenges={challenges}
-      skills={skills}
-    />
-  </div>
+  <ChallengeRunnerIsland
+    client:load
+    challenge={challenge}
+    challenges={challenges}
+    skills={skills}
+  />
 </SiteLayout>

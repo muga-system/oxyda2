@@ -1,0 +1,36 @@
+---
+import type { Illustration } from '../../shared/ui/illustrations';
+
+interface Props {
+  label: string;
+  title: string;
+  description: string;
+  illustration?: Illustration;
+}
+
+const { label, title, description, illustration } = Astro.props;
+---
+
+<header class:list={['page-head', illustration && 'page-head--art']}>
+  <div class="page-head__copy">
+    <span class="label">{label}</span>
+    <h1>{title}</h1>
+    <p class="lead">{description}</p>
+    <slot />
+  </div>
+  {
+    illustration && (
+      <figure class="page-head__art dots">
+        <img
+          src={illustration.src}
+          srcset={illustration.srcset}
+          sizes="(max-width: 720px) 160px, 220px"
+          width={illustration.width}
+          height={illustration.height}
+          alt={illustration.alt}
+          decoding="async"
+        />
+      </figure>
+    )
+  }
+</header>

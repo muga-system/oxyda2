@@ -1,33 +1,17 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
-import SectionHeading from '../../components/astro/SectionHeading.astro';
+import PageHead from '../../components/astro/PageHead.astro';
 import LearningOverviewIsland from '../../modules/learning/ui/LearningOverviewIsland';
 import { families, skills } from '../../content/skills';
+import { areaIllustrations } from '../../shared/ui/illustrations';
 ---
 
 <SiteLayout title="Aprender">
-  <div class="learning-page learning-page--overview">
-    <div class="learning-overview-hero">
-      <SectionHeading
-        title="Una idea a la vez."
-        description="Cinco familias para entender relaciones que aparecen todos los días. Empezá donde tengas curiosidad."
-      />
-      <figure class="learning-overview-visual">
-        <img
-          src="/learning/aprender-640.png"
-          srcset="/learning/aprender-320.png 320w, /learning/aprender-640.png 640w"
-          sizes="(max-width: 760px) 240px, 360px"
-          width="640"
-          height="612"
-          alt="Ilustración de un libro abierto que representa el aprendizaje"
-          decoding="async"
-        />
-      </figure>
-    </div>
-    <LearningOverviewIsland client:load families={families} skills={skills} />
-    <p class="small-note">
-      Todos los conceptos están abiertos. La progresión orienta; vos elegís el
-      recorrido.
-    </p>
-  </div>
+  <PageHead
+    label="Aprender"
+    title="Conceptos breves, en orden."
+    description="Cinco familias para entender relaciones que aparecen todos los días. Todos los conceptos están abiertos: la progresión orienta, vos elegís el recorrido."
+    illustration={areaIllustrations.learn}
+  />
+  <LearningOverviewIsland client:load families={families} skills={skills} />
 </SiteLayout>

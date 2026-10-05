@@ -1,12 +1,12 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import SiteLayout from '../../layouts/SiteLayout.astro';
-import SectionHeading from '../../components/astro/SectionHeading.astro';
+import PageHead from '../../components/astro/PageHead.astro';
 import FamilyStatusIsland from '../../modules/learning/ui/FamilyStatusIsland';
 import FamilyConceptsIsland from '../../modules/learning/ui/FamilyConceptsIsland';
 import { families, skills } from '../../content/skills';
 import { challenges } from '../../content/challenges';
-import { AnimatedArrowLink } from '../../components/react/AnimatedArrowAction';
+import { familyIllustrations } from '../../shared/ui/illustrations';
 
 export const getStaticPaths = (() =>
   families.map((family) => ({
@@ -14,119 +14,54 @@ export const getStaticPaths = (() =>
     props: { family },
   }))) satisfies GetStaticPaths;
 const { family } = Astro.props;
+const familyIndex = families.indexOf(family) + 1;
 const familySkills = skills.filter((skill) => skill.familyId === family.id);
 const relatedChallenges = challenges.filter(
   (challenge) => challenge.familyId === family.id,
 );
-const familyIllustration =
-  family.id === 'percentage'
-    ? {
-        src: '/learning/porcentajes-640.png',
-        srcset:
-          '/learning/porcentajes-320.png 320w, /learning/porcentajes-640.png 640w',
-        width: 640,
-        height: 666,
-        alt: 'Ilustración de engranajes que representan porcentajes y relaciones',
-      }
-    : family.id === 'proportion'
-      ? {
-          src: '/learning/proporciones-640.png',
-          srcset:
-            '/learning/proporciones-320.png 320w, /learning/proporciones-640.png 640w',
-          width: 640,
-          height: 624,
-          alt: 'Ilustración de dos engranajes conectados que representan proporciones',
-        }
-      : family.id === 'estimation'
-        ? {
-            src: '/learning/estimacion-640.png',
-            srcset:
-              '/learning/estimacion-320.png 320w, /learning/estimacion-640.png 640w',
-            width: 640,
-            height: 628,
-            alt: 'Ilustración de dos filas de bloques que representan una estimación',
-          }
-        : family.id === 'data'
-          ? {
-              src: '/learning/datos-640.png',
-              srcset:
-                '/learning/datos-320.png 320w, /learning/datos-640.png 640w',
-              width: 640,
-              height: 668,
-              alt: 'Ilustración de una escalera que representa la lectura de datos',
-            }
-          : family.id === 'units'
-            ? {
-                src: '/learning/unidades-640.png',
-                srcset:
-                  '/learning/unidades-320.png 320w, /learning/unidades-640.png 640w',
-                width: 640,
-                height: 648,
-                alt: 'Ilustración de una medida conectada que representa unidades',
-              }
-            : undefined;
 ---
 
 <SiteLayout title={family.title}>
-  <div class="learning-page learning-page--family">
-    <a class="back-link" href="/aprender">← Aprender</a>
-    <div
-      class:list={[
-        'learning-family-hero',
-        familyIllustration && 'learning-family-hero--illustrated',
-      ]}
-    >
-      <SectionHeading
-        className="learning-family-heading"
-        compact
-        title={family.title}
-        description={family.description}
-      />
-      {
-        familyIllustration && (
-          <figure class="learning-family-visual">
-            <img
-              src={familyIllustration.src}
-              srcset={familyIllustration.srcset}
-              sizes="(max-width: 720px) 240px, 360px"
-              width={familyIllustration.width}
-              height={familyIllustration.height}
-              alt={familyIllustration.alt}
-              decoding="async"
-            />
-          </figure>
-        )
-      }
-    </div>
+  <nav class="crumbs" aria-label="Ruta">
+    <a href="/aprender">Aprender</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">{family.title}</span>
+  </nav>
+  <PageHead
+    label={`${String(familyIndex).padStart(2, '0')} — ${family.title}`}
+    title={family.question}
+    description={family.description}
+    illustration={familyIllustrations[family.id]}
+  >
     <FamilyStatusIsland client:load skills={familySkills} />
-    <FamilyConceptsIsland
-      client:load
-      familyTitle={family.title}
-      skills={familySkills}
-      challenges={relatedChallenges}
-    />
-    <section class="related-challenges">
-      <h2>Situaciones de {family.title.toLowerCase()}</h2><div
-        class="challenge-links"
-      >
-        {
-          relatedChallenges.map((challenge) => (
-            <AnimatedArrowLink
-              client:load
-              className="challenge-link"
-              arrowClassName="challenge-link__arrow"
+  </PageHead>
+  <FamilyConceptsIsland
+    client:load
+    familyTitle={family.title}
+    skills={familySkills}
+    challenges={relatedChallenges}
+  />
+  <section class="row" aria-labelledby="related-title">
+    <div class="cell cell--intro">
+      <span class="label">Situaciones</span>
+      <h2 id="related-title">Desafíos de {family.title.toLowerCase()}</h2>
+    </div>
+    <ol class="cell cell--wide link-list">
+      {
+        relatedChallenges.map((challenge) => (
+          <li>
+            <a
               href={`/desafio/${challenge.slug}?source=learning`}
-              reload
-              direction="up-right"
+              data-astro-reload
             >
-              <span class="challenge-link__body">
-                <strong>{challenge.title}</strong>
-                <span>{challenge.steps.length} pasos para pensar</span>
+              <span class="link-list__title">{challenge.title}</span>
+              <span class="link-list__meta">
+                {challenge.steps.length} pasos →
               </span>
-            </AnimatedArrowLink>
-          ))
-        }
-      </div>
-    </section>
-  </div>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
 </SiteLayout>

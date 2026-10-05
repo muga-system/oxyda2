@@ -1,23 +1,13 @@
 import { useMemo } from 'react';
-import type { Family, FamilyId, Skill } from '../../../shared/domain/types';
+import type { Family, Skill } from '../../../shared/domain/types';
 import { useProgress } from '../../progress/ui/useProgress';
 import {
   getFamilyStatus,
   getSkillProgress,
 } from '../../progress/domain/progress';
+import { familyIllustrations } from '../../../shared/ui/illustrations';
 import StorageNotice from '../../../components/react/StorageNotice';
-import { AnimatedArrowLink } from '../../../components/react/AnimatedArrowAction';
-
-const familySignals: Record<
-  FamilyId,
-  { expression: string; explanation: string }
-> = {
-  percentage: { expression: '25%', explanation: 'parte de un total' },
-  proportion: { expression: '3 : 5', explanation: 'relación que se mantiene' },
-  estimation: { expression: '≈ 500', explanation: 'orden posible' },
-  units: { expression: '1000 m → 1 km', explanation: 'misma medida' },
-  data: { expression: '10 · 12 · 14', explanation: 'leer el centro' },
-};
+import { StatusChip } from '../../../components/react/StatusChip';
 
 export default function LearningOverviewIsland({
   families,
@@ -37,7 +27,7 @@ export default function LearningOverviewIsland({
   return (
     <>
       <StorageNotice message={message} />
-      <div className="learning-families">
+      <ul className="family-rows" aria-label="Familias">
         {families.map((family, index) => {
           const familySkills = skills.filter(
             (skill) => skill.familyId === family.id,
@@ -47,40 +37,33 @@ export default function LearningOverviewIsland({
               familySkills.some((skill) => skill.id === entry.skillId),
             ),
           );
+          const art = familyIllustrations[family.id];
           return (
-            <AnimatedArrowLink
-              className="learning-family"
-              href={`/aprender/${family.slug}`}
-              direction="up-right"
-              arrowClassName="family-arrow"
-              key={family.id}
-            >
-              <div className="family-index" aria-hidden="true">
-                <span>{String(index + 1).padStart(2, '0')}</span>
-                <span className="family-index__line" />
-              </div>
-              <div className="learning-family-content">
-                <div
-                  className="family-signal"
-                  aria-label={familySignals[family.id].explanation}
-                >
-                  <code>{familySignals[family.id].expression}</code>
-                  <span>{familySignals[family.id].explanation}</span>
-                </div>
-                <div className="family-title-row">
-                  <h2>{family.title}</h2>
-                  <span className="status">{status}</span>
-                </div>
-                <p>{family.description}</p>
-                <div className="family-meta">
-                  <span>{familySkills.length} conceptos</span>
-                  <span>{family.question}</span>
-                </div>
-              </div>
-            </AnimatedArrowLink>
+            <li key={family.id}>
+              <a className="family-row" href={`/aprender/${family.slug}`}>
+                <span className="family-row__art dots" aria-hidden="true">
+                  <img src={art.src} width="88" height="88" alt="" />
+                </span>
+                <span className="family-row__body">
+                  <span className="label">
+                    {String(index + 1).padStart(2, '0')} — {family.title}
+                  </span>
+                  <span className="family-row__question">
+                    {family.question}
+                  </span>
+                  <span className="family-row__description">
+                    {family.description}
+                  </span>
+                </span>
+                <span className="family-row__meta">
+                  <StatusChip status={status} />
+                  <span>{familySkills.length} conceptos →</span>
+                </span>
+              </a>
+            </li>
           );
         })}
-      </div>
+      </ul>
     </>
   );
 }

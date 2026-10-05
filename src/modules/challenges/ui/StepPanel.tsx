@@ -22,6 +22,8 @@ interface Props {
   onNext: () => void;
   finalStep?: boolean;
   focusOnMount?: boolean;
+  /** Mono label above the prompt. Defaults to the step kind. */
+  stepLabel?: string;
 }
 
 const reasoningCues: Record<ChallengeKind, string> = {
@@ -42,6 +44,7 @@ export default function StepPanel({
   onNext,
   finalStep = false,
   focusOnMount = false,
+  stepLabel,
 }: Props) {
   const [raw, setRaw] = useState('');
   const [attempts, setAttempts] = useState(0);
@@ -162,12 +165,12 @@ export default function StepPanel({
   return (
     <section className="step-panel" aria-labelledby={`step-${step.id}`}>
       <header className="step-panel__header">
-        <div className="step-panel__signal">
-          <span className="step-panel__kind">{kindLabels[step.kind]}</span>
-          {step.label && step.label !== kindLabels[step.kind] && (
-            <span className="step-panel__subkind">{step.label}</span>
-          )}
-        </div>
+        <span className="label">
+          {stepLabel ??
+            (step.label && step.label !== kindLabels[step.kind]
+              ? `${kindLabels[step.kind]} · ${step.label}`
+              : kindLabels[step.kind])}
+        </span>
         <p className="step-panel__cue">{reasoningCues[step.kind]}</p>
         <h2 ref={heading} tabIndex={-1} id={`step-${step.id}`}>
           {step.prompt}
@@ -192,7 +195,7 @@ export default function StepPanel({
             <legend className="sr-only">Elegí una respuesta</legend>
             {step.answer.options.map((option, index) => (
               <label
-                className={`choice ${raw === option.id ? 'is-selected' : ''}`}
+                className={`choice ${raw === option.id ? `is-selected ${result && !unknownAnswer ? (result.evaluation.correct ? 'is-correct' : 'is-review') : ''}` : ''}`}
                 key={option.id}
               >
                 <input
@@ -210,7 +213,13 @@ export default function StepPanel({
                 </span>
                 <span className="choice-label">{option.label}</span>
                 <span className="choice-status" aria-hidden="true">
-                  {raw === option.id ? 'Elegida' : ''}
+                  {raw !== option.id
+                    ? ''
+                    : !result || unknownAnswer
+                      ? 'Elegida'
+                      : result.evaluation.correct
+                        ? '✓ Correcta'
+                        : 'Para revisar'}
                 </span>
               </label>
             ))}
@@ -311,12 +320,7 @@ export default function StepPanel({
       >
         <div className="feedback-dialog__inner">
           <div className="feedback-dialog__header">
-            <span
-              className="feedback-dialog__symbol hint-dialog__symbol"
-              aria-hidden="true"
-            >
-              ?
-            </span>
+            <span className="dot dot--accent" aria-hidden="true" />
             <div>
               <span className="feedback-dialog__eyebrow">Pista 1</span>
               <h2 id={`hint-dialog-title-${step.id}`}>Una pista para seguir</h2>
@@ -350,9 +354,10 @@ export default function StepPanel({
         {result && (
           <div className="feedback-dialog__inner">
             <div className="feedback-dialog__header">
-              <span className="feedback-dialog__symbol" aria-hidden="true">
-                {unknownAnswer ? '·' : result.evaluation.correct ? '✓' : '↳'}
-              </span>
+              <span
+                className={`dot ${unknownAnswer ? 'dot--muted' : result.evaluation.correct ? 'dot--success' : 'dot--accent'}`}
+                aria-hidden="true"
+              />
               <div>
                 <span className="feedback-dialog__eyebrow">
                   {unknownAnswer
