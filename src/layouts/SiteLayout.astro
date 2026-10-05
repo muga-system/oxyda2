@@ -3,6 +3,7 @@ import '@fontsource-variable/geist';
 import '@fontsource-variable/geist-mono';
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
+import { version } from '../../package.json';
 
 interface Props {
   title?: string;
@@ -104,10 +105,7 @@ const isCurrent = (href: string) =>
     <footer class="site-footer">
       <div class="site-footer__inner">
         <span>OxYda2 · Matemática disponible.</span>
-        <span class="site-footer__status">
-          <span class="dot dot--success" aria-hidden="true"></span>
-          Sin cuenta. Progreso guardado en este navegador.
-        </span>
+        <span class="site-footer__version">v{version}</span>
       </div>
     </footer>
     <noscript

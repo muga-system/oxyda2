@@ -254,8 +254,9 @@ export default function ProgressMapIsland({
       )}
 
       <p className="small-note page-note">
-        Tu mapa reúne prácticas recientes, pistas y reintentos. Solo se conserva
-        en este navegador; borrar sus datos también borra este progreso.
+        Sin cuenta: tu progreso se guarda solo en este navegador. El mapa reúne
+        prácticas recientes, pistas y reintentos; borrar los datos del navegador
+        también borra este progreso.
       </p>
     </>
   );

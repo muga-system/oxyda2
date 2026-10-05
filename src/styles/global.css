@@ -358,10 +358,9 @@ h2.label {
   font-size: 13px;
   color: var(--color-muted);
 }
-.site-footer__status {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+.site-footer__version {
+  font-family: var(--font-mono);
+  font-size: 12px;
 }
 .noscript-message {
   max-width: var(--frame);
